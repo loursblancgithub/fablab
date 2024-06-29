@@ -1,0 +1,59 @@
+@font-face {
+    font-family: 'LexendDeca';
+    src: url('../Assets/LexendDeca-VariableFont_wght.ttf') format('truetype');
+}
+
+body {
+    background-color: #ffffff;
+    font-family: LexendDeca, serif;
+}
+
+input {
+    font-family: LexendDeca, serif;
+    background-color: #e6e9f0;
+    border: 0;
+    border-radius: 3px;
+    box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
+    height: 5vh;
+    width: 15vw;
+}
+
+#bodyContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+}
+
+
+#fablabLogo {
+    width: 7.5vw;
+    margin-bottom: 2vw;
+}
+
+#loginBox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.formTitle {
+    font-size: 2.5vh;
+    font-weight: 325;
+    margin: 1.5vh 0 0.5vh 0;
+}
+
+.blueButton {
+    background-color: #2E4798;
+    color: #ffffff;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    font-weight: 250;
+    padding: 0.3vh 0 0.5vh 0;
+    margin: 2vh 0 2vh 0;
+}
