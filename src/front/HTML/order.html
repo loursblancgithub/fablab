@@ -15,14 +15,49 @@
 <div id="bodyContainer">
     <img src="../Assets/logo_fablab.svg" alt="logo" id="fablabLogo">
 
-    <div id="loginBox">
+    <div id="loginForm">
         <div class="formTitle">Code élève</div>
-        <label for="codeEleve"></label><input type="text" id="codeEleve" name="codeEleve">
+        <label for="codeEleve"></label><input class="inputStyle" type="text" id="codeEleve" name="codeEleve">
         <div class="formTitle">Mot de passe</div>
-        <label for="password"></label><input type="password" id="password" name="password">
+        <label for="password"></label><input class="inputStyle" type="password" id="password" name="password">
         <div id="login" class="blueButton">Se connecter</div>
     </div>
 
+    <hr class="solid" id="formsSeparator">
+
+    <div id="orderForm">
+        <div class="formTitle">Nom de la commande</div>
+        <label for="orderName"></label><input class="inputStyle" type="text" id="orderName" name="nom">
+
+        <div id="subform">
+            <div class="subFormColumn">
+                <div class="formTitle">Fichier(s)</div>
+                <label for="orderFile"></label><input class="inputStyle" type="file" id="orderFile" name="file">
+                <div class="formTitle">Quantité</div>
+                <label for="orderQuantity"></label><input class="inputStyle" type="text" id="orderQuantity" name="quantity">
+            </div>
+
+            <div class="subFormColumn">
+                <div class="formTitle">Logiciel utilisé</div>
+                <label for="orderTool"></label><input class="inputStyle" type="text" id="orderTool" name="tool">
+                <div class="formTitle">Matériau</div>
+                <label for="orderMaterial"></label><input class="inputStyle" type="text" id="orderMaterial" name="material">
+            </div>
+        </div>
+
+        <div class="formTitle">Questions et commentaires</div>
+        <label for="orderQuestions"></label><textarea class="inputStyle" id="orderQuestions" name="questions"></textarea>
+
+        <div id="goodPractices">
+            <label for="goodPracticesCheck"></label><input class="inputStyle" type="checkbox" id="goodPracticesCheck" name="goodPracticesCheck" value="goodPracticesYes">
+            <div id="goodPracticesText">En cochant cette case, je certifie avoir lu les bonnes pratiques de l’impression 3D et y adhérer sans réserve. J’accepte que ma commande ne soit pas traitée si les conditions indiquées ne sont pas respectées.</div>
+        </div>
+
+        <div id="submit" class="blueButton">Commander</div>
+    </div>
+
 </div>
+
+<script src="../JS/order.js"></script>
 </body>
 </html>
