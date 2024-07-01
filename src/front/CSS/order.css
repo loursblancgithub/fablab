@@ -49,15 +49,18 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    z-index: 1;
+    position: relative;
+}
+
+#loginForm.disappear {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
 
 .hideElement {
     opacity: 0;
     transition: opacity 1s;
-}
-
-.moveUp {
-    transform: translateY(-25vh);
 }
 
 #password {
@@ -100,7 +103,7 @@ hr.solid {
     justify-content: flex-start;
     align-items: center;
     width: 36.5vw;
-    transition: transform 2s ease-in-out;
+    z-index: 0;
 }
 
 #subform {

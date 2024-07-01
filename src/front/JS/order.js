@@ -1,21 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const textInputs = document.querySelectorAll('input[type="text"], input[type="password"], textarea');
+    const wipeInputs = document.querySelectorAll('input[type="text"], input[type="password"], input[type="checkbox"], textarea');
+    const orderForm = document.getElementById('orderForm');
 
-    textInputs.forEach(input => {
+    wipeInputs.forEach(input => {
         input.value = '';
+        input.state = false;
     });
+
+    let loginMask = document.createElement('div');
+    loginMask.id = 'loginMask';
 
     document.addEventListener("keypress", function (event) {
         if (event.key === "f") {
             console.log('Sucessfully logged in');
 
-            document.getElementById('loginForm').classList.add('hideElement');
-            document.getElementById('formsSeparator').classList.add('hideElement');
-
-            setTimeout(function () {
-                document.getElementById('orderForm').classList.add('moveUp');
-            }, 500);
-            document.getElementById('loginMask').style.display = 'none';
+            document.getElementById('loginForm').classList.add('disappear');
+            orderForm.style.filter = 'blur(0)';
+            orderForm.style.pointerEvents = 'all';
         }
     });
 
