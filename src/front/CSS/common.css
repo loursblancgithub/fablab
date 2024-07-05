@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'LexendDeca';
+    src: url('../Assets/LexendDeca-VariableFont_wght.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Cabin';
+    src: url('../Assets/Cabin-VariableFont_wdth,wght.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Manrope';
+    src: url('../Assets/Manrope-VariableFont_wght.ttf') format('truetype');
+}
+
+body {
+    background-color: #ffffff;
+    font-family: LexendDeca, serif;
+}

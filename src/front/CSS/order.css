@@ -1,25 +1,9 @@
-@font-face {
-    font-family: 'LexendDeca';
-    src: url('../Assets/LexendDeca-VariableFont_wght.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Cabin';
-    src: url('../Assets/Cabin-VariableFont_wdth,wght.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Manrope';
-    src: url('../Assets/Manrope-VariableFont_wght.ttf') format('truetype');
-}
-
-body {
-    background-color: #ffffff;
-    font-family: LexendDeca, serif;
-}
-
 strong {
     color: #2e4798;
+}
+
+option {
+    font-family: LexendDeca, sans-serif;
 }
 
 .inputStyle {
@@ -42,7 +26,6 @@ strong {
     height: 100vh;
 }
 
-
 #fablabLogo {
     width: 7.5vw;
     margin: 1vw 0 1vw 0;
@@ -59,7 +42,7 @@ strong {
 
 #loginForm.disappear {
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-out;
 }
 
 .hideElement {
@@ -114,17 +97,29 @@ hr.solid {
 
 #subform {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-content: flex-start;
     padding: 1vh 0 1vh 0;
 }
 
-.subFormColumn {
+.subFormElement {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 0 2vw 0 2vw;
+}
+
+.subFormLine {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 2vw 0 2vw;
+}
+
+#orderMaterial, #orderColor, #orderQuantity {
+    width: 5vw;
 }
 
 #orderQuantity {

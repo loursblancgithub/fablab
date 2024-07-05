@@ -12,7 +12,7 @@ socket.addEventListener("message", (event) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const wipeInputs = document.querySelectorAll('input[type="text"], input[type="password"],input[type="quantity"], input[type="checkbox"], textarea');
+    const wipeInputs = document.querySelectorAll('input[type="text"], input[type="password"],input[type="quantity"], input[type="checkbox"], input[type="select"], textarea');
     const orderForm = document.getElementById('orderForm');
     const loginForm = document.getElementById('loginForm');
 
@@ -31,8 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Successfully logged in');
 
             if (orderForm) {
-                loginForm.style.transition = 'ease-out 0.5s';
-                orderForm.style.transition = 'transform 3.5s';
+                orderForm.style.transition = 'transform 1.5s';
                 orderForm.style.transform = 'translateY(-30vh)';
             }
 
@@ -46,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Retrieving, formatting and sending the order informations
     document.getElementById('submit').addEventListener('click', function () {
         if (document.getElementById('goodPracticesCheck').checked) {
-            const requiredFields = ['orderName', 'orderTool', 'orderQuantity', 'orderMaterial', 'orderQuestions'];
+            const requiredFields = ['orderName', 'orderTool', 'orderQuantity', 'orderMaterial'];
 
             const allFieldsFilled = requiredFields.every(fieldId => {
                 const field = document.getElementById(fieldId);
@@ -71,10 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(orderDetails);
                 socket.send(JSON.stringify(orderDetails));
             } else {
-                alert('Please fill in all required fields.');
+                alert('Remplissez tous les champs obligatoires.');
             }
         } else {
-            alert('Please agree to the good practices.');
+            alert('Lisez et acceptez les bonnes pratiques avant de valider votre commande.');
         }
     });
 });
