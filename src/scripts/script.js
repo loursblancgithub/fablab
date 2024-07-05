@@ -1,16 +1,3 @@
-// Create WebSocket connection.
-const socket = new WebSocket("ws://localhost:8080");
-
-// Connection opened
-socket.addEventListener("open", (event) => {
-  socket.send("Hello Server!");
-});
-
-// Listen for messages
-socket.addEventListener("message", (event) => {
-  console.log("Message from server ", event.data);
-});
-
 document.addEventListener('DOMContentLoaded', function () { // Est activé quand le script est appelé
   document.getElementById('bt').addEventListener('click', function () { // Est activé quand le bouton #bt est cliqué
       console.log('Bouton cliqué'); // me dit si le bouton a été cliqué

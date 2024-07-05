@@ -1,3 +1,16 @@
+// Create WebSocket connection.
+const socket = new WebSocket("ws://localhost:8080");
+
+// Connection opened
+socket.addEventListener("open", (event) => {
+    socket.send("Hello Server!");
+});
+
+// Listen for messages
+socket.addEventListener("message", (event) => {
+    console.log("Message from server ", event.data);
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     const wipeInputs = document.querySelectorAll('input[type="text"], input[type="password"],input[type="quantity"], input[type="checkbox"], textarea');
     const orderForm = document.getElementById('orderForm');
@@ -57,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 console.log(orderDetails);
+                socket.send(JSON.stringify(orderDetails));
             } else {
                 alert('Please fill in all required fields.');
             }
