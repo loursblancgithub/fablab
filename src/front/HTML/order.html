@@ -17,13 +17,15 @@
 
     <div id="loginForm">
         <div class="formTitle">Code élève</div>
-        <label for="codeEleve"></label><input class="inputStyle" type="text" id="codeEleve" name="codeEleve">
+        <label for="codeEleve"></label><input class="inputStyle" type="text" id="codeEleve" name="codeEleve"
+                                              aria-label="Code élève">
         <div class="formTitle">Mot de passe</div>
-        <label for="password"></label><input class="inputStyle" type="password" id="password" name="password">
+        <label for="password"></label><input class="inputStyle" type="password" id="password" name="password"
+                                             aria-label="Mot de passe">
         <div id="login" class="blueButton">Se connecter</div>
-    </div>
 
-    <hr class="solid" id="formsSeparator">
+        <hr class="solid" id="formsSeparator">
+    </div>
 
     <div id="orderForm">
         <div class="formTitle">Nom de la commande</div>
@@ -34,23 +36,72 @@
                 <div class="formTitle">Fichier(s)</div>
                 <label for="orderFile"></label><input class="inputStyle" type="file" id="orderFile" name="file">
                 <div class="formTitle">Quantité</div>
-                <label for="orderQuantity"></label><input class="inputStyle" type="text" id="orderQuantity" name="quantity">
+                <label for="orderQuantity"></label><input class="inputStyle" type="number" max="10" min="0"
+                                                          id="orderQuantity" name="quantity">
             </div>
 
             <div class="subFormColumn">
                 <div class="formTitle">Logiciel utilisé</div>
                 <label for="orderTool"></label><input class="inputStyle" type="text" id="orderTool" name="tool">
                 <div class="formTitle">Matériau</div>
-                <label for="orderMaterial"></label><input class="inputStyle" type="text" id="orderMaterial" name="material">
+                <label for="orderMaterial"></label><input class="inputStyle" type="text" id="orderMaterial"
+                                                          name="material">
             </div>
         </div>
 
         <div class="formTitle">Questions et commentaires</div>
-        <label for="orderQuestions"></label><textarea class="inputStyle" id="orderQuestions" name="questions"></textarea>
+        <label for="orderQuestions"></label><textarea class="inputStyle" id="orderQuestions"
+                                                      name="questions"></textarea>
 
-        <div id="goodPractices">
-            <label for="goodPracticesCheck"></label><input class="inputStyle" type="checkbox" id="goodPracticesCheck" name="goodPracticesCheck" value="goodPracticesYes">
-            <div id="goodPracticesText">En cochant cette case, je certifie avoir lu les bonnes pratiques de l’impression 3D et y adhérer sans réserve. J’accepte que ma commande ne soit pas traitée si les conditions indiquées ne sont pas respectées.</div>
+        <div id="goodPracticesTextContainer">
+            <div>
+                <div id="goodPracticesTextHeader" class="goodPracticesHeadFoot">Quelques points importants</div>
+                <div id="goodPracticesText">
+                    Ici, vous pouvez passer commande pour des impressions 3D auprès du FabLab.<br><br>
+                    <strong>Tout d'abord, des consignes de base pour vos pièces :</strong><br>
+                    - Les pièces doivent être au format .STL, .3MF ou .STP/STEP<br>
+                    - Les pièces doivent avoir comme unité de mesure le mm<br>
+                    - Le volume maximal d'impression <strong>en FDM</strong> est de 240x240x240mm, à ne surtout pas dépasser<br>
+                    - Pour une impression <strong>résine</strong>, la taille maximale est de 50x50x50mm<br>
+                    <br>
+                    <strong>Evitez au maximum les supports</strong><br>
+                    Une partie de votre pièce en suspension peut avoir besoin de support. Faites en sorte qu'une face de
+                    votre modèle donne la plus grande surface de contact possible avec la surface d'impression. Cela
+                    permettra de limiter l'utilisation de supports et donc de réduire le temps d'impression et le coût
+                    de votre pièce.<br><br>
+                    <strong>Une seule pièce par fichier</strong><br>
+                    Si vous nous envoyez un fichier, il faut une seule pièce dessus. Si un fichier contient un bateau,
+                    le mât doit faire partie du modèle de la coque. Seul cas accepté de plusieurs morceaux sur un même
+                    fichier : le print-in-place. Si ce terme ne vous dit rien, merci de mettre une seule pièce par
+                    fichier pour éviter tout problème.<br><br>
+                    <strong>Si vous modélisez vous-mêmes vos pièces</strong><br>
+                    La tolérance (précision maximale) de l'impression 3D est de 0.2mm, c'est à dire qu'une boîte sur
+                    laquelle s'assemble un couvercle doit avoir un espace de 0.2mm minimum entre le couvercle et la
+                    boîte pour pouvoir s'emboîter. Pensez-y pour ne pas avoir à ré-imprimer vos pièces et ainsi vous
+                    éviter des frais supplémentaires.
+                    <br><br>
+                    <strong>Si vous avez trouvé la ou les pièce(s) sur internet</strong><br>
+                    et que vous souhaitez en changer la taille,
+                    faites-le sur
+                    <a href="https://www.tinkercad.com/">https://www.tinkercad.com/</a>. Le personnel du FabLab ne fait
+                    pas de modification de pièces pour ne pas imprimer de pièces inutilement.<br><br>
+                    <strong>Après envoi d'une demande</strong><br>
+                    vérifiez votre boîte de réception régulièrement pour ne pas manquer toute
+                    réponse de notre part contenant :<br>
+                    - Votre devis<br>
+                    - Une remarque sur votre modèle<br>
+                    - Une information éventuelle sur la disponibilité du matériau que vous avez demandé.<br><br>
+                </div>
+            </div>
+        </div>
+
+        <div id="goodPracticesCheckContainer">
+            <label for="goodPracticesCheck"></label><input class="inputStyle" type="checkbox" id="goodPracticesCheck"
+                                                           name="goodPracticesCheck" value="goodPracticesYes">
+            <div id="goodPracticesCheckText">En cochant cette case, je certifie avoir lu les points importants ci-dessus
+                et y adhérer sans réserve. J’accepte que ma commande ne soit pas traitée si les conditions indiquées ne
+                sont pas respectées.
+            </div>
         </div>
 
         <div id="submit" class="blueButton">Commander</div>
