@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.key === "f") {
             console.log('Successfully logged in');
 
-            const orderForm = document.getElementById('orderForm');
             if (orderForm) {
                 loginForm.style.transition = 'ease-out 0.5s';
                 orderForm.style.transition = 'transform 3.5s';
