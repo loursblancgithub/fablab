@@ -147,6 +147,7 @@ hr.solid {
     margin: 2vh 0 2vh 0;
     box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
     padding: 0 1vw 0 1vw;
+    text-align: justify;
 }
 
 #goodPracticesTextHeader {
@@ -157,7 +158,7 @@ hr.solid {
     align-content: center;
     font-weight: bold;
     font-size: 3vh;
-    margin-bottom: 1vh;
+    margin-bottom: 2vh;
     color: #2e4798;
 }
 
