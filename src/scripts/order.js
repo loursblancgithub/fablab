@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.key === "f") {
             console.log('Successfully logged in');
 
+            loginForm.style.zIndex = '-15';
+
             if (orderForm) {
                 orderForm.style.transition = 'transform 1.5s';
                 orderForm.style.transform = 'translateY(-30vh)';
