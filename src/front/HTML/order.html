@@ -17,42 +17,37 @@
     <img src="../Assets/logo_fablab.svg" alt="logo" id="fablabLogo">
 
     <div id="loginForm">
-        <div class="formTitle">Code élève</div>
+        <div class="formTitle required">Code élève</div>
         <label for="codeEleve"></label><input class="inputStyle" type="text" id="codeEleve" name="codeEleve"
                                               aria-label="Code élève">
-        <div class="formTitle">Mot de passe</div>
+        <div class="formTitle required">Mot de passe ISEP</div>
         <label for="password"></label><input class="inputStyle" type="password" id="password" name="password"
                                              aria-label="Mot de passe">
         <div id="login" class="blueButton">Se connecter</div>
-
-        <div id="signUpTextContainer">
-            <div id="signUpText">Pas encore inscrit ?</div>
-            <div id="signUpLink">Crée toi un compte</div>
-        </div>
 
         <hr class="solid" id="formsSeparator">
     </div>
 
     <div id="orderForm">
-        <div class="formTitle">Nom de la commande</div>
+        <div class="formTitle required">Nom de la commande</div>
         <label for="orderName"></label><input class="inputStyle" type="text" id="orderName" name="nom">
 
         <div id="subform">
             <div class="subFormLine">
                 <div class="subFormElement">
-                    <div class="formTitle">Fichier(s)</div>
+                    <div class="formTitle required">Fichier(s)</div>
                     <label for="orderFile"></label><input class="inputStyle" type="file" id="orderFile" name="file" accept=".stl, .3mf, .stp, .step">
                 </div>
 
                 <div class="subFormElement">
-                    <div class="formTitle">Logiciel utilisé</div>
+                    <div class="formTitle required">Logiciel utilisé</div>
                     <label for="orderTool"></label><input class="inputStyle" type="text" id="orderTool" name="tool">
                 </div>
             </div>
 
             <div class="subFormLine">
                 <div class="subFormElement">
-                    <div class="formTitle">Matériau</div>
+                    <div class="formTitle required">Matériau</div>
                     <label for="orderMaterial"></label><select class="inputStyle" id="orderMaterial" name="material">
                     <option value="pla">PLA</option>
                     <option value="abs">ABS</option>
@@ -60,7 +55,7 @@
                 </select></div>
 
                 <div class="subFormElement">
-                    <div class="formTitle">Couleur</div>
+                    <div class="formTitle required">Couleur</div>
                     <label for="orderColor"></label><select class="inputStyle" id="orderColor" name="color">
                     <option value="red">Rouge</option>
                     <option value="blue">Bleu</option>
@@ -69,7 +64,7 @@
                 </div>
 
                 <div class="subFormElement">
-                    <div class="formTitle">Quantité</div>
+                    <div class="formTitle required">Quantité</div>
                     <label for="orderQuantity"></label><input class="inputStyle" type="number" max="10" min="1" id="orderQuantity" name="quantity">
                 </div>
 
@@ -135,6 +130,6 @@
 
 </div>
 
-<script src="../JS/order.js"></script>
+<script src="../../scripts/order.js"></script>
 </body>
 </html>
