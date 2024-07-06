@@ -54,6 +54,27 @@ option {
     margin-bottom: 2vh;
 }
 
+#signUpTextContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#signUpText {
+    font-size: 1.5vh;
+}
+
+#signUpLink {
+    margin-left: 0.4vw;
+    font-size: 1.5vh;
+    color: #2E4798;
+}
+
+#signUpLink:hover {
+    cursor: pointer;
+}
+
 .formTitle {
     font-size: 2vh;
     font-weight: 325;
