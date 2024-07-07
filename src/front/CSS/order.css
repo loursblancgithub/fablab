@@ -29,7 +29,6 @@ option {
     justify-content: flex-start;
     align-items: center;
     height: 100vh;
-    font-family: LexendDeca, serif;
 }
 
 #fablabLogo {
@@ -141,6 +140,7 @@ hr.solid {
 
 #orderFile {
     padding: 1px 1px 1px 1px;
+    width: 17.5vw;
 }
 
 #goodPracticesTextContainer {
