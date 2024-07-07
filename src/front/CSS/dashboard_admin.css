@@ -4,7 +4,6 @@
     align-items: center;
     height: 95vh;
     overflow: hidden;
-    font-family: LexendDeca, serif;
 }
 
 option {
@@ -40,8 +39,15 @@ option {
     justify-content: center;
     width: 10vw;
     height: 3vh;
-    border-radius: 10px;
+    border-radius: 5px;
     font-size: 1vw;
+    transition: background-color 0.5s ease;
+    margin: 0.5vh 0 0.5vh 0;
+}
+
+.active {
+    background-color: #2e4798 !important;
+    color: #ffffff;
 }
 
 .sidePanelStateButton:hover {

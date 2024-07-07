@@ -56,83 +56,105 @@ document.addEventListener('DOMContentLoaded', () => {
         // Assuming the server sends a JSON string with order data
         const orderData = JSON.parse(event.data);
     });*/
+
+    document.querySelectorAll('.sidePanelStateButton').forEach(button => {
+        button.addEventListener('click', function () {
+            // Remove active class from all buttons
+            document.querySelectorAll('.sidePanelStateButton').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Add active class to the clicked button
+            this.classList.add('active');
+        });
+    });
+
     document.getElementById('sidePanelStateButtonAll').addEventListener('click', () => {
         console.log('Button clicked');
 
         contentContainer.innerHTML = '';
-
-        // Dynamically create elements based on the order data
-        orderDataDummy.forEach(function (orderElement) {
-            const orderElementDiv = document.createElement('div');
-            orderElementDiv.classList.add('orderElement');
-
-            const orderElementHeader = document.createElement('div');
-            orderElementHeader.classList.add('orderElementHeader');
-
-            const orderElementHeaderColumn1 = document.createElement('div');
-            orderElementHeaderColumn1.classList.add('orderElementHeaderColumn');
-
-            // Order Name
-            const orderNameElement = document.createElement('div');
-            orderNameElement.textContent = `${orderElement.orderName}`;
-            orderNameElement.classList.add('orderElementText');
-            orderElementHeaderColumn1.appendChild(orderNameElement);
-
-            // Client Name
-            const orderClientElement = document.createElement('div');
-            orderClientElement.textContent = `${orderElement.orderClient}`;
-            orderClientElement.classList.add('orderElementText');
-            orderElementHeaderColumn1.appendChild(orderClientElement);
-
-            orderElementHeader.appendChild(orderElementHeaderColumn1);
-
-            const orderElementHeaderColumn2 = document.createElement('div');
-            orderElementHeaderColumn2.classList.add('orderElementHeaderColumn');
-            orderElementHeaderColumn2.style.justifyContent = 'flex-start';
-
-            // Order State
-            const orderStateDropdown = createStateDropdown(orderElement.orderState);
-            orderStateDropdown.style.margin = '1vh 0 1vh 0';
-            orderElementHeaderColumn2.appendChild(orderStateDropdown);
-
-            orderElementHeader.appendChild(orderElementHeaderColumn2);
-            orderElementDiv.appendChild(orderElementHeader);
-
-            // Client Email
-            const orderClientEmailElement = document.createElement('div');
-            orderClientEmailElement.textContent = `E-mail: ${orderElement.orderClientEmail}`;
-            orderClientEmailElement.classList.add('orderElementText');
-            orderElementDiv.appendChild(orderClientEmailElement);
-
-            // Material
-            const orderMaterialElement = document.createElement('div');
-            orderMaterialElement.textContent = `Matériau: ${orderElement.orderMaterial}`;
-            orderMaterialElement.classList.add('orderElementText');
-            orderElementDiv.appendChild(orderMaterialElement);
-
-            // Total Weight
-            const orderTotalWeightElement = document.createElement('div');
-            orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight}`;
-            orderTotalWeightElement.classList.add('orderElementText');
-            orderElementDiv.appendChild(orderTotalWeightElement);
-
-            // Quantity
-            const orderQuantityElement = document.createElement('div');
-            orderQuantityElement.textContent = `Quantité: ${orderElement.orderQuantity}`;
-            orderQuantityElement.classList.add('orderElementText');
-            orderElementDiv.appendChild(orderQuantityElement);
-
-            // Price
-            const orderPriceElement = document.createElement('div');
-            orderPriceElement.textContent = `Price: ${orderElement.orderPrice}`;
-            orderPriceElement.classList.add('orderElementText');
-            orderElementDiv.appendChild(orderPriceElement);
-
-            // Append the order element to the content container
-            contentContainer.appendChild(orderElementDiv);
-        });
+        createOrderElements(orderDataDummy);
     });
 });
+
+//-------------------------->
+
+//Functions
+
+//-------------------------->
+
+// Dynamically create elements based on the order data
+function createOrderElements(orderElements) {
+    orderElements.forEach(function (orderElement) {
+        const orderElementDiv = document.createElement('div');
+        orderElementDiv.classList.add('orderElement');
+
+        const orderElementHeader = document.createElement('div');
+        orderElementHeader.classList.add('orderElementHeader');
+
+        const orderElementHeaderColumn1 = document.createElement('div');
+        orderElementHeaderColumn1.classList.add('orderElementHeaderColumn');
+
+        // Order Name
+        const orderNameElement = document.createElement('div');
+        orderNameElement.textContent = `${orderElement.orderName}`;
+        orderNameElement.classList.add('orderElementText');
+        orderElementHeaderColumn1.appendChild(orderNameElement);
+
+        // Client Name
+        const orderClientElement = document.createElement('div');
+        orderClientElement.textContent = `${orderElement.orderClient}`;
+        orderClientElement.classList.add('orderElementText');
+        orderElementHeaderColumn1.appendChild(orderClientElement);
+
+        orderElementHeader.appendChild(orderElementHeaderColumn1);
+
+        const orderElementHeaderColumn2 = document.createElement('div');
+        orderElementHeaderColumn2.classList.add('orderElementHeaderColumn');
+        orderElementHeaderColumn2.style.justifyContent = 'flex-start';
+
+        // Order State
+        const orderStateDropdown = createStateDropdown(orderElement.orderState);
+        orderStateDropdown.style.margin = '1vh 0 1vh 0';
+        orderElementHeaderColumn2.appendChild(orderStateDropdown);
+
+        orderElementHeader.appendChild(orderElementHeaderColumn2);
+        orderElementDiv.appendChild(orderElementHeader);
+
+        // Client Email
+        const orderClientEmailElement = document.createElement('div');
+        orderClientEmailElement.textContent = `E-mail: ${orderElement.orderClientEmail}`;
+        orderClientEmailElement.classList.add('orderElementText');
+        orderElementDiv.appendChild(orderClientEmailElement);
+
+        // Material
+        const orderMaterialElement = document.createElement('div');
+        orderMaterialElement.textContent = `Matériau: ${orderElement.orderMaterial}`;
+        orderMaterialElement.classList.add('orderElementText');
+        orderElementDiv.appendChild(orderMaterialElement);
+
+        // Total Weight
+        const orderTotalWeightElement = document.createElement('div');
+        orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight}`;
+        orderTotalWeightElement.classList.add('orderElementText');
+        orderElementDiv.appendChild(orderTotalWeightElement);
+
+        // Quantity
+        const orderQuantityElement = document.createElement('div');
+        orderQuantityElement.textContent = `Quantité: ${orderElement.orderQuantity}`;
+        orderQuantityElement.classList.add('orderElementText');
+        orderElementDiv.appendChild(orderQuantityElement);
+
+        // Price
+        const orderPriceElement = document.createElement('div');
+        orderPriceElement.textContent = `Price: ${orderElement.orderPrice}`;
+        orderPriceElement.classList.add('orderElementText');
+        orderElementDiv.appendChild(orderPriceElement);
+
+        // Append the order element to the content container
+        contentContainer.appendChild(orderElementDiv);
+    });
+}
 
 // Function to create the order state dropdown
 function createStateDropdown(currentState) {
@@ -170,12 +192,13 @@ function createStateDropdown(currentState) {
     return dropdown;
 }
 
+// Apply colors to the dropdown
 function getColorForState(state, fontColor = false) {
     const stateColorMapping = {
         billed: {background: '#215a6c', font: '#ffffff'},
         printed: {background: '#5a3286', font: '#ffffff'},
         sliced: {background: '#0a53a8', font: '#ffffff'},
-        printing: {background: '#ffe5a0', font: '#000000'}
+        printing: {background: '#fd731e', font: '#000000'}
     };
 
     if (fontColor) {
