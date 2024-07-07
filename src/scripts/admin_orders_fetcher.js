@@ -5,49 +5,49 @@ import {socket} from './websocket_setup.js';
 socket.send("Message specific to admin_orders_fetcher functionality.");
 */
 
+const orderDataDummy = [{
+    "orderName": "Custom Widget",
+    "orderState": "billed",
+    "orderClient": "Jane Doe",
+    "orderClientEmail": "jane.doe@example.com",
+    "orderMaterial": "Aluminum",
+    "orderTotalWeight": "5kg",
+    "orderQuantity": 100,
+    "orderPrice": "$2000"
+},
+    {
+        "orderName": "Airbus A220",
+        "orderState": "printed",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": "300g",
+        "orderQuantity": 1,
+        "orderPrice": "8€"
+    },
+    {
+        "orderName": "Airbus A220",
+        "orderState": "sliced",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": "300g",
+        "orderQuantity": 1,
+        "orderPrice": "8€"
+    },
+    {
+        "orderName": "Airbus A220",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": "300g",
+        "orderQuantity": 1,
+        "orderPrice": "8€"
+    }];
+
 document.addEventListener('DOMContentLoaded', () => {
     const contentContainer = document.getElementById('contentContainer');
-
-    const orderDataDummy = [{
-        "orderName": "Custom Widget",
-        "orderState": "billed",
-        "orderClient": "Jane Doe",
-        "orderClientEmail": "jane.doe@example.com",
-        "orderMaterial": "Aluminum",
-        "orderTotalWeight": "5kg",
-        "orderQuantity": 100,
-        "orderPrice": "$2000"
-    },
-        {
-            "orderName": "Airbus A220",
-            "orderState": "printed",
-            "orderClient": "John Doe",
-            "orderClientEmail": "john.doe@example.com",
-            "orderMaterial": "PLA",
-            "orderTotalWeight": "300g",
-            "orderQuantity": 1,
-            "orderPrice": "8€"
-        },
-        {
-            "orderName": "Airbus A220",
-            "orderState": "sliced",
-            "orderClient": "John Doe",
-            "orderClientEmail": "john.doe@example.com",
-            "orderMaterial": "PLA",
-            "orderTotalWeight": "300g",
-            "orderQuantity": 1,
-            "orderPrice": "8€"
-        },
-        {
-            "orderName": "Airbus A220",
-            "orderState": "printing",
-            "orderClient": "John Doe",
-            "orderClientEmail": "john.doe@example.com",
-            "orderMaterial": "PLA",
-            "orderTotalWeight": "300g",
-            "orderQuantity": 1,
-            "orderPrice": "8€"
-        }];
 
     /*// Use the `socket` object for sending messages, etc.
     socket.send("Requesting order data");

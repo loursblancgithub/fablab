@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Mes commandes - FabLab</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="../Assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../Assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../Assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="../Assets/favicon/site.webmanifest">
+
+    <link rel="stylesheet" href="../CSS/main_client.css">
+    <link rel="stylesheet" href="../CSS/common.css">
 </head>
 <body>
-
+<div id="bodyContainer">
+    <img src="../Assets/logo_fablab.svg" alt="logo" id="fablabLogo">
+    <div id="contentContainer">
+        <div id="ordersList"></div>
+        <div id="orderContainer"></div>
+    </div>
+</div>
+<script src="../../scripts/client_orders_fetcher.js"></script>
 </body>
 </html>

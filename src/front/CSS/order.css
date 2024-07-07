@@ -94,7 +94,7 @@ hr.solid {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: 36.5vw;
+    width: 40vw;
     z-index: 0;
     filter: blur(2px);
     pointer-events: none;
