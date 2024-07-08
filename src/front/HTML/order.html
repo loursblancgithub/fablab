@@ -2,6 +2,8 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>FabLab - Commander</title>
 
     <link rel="apple-touch-icon" sizes="180x180" href="../Assets/favicon/apple-touch-icon.png">
@@ -32,7 +34,7 @@
         <div class="formTitle required">Nom de la commande</div>
         <label for="orderName"></label><input class="inputStyle" type="text" id="orderName" name="nom">
 
-        <div id="subform">
+        <div id="subForm">
             <div class="subFormLine">
                 <div class="subFormElement">
                     <div class="formTitle required">Fichier(s)</div>
@@ -40,12 +42,12 @@
                 </div>
 
                 <div class="subFormElement">
-                    <div class="formTitle required">Logiciel utilisé</div>
+                    <div class="formTitle required">Logiciel/URL</div>
                     <label for="orderTool"></label><input class="inputStyle" type="text" id="orderTool" name="tool">
                 </div>
             </div>
 
-            <div class="subFormLine">
+            <div class="subFormLine" id="subFormLineSelectors">
                 <div class="subFormElement">
                     <div class="formTitle required">Matériau</div>
                     <label for="orderMaterial"></label><select class="inputStyle" id="orderMaterial" name="material">
@@ -65,7 +67,7 @@
 
                 <div class="subFormElement">
                     <div class="formTitle required">Quantité</div>
-                    <label for="orderQuantity"></label><input class="inputStyle" type="number" max="10" min="1" id="orderQuantity" name="quantity">
+                    <label for="orderQuantity"></label><input class="inputStyle" type="text" id="orderQuantity" name="quantity">
                 </div>
 
             </div>
@@ -76,43 +78,43 @@
                                                       name="questions"></textarea>
 
         <div id="goodPracticesTextContainer">
-            <div>
-                <div id="goodPracticesTextHeader" class="goodPracticesHeadFoot">Quelques points importants</div>
-                <div id="goodPracticesText">
-                    <strong>Tout d'abord, des consignes de base pour vos pièces :</strong><br>
-                    - Les pièces doivent être au format .STL, .3MF ou .STP/.STEP<br>
-                    - Les pièces doivent avoir comme unité de mesure le mm<br>
-                    - Le volume maximal d'impression <strong>filament (FDM)</strong> est de 240x240x240mm<br>
-                    - Pour une impression <strong>résine (SLA)</strong>, le volume maximal est de 50x50x50mm<br>
-                    <br>
-                    <strong>Evitez au maximum les supports</strong><br>
-                    Une partie de votre pièce en suspension peut avoir besoin de support. Faites en sorte qu'une face de
-                    votre modèle donne la plus grande surface de contact possible avec la surface d'impression. Cela
-                    permettra de limiter l'utilisation de supports et donc de réduire le temps d'impression et le coût
-                    de votre pièce.<br><br>
-                    <strong>Mettez une seule pièce par fichier</strong><br>
-                    Si vous nous envoyez un fichier, il faut une seule pièce dessus. Si un fichier contient un bateau et son mât,
-                    le mât doit faire partie du modèle de la coque. Seul cas accepté de plusieurs pièces sur un même
-                    fichier : le print-in-place. Si ce terme ne vous dit rien, merci de mettre une seule pièce par
-                    fichier.<br><br>
-                    <strong>Si vous modélisez vous-mêmes vos pièces</strong><br>
-                    La tolérance (précision maximale) de l'impression 3D est de 0.2mm, c'est à dire qu'une boîte sur
-                    laquelle s'assemble un couvercle doit avoir un espace de 0.2mm minimum entre le couvercle et la
-                    boîte pour pouvoir s'emboîter. Pensez-y pour ne pas avoir à ré-imprimer vos pièces et ainsi vous
-                    éviter des frais supplémentaires.
-                    <br><br>
-                    <strong>Si vous avez trouvé la ou les pièce(s) sur internet</strong><br>
-                    Si vous souhaitez en changer la taille,
-                    faites-le sur
-                    <a href="https://www.tinkercad.com/">https://www.tinkercad.com/</a>. Le personnel du FabLab ne fait
-                    pas de modification de pièces pour ne pas imprimer de pièces inutilement.<br><br>
-                    <strong>Après l'envoi de votre demande</strong><br>
-                    Vérifiez votre boîte de réception régulièrement pour ne pas manquer toute
-                    réponse de notre part contenant :<br>
-                    - Votre devis<br>
-                    - Une remarque sur votre modèle<br>
-                    - Une information éventuelle sur la disponibilité du matériau que vous avez demandé.<br><br>
-                </div>
+            <div id="goodPracticesTextHeader" class="goodPracticesHeadFoot">Quelques points importants</div>
+            <div id="goodPracticesText">
+                <strong>Tout d'abord, des consignes de base pour vos pièces :</strong><br>
+                - Les pièces doivent être au format .STL, .3MF ou .STP/.STEP<br>
+                - Les pièces doivent avoir comme unité de mesure le mm<br>
+                - Le volume maximal d'impression <strong>filament (FDM)</strong> est de 240x240x240mm<br>
+                - Pour une impression <strong>résine (SLA)</strong>, le volume maximal est de 50x50x50mm<br>
+                <br>
+                <strong>Evitez au maximum les supports</strong><br>
+                Une partie de votre pièce en suspension peut avoir besoin de support. Faites en sorte qu'une face de
+                votre modèle donne la plus grande surface de contact possible avec la surface d'impression. Cela
+                permettra de limiter l'utilisation de supports et donc de réduire le temps d'impression et le coût
+                de votre pièce.<br><br>
+                <strong>Mettez une seule pièce par fichier</strong><br>
+                Si vous nous envoyez un fichier, il faut une seule pièce dessus. Si un fichier contient un bateau et son
+                mât,
+                le mât doit faire partie du modèle de la coque. Seul cas accepté de plusieurs pièces sur un même
+                fichier : le print-in-place. Si ce terme ne vous dit rien, merci de mettre une seule pièce par
+                fichier.<br><br>
+                <strong>Si vous modélisez vous-mêmes vos pièces</strong><br>
+                La tolérance (précision maximale) de l'impression 3D est de 0.2mm, c'est à dire qu'une boîte sur
+                laquelle s'assemble un couvercle doit avoir un espace de 0.2mm minimum entre le couvercle et la
+                boîte pour pouvoir s'emboîter. Pensez-y pour ne pas avoir à ré-imprimer vos pièces et ainsi vous
+                éviter des frais supplémentaires.
+                <br><br>
+                <strong>Si vous avez trouvé la ou les pièce(s) sur internet</strong><br>
+                Tout d'abord, indiquez nous la provenance du modèle en indiquant son URL dans le champ prévu à cet effet.
+                <strong>Si vous souhaitez en changer la taille,</strong>
+                faites-le sur
+                <a href="https://www.tinkercad.com/">https://www.tinkercad.com/</a>. Le personnel du FabLab ne fait
+                pas de modification de pièces pour ne pas imprimer de pièces inutilement.<br><br>
+                <strong>Après l'envoi de votre demande</strong><br>
+                Vérifiez votre boîte de réception régulièrement pour ne pas manquer toute
+                réponse de notre part contenant :<br>
+                - Votre devis<br>
+                - Une remarque sur votre modèle<br>
+                - Une information éventuelle sur la disponibilité du matériau que vous avez demandé.<br><br>
             </div>
         </div>
 

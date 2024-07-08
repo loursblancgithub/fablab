@@ -7,8 +7,8 @@ option {
 }
 
 .required:after {
-  content:" *";
-  color: red;
+    content: " *";
+    color: red;
 }
 
 .inputStyle {
@@ -18,7 +18,9 @@ option {
     border-radius: 3px;
     box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
     height: 3vh;
+    min-width: fit-content;
     width: 15vw;
+    max-width: 400px;
     font-size: 2vh;
     margin-bottom: 2vh;
 }
@@ -33,6 +35,7 @@ option {
 
 #fablabLogo {
     width: 7.5vw;
+    max-width: 120px;
     margin: 1vh 0 1vh 0;
 }
 
@@ -69,6 +72,8 @@ option {
     background-color: #2E4798;
     color: #ffffff;
     width: 15vw;
+    min-width: fit-content;
+    max-width: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -77,6 +82,7 @@ option {
     padding: 0.5vh 0 0.8vh 0;
     margin: 2vh 0 2vh 0;
     font-size: 2vh;
+    text-wrap: nowrap;
 }
 
 .blueButton:hover {
@@ -100,7 +106,7 @@ hr.solid {
     pointer-events: none;
 }
 
-#subform {
+#subForm {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -128,7 +134,17 @@ hr.solid {
 }
 
 #orderQuantity {
-    width: 3vw;
+    min-width: 5vw;
+    max-width: 5vw;
+}
+
+#orderFile {
+    padding: 1px 1px 1px 1px;
+    width: 17.5vw;
+}
+
+#orderTool {
+    width: 15vw;
 }
 
 #orderQuestions {
@@ -138,16 +154,12 @@ hr.solid {
     resize: none;
 }
 
-#orderFile {
-    padding: 1px 1px 1px 1px;
-    width: 17.5vw;
-}
-
 #goodPracticesTextContainer {
     border-radius: 5px;
     margin: 2vh 0 2vh 0;
     box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
     padding: 0 1vw 0 1vw;
+    width: auto;
     text-align: justify;
 }
 
@@ -163,12 +175,69 @@ hr.solid {
     color: #2e4798;
 }
 
+#goodPracticesText {
+    font-size: 2vh;
+}
+
 #goodPracticesCheckContainer {
     display: flex;
     justify-content: flex-start;
-    align-content: flex-start;
+    align-content: center;
 }
 
 #goodPracticesCheckText {
-    font-size: 0.75vw;
+    font-size: 75%;
+}
+
+/*--------------------------
+
+Responsive design
+
+--------------------------*/
+
+@media only screen and (max-width: 768px) {
+
+    #fablabLogo {
+        width: 15vw;
+    }
+
+    .blueButton {
+        padding: 1vh 2vw 1vh 2vw;
+    }
+
+    .formTitle {
+        text-wrap: nowrap;
+    }
+
+    .subFormLine {
+        flex-direction: column;
+    }
+
+    #subFormLineSelectors {
+        flex-direction: row;
+    }
+
+    #orderMaterial, #orderColor, #orderQuantity {
+        min-width: 20vw;
+    }
+
+    #orderQuestions {
+        width: 70vw;
+    }
+
+    #goodPracticesTextContainer {
+        width: 80vw;
+    }
+
+    #goodPracticesTextHeader {
+        font-size: 2.5vh;
+    }
+
+    #goodPracticesCheckContainer {
+        width: 80vw;
+    }
+
+    #goodPracticesCheck {
+        margin: 0 3vw 0 1vw;
+    }
 }

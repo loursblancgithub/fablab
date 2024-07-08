@@ -77,5 +77,5 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             alert('Lisez et acceptez les bonnes pratiques avant de valider votre commande.');
         }
-    });
+    })
 });
