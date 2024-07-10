@@ -13,7 +13,8 @@ const orderDataDummy = [{
     "orderMaterial": "Aluminum",
     "orderTotalWeight": "5kg",
     "orderQuantity": 100,
-    "orderPrice": "$2000"
+    "orderPrice": "$2000",
+    "orderQuestion": "Beautiful but underpowered lul"
 },
     {
         "orderName": "Airbus A220",
@@ -23,7 +24,8 @@ const orderDataDummy = [{
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€"
+        "orderPrice": "8€",
+        "orderQuestion": "Bombardier on vous aime"
     },
     {
         "orderName": "Boeing 787",
@@ -33,7 +35,8 @@ const orderDataDummy = [{
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€"
+        "orderPrice": "8€",
+        "orderQuestion": "Belle machine faite par des sagouins"
     },
     {
         "orderName": "Embraer E190",
@@ -43,7 +46,63 @@ const orderDataDummy = [{
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€"
+        "orderPrice": "8€",
+        "orderQuestion": "Faites attention les winglets sont fragiles"
+    },
+    {
+        "orderName": "Embraer E190",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": "300g",
+        "orderQuantity": 1,
+        "orderPrice": "8€",
+        "orderQuestion": "Faites attention les winglets sont fragiles"
+    },
+    {
+        "orderName": "Embraer E190",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": "300g",
+        "orderQuantity": 1,
+        "orderPrice": "8€",
+        "orderQuestion": "Faites attention les winglets sont fragiles"
+    },
+    {
+        "orderName": "Embraer E190",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": "300g",
+        "orderQuantity": 1,
+        "orderPrice": "8€",
+        "orderQuestion": "Faites attention les winglets sont fragiles"
+    },
+    {
+        "orderName": "Embraer E190",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": "300g",
+        "orderQuantity": 1,
+        "orderPrice": "8€",
+        "orderQuestion": "Faites attention les winglets sont fragiles"
+    },
+    {
+        "orderName": "Embraer E190",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": "300g",
+        "orderQuantity": 1,
+        "orderPrice": "8€",
+        "orderQuestion": "Faites attention les winglets sont fragiles"
     }];
 
 
@@ -66,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     orderDataDummy.forEach((orderElement) => {
         const ordersListElement = document.createElement('div');
         ordersListElement.classList.add('ordersListElement');
+        ordersListElement.classList.add('hoverButton');
 
         const ordersListElementName = document.createElement('div');
         ordersListElementName.classList.add('ordersListElementName');
@@ -132,11 +192,9 @@ function displayOrderDetails(order) {
     // Order Element Body
     const orderElementBody = document.createElement('div');
     orderElementBody.classList.add('orderElementBody');
-    orderElementBody.style.display = 'flex';
-    orderElementBody.style.justifyContent = 'space-between';
-    orderElementBody.style.alignItems = 'center';
 
-    const orderElementSummary  = document.createElement('div');
+    // Order Element Summary
+    const orderElementSummary = document.createElement('div');
     orderElementSummary.classList.add('orderElementSummary');
     orderElementSummary.style.width = '50%';
 
@@ -148,6 +206,7 @@ function displayOrderDetails(order) {
     const orderElementDetails = document.createElement('div');
     orderElementDetails.classList.add('orderElementDetails');
 
+    // Order Details
     const orderElementSummaryMaterial = document.createElement('div');
     orderElementSummaryMaterial.textContent = `Matériau: ${order.orderMaterial}`;
     orderElementDetails.appendChild(orderElementSummaryMaterial);
@@ -164,14 +223,40 @@ function displayOrderDetails(order) {
     orderElementSummaryPrice.textContent = `Prix: ${order.orderPrice}`;
     orderElementDetails.appendChild(orderElementSummaryPrice);
 
+    const orderElementSummaryQuestions = document.createElement('div');
+    orderElementSummaryQuestions.textContent = `Questions et commentaires: ${order.orderQuestion}`;
+    orderElementDetails.appendChild(orderElementSummaryQuestions);
+
     orderElementSummary.appendChild(orderElementDetails);
 
     orderElementBody.appendChild(orderElementSummary);
 
+    // Order Files or message container
+    const orderElementFilesMessage = document.createElement('div');
+    orderElementFilesMessage.classList.add('orderElementFilesMessage');
+
+    const orderElementFilesMessageHeader = document.createElement('div');
+    orderElementFilesMessageHeader.classList.add('orderElementFilesMessageHeader');
+
+    const orderElementFilesButton = document.createElement('div');
+    orderElementFilesButton.textContent = 'Fichiers';
+    orderElementFilesButton.classList.add('orderElementFilesMessageButton');
+    orderElementFilesButton.classList.add('hoverButton');
+    orderElementFilesMessageHeader.appendChild(orderElementFilesButton);
+
+    const orderElementMessageButton = document.createElement('div');
+    orderElementMessageButton.textContent = 'Discussion';
+    orderElementMessageButton.classList.add('orderElementFilesMessageButton');
+    orderElementMessageButton.classList.add('hoverButton');
+    orderElementFilesMessageHeader.appendChild(orderElementMessageButton);
+
+    orderElementFilesMessage.appendChild(orderElementFilesMessageHeader);
+    orderElementBody.appendChild(orderElementFilesMessage);
 
     // Adding all parts to the order element division
     orderElementDiv.appendChild(orderElementHeader);
     orderElementDiv.appendChild(orderElementBody);
 
     orderContainer.appendChild(orderElementDiv);
+    setTimeout(() => orderElementDiv.classList.add('active'), 10);
 }
