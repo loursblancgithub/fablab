@@ -1,15 +1,9 @@
-// Create WebSocket connection.
-const socket = new WebSocket("ws://localhost:8080");
+/*
+import {socket} from './websocket_setup.js';
 
-// Connection opened
-socket.addEventListener("open", (event) => {
-    socket.send("Hello Server!");
-});
-
-// Listen for messages
-socket.addEventListener("message", (event) => {
-    console.log("Message from server ", event.data);
-});
+// Use the `socket` object for sending messages, etc.
+socket.send("Message specific to admin_orders_fetcher functionality.");
+*/
 
 document.addEventListener('DOMContentLoaded', () => {
     const wipeInputs = document.querySelectorAll('input[type="text"], input[type="password"],input[type="quantity"], input[type="checkbox"], input[type="select"], textarea');
@@ -61,12 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 const orderDetails = {
-                    orderName: document.getElementById('orderName').value,
-                    usedSoftware: document.getElementById('orderTool').value,
-                    quantity: document.getElementById('orderQuantity').value,
-                    material: document.getElementById('orderMaterial').value,
-                    questions: document.getElementById('orderQuestions').value,
-                    verification: document.getElementById('goodPracticesCheck').checked
+                    orderName: escapeOutput(document.getElementById('orderName').value),
+                    orderTool: escapeOutput(document.getElementById('orderTool').value),
+                    orderQuantity: escapeOutput(document.getElementById('orderQuantity').value),
+                    orderMaterial: escapeOutput(document.getElementById('orderMaterial').value),
+                    orderQuestions: escapeOutput(document.getElementById('orderQuestions').value),
+                    goodPracticesCheck: document.getElementById('goodPracticesCheck').checked
                 };
 
                 console.log(orderDetails);
@@ -79,3 +73,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 });
+
+/*--------------------------
+
+Functions
+
+--------------------------*/
+
+
+// Input sanitizer
+function escapeOutput(toOutput) {
+    return toOutput.replace(/\&/g, '&amp;')
+        .replace(/\</g, '&lt;')
+        .replace(/\>/g, '&gt;')
+        .replace(/\"/g, '&quot;')
+        .replace(/\'/g, '&#x27;')
+        .replace(/\//g, '&#x2F;');
+}
