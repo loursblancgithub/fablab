@@ -11,20 +11,6 @@ option {
     color: red;
 }
 
-.inputStyle {
-    font-family: LexendDeca, serif;
-    background-color: #e6e9f0;
-    border: 0;
-    border-radius: 3px;
-    box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
-    height: 3vh;
-    min-width: fit-content;
-    width: 15vw;
-    max-width: 400px;
-    font-size: 2vh;
-    margin-bottom: 2vh;
-}
-
 #bodyContainer {
     display: flex;
     flex-direction: column;
@@ -66,28 +52,6 @@ option {
     font-size: 2vh;
     font-weight: 325;
     margin: 1.5vh 0 0.5vh 0;
-}
-
-.blueButton {
-    background-color: #2E4798;
-    color: #ffffff;
-    width: 15vw;
-    min-width: fit-content;
-    max-width: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 3px;
-    font-weight: 275;
-    padding: 0.5vh 0 0.8vh 0;
-    margin: 2vh 0 2vh 0;
-    font-size: 2vh;
-    text-wrap: nowrap;
-}
-
-.blueButton:hover {
-    background-color: #1E2E5C;
-    cursor: pointer;
 }
 
 hr.solid {
