@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let loginMask = document.createElement('div');
     loginMask.id = 'loginMask';
 
+    // When successfully logged in, removing the login form
     document.addEventListener("keypress", function (event) {
         if (event.key === "f") {
             console.log('Successfully logged in');
@@ -54,22 +55,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     input.value = input.value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                 });
 
+                const now = new Date();
+                const dateTimeString = now.toString();
+                console.log(dateTimeString);
+
                 const orderDetails = {
                     orderName: escapeOutput(document.getElementById('orderName').value),
                     orderTool: escapeOutput(document.getElementById('orderTool').value),
                     orderQuantity: escapeOutput(document.getElementById('orderQuantity').value),
                     orderMaterial: escapeOutput(document.getElementById('orderMaterial').value),
                     orderQuestions: escapeOutput(document.getElementById('orderQuestions').value),
-                    goodPracticesCheck: document.getElementById('goodPracticesCheck').checked
+                    goodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
+                    orderDateTime: dateTimeString
                 };
 
                 console.log(orderDetails);
-                socket.send(JSON.stringify(orderDetails));
+                /*socket.send(JSON.stringify(orderDetails));*/
             } else {
-                alert('Remplissez tous les champs obligatoires.');
+                alert('Merci de remplir tous les champs obligatoires');
             }
         } else {
-            alert('Lisez et acceptez les bonnes pratiques avant de valider votre commande.');
+            alert('Il faut lire et accepter les points importants afin de pouvoir valider la commande');
         }
     })
 });
@@ -83,10 +89,10 @@ Functions
 
 // Input sanitizer
 function escapeOutput(toOutput) {
-    return toOutput.replace(/\&/g, '&amp;')
-        .replace(/\</g, '&lt;')
-        .replace(/\>/g, '&gt;')
-        .replace(/\"/g, '&quot;')
-        .replace(/\'/g, '&#x27;')
+    return toOutput.replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;')
         .replace(/\//g, '&#x2F;');
 }

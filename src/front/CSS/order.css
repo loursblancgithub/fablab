@@ -25,6 +25,18 @@ option {
     margin: 1vh 0 1vh 0;
 }
 
+#headerSide {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: fit-content;
+    position: sticky;
+    right: 1vw;
+    top: 0.5vw;
+    margin-right: -90vw;
+    margin-top: -6.25vh;
+}
+
 #loginForm {
     display: flex;
     flex-direction: column;
