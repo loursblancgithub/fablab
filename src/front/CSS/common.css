@@ -1,3 +1,9 @@
+/*--------------------------
+
+Generic elements
+
+--------------------------*/
+
 @font-face {
     font-family: 'LexendDeca';
     src: url('../Assets/LexendDeca-VariableFont_wght.ttf') format('truetype');
@@ -5,5 +11,207 @@
 
 body {
     background-color: #ffffff;
-    font-family: LexendDeca, serif;
+    font-family: LexendDeca, sans-serif;
+}
+
+/* Generic grey input with box shadow */
+
+.inputStyle {
+    font-family: LexendDeca, sans-serif;
+    background-color: #e6e9f0;
+    border: 0;
+    border-radius: 3px;
+    box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
+    height: 3vh;
+    min-width: fit-content;
+    width: 15vw;
+    max-width: 400px;
+    font-size: 2vh;
+    margin-bottom: 2vh;
+}
+
+/* Generic #2e4798 blue button */
+
+.blueButton {
+    background-color: #2E4798;
+    color: #ffffff;
+    width: 15vw;
+    min-width: fit-content;
+    max-width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    font-weight: 275;
+    padding: 0.5vh 0 0.8vh 0;
+    margin: 2vh 0 2vh 0;
+    font-size: 2vh;
+    text-wrap: nowrap;
+}
+
+.blueButton:hover {
+    background-color: #1a2f66;
+    cursor: pointer;
+}
+
+select > option {
+    font-family: LexendDeca, sans-serif;
+}
+
+/*--------------------------
+
+Header side
+
+--------------------------*/
+
+#headerSide {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: fit-content;
+    position: absolute;
+    right: 10vw;
+    top: 6vw;
+}
+
+#formBulb {
+    width: 2vw;
+    max-width: 100px;
+    margin: 1vh 0 1vh 0;
+}
+
+#formBulb:hover {
+    cursor: pointer;
+}
+
+#logoutButton {
+    width: fit-content;
+    padding: 1% 5% 1% 5%;
+    margin: 0 0 0 5%;
+}
+
+#logoutButton:hover {
+    cursor: pointer;
+}
+
+/*--------------------------
+
+Feedback Form
+
+--------------------------*/
+
+@keyframes fadeInScaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#pageMask {
+    background-color: #ffffff;
+    position: absolute;
+    z-index: 14;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    opacity: 0.5;
+    height: 100vh;
+    width: 100vw;
+}
+
+.feedbackForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 20vw;
+    height: fit-content;
+    background-color: #ffffff;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    padding: 2vh 1vw 1vh 1vw;
+    border: 10px solid #2E4798;
+    border-radius: 10px;
+    animation: fadeInScaleUp 0.25s ease-out forwards;
+}
+
+#feedbackFormClose {
+    font-size: 4vh;
+    cursor: pointer;
+    margin: 0 0 1vh 0;
+}
+
+/* Pop-in animation */
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Pop-out animation */
+@keyframes popOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+}
+
+.feedbackFormPopIn {
+    animation: popIn 0.25s forwards;
+}
+
+.feedbackFormPopOut {
+    animation: popOut 0.25s forwards;
+}
+
+/* Responsive elements */
+@media only screen and (max-width: 768px) {
+    #headerSide {
+        right: 5vw;
+        top: 3vw;
+        flex-direction: column-reverse;
+        align-content: flex-end;
+        justify-content: flex-end;
+    }
+
+    #formBulb {
+        width: 4vw;
+    }
+
+    #logoutButton {
+        padding: 1% 3% 1% 3%;
+        font-size: 1em;
+    }
+
+    .inputStyle {
+        width: 30vw;
+    }
+
+    .blueButton {
+        width: 30vw;
+    }
+
+    .feedbackForm {
+        width: 60vw;
+        padding: 2%;
+    }
 }
