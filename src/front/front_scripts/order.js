@@ -17,28 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('goodPracticesCheck').checked = false;
 
-    let loginMask = document.createElement('div');
-    loginMask.id = 'loginMask';
-
-    // When successfully logged in, removing the login form
-    document.addEventListener("keypress", function (event) {
-        if (event.key === "f") {
-            console.log('Successfully logged in');
-
-            loginForm.style.zIndex = '-15';
-
-            if (orderForm) {
-                orderForm.style.transition = 'transform 1.5s';
-                orderForm.style.transform = 'translateY(-30vh)';
-            }
-
-            document.getElementById('loginForm').classList.add('disappear');
-            orderForm.style.filter = 'blur(0)';
-            orderForm.style.pointerEvents = 'all';
-            loginForm.style.pointerEvents = 'none';
-        }
-    });
-
     // Retrieving, formatting and sending the order informations
     document.getElementById('submit').addEventListener('click', function () {
         if (document.getElementById('goodPracticesCheck').checked) {

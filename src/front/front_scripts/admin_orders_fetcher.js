@@ -6,8 +6,8 @@ socket.send("Message specific to admin_orders_fetcher functionality.");
 */
 
 const orderDataDummy = [{
-    "orderName": "Custom Widget",
-    "orderState": "billed",
+    "orderName": "Cirrus Vision Jet",
+    "orderState": "pending",
     "orderClient": "Jane Doe",
     "orderClientEmail": "jane.doe@example.com",
     "orderMaterial": "Aluminum",
@@ -17,7 +17,7 @@ const orderDataDummy = [{
 },
     {
         "orderName": "Airbus A220",
-        "orderState": "printed",
+        "orderState": "finished",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
         "orderMaterial": "PLA",
@@ -26,7 +26,7 @@ const orderDataDummy = [{
         "orderPrice": "8€"
     },
     {
-        "orderName": "Airbus A220",
+        "orderName": "Boeing 787",
         "orderState": "sliced",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
@@ -36,18 +36,20 @@ const orderDataDummy = [{
         "orderPrice": "8€"
     },
     {
-        "orderName": "Airbus A220",
+        "orderName": "Embraer E190",
         "orderState": "printing",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€"
+        "orderPrice": "8€",
+        "orderQuestion": "Faites attention les winglets sont fragiles"
     }];
 
+const contentContainer = document.getElementById('contentContainer');
+
 document.addEventListener('DOMContentLoaded', () => {
-    const contentContainer = document.getElementById('contentContainer');
 
     /*// Use the `socket` object for sending messages, etc.
     socket.send("Requesting order data");
@@ -64,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.remove('active');
             });
 
-            // Add active class to the clicked button
+            // Add active class to the clicked buttons
             this.classList.add('active');
         });
     });
@@ -94,6 +96,7 @@ function createOrderElements(orderElements) {
 
         const orderElementHeaderColumn1 = document.createElement('div');
         orderElementHeaderColumn1.classList.add('orderElementHeaderColumn');
+        orderElementHeaderColumn1.id = 'orderElementHeaderColumn1';
 
         // Order Name
         const orderNameElement = document.createElement('div');
@@ -125,30 +128,35 @@ function createOrderElements(orderElements) {
         const orderClientEmailElement = document.createElement('div');
         orderClientEmailElement.textContent = `E-mail: ${orderElement.orderClientEmail}`;
         orderClientEmailElement.classList.add('orderElementText');
+        orderClientEmailElement.classList.add('orderResponsive');
         orderElementDiv.appendChild(orderClientEmailElement);
 
         // Material
         const orderMaterialElement = document.createElement('div');
         orderMaterialElement.textContent = `Matériau: ${orderElement.orderMaterial}`;
         orderMaterialElement.classList.add('orderElementText');
+        orderMaterialElement.classList.add('orderResponsive');
         orderElementDiv.appendChild(orderMaterialElement);
 
         // Total Weight
         const orderTotalWeightElement = document.createElement('div');
         orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight}`;
         orderTotalWeightElement.classList.add('orderElementText');
+        orderTotalWeightElement.classList.add('orderResponsive');
         orderElementDiv.appendChild(orderTotalWeightElement);
 
         // Quantity
         const orderQuantityElement = document.createElement('div');
         orderQuantityElement.textContent = `Quantité: ${orderElement.orderQuantity}`;
         orderQuantityElement.classList.add('orderElementText');
+        orderQuantityElement.classList.add('orderResponsive');
         orderElementDiv.appendChild(orderQuantityElement);
 
         // Price
         const orderPriceElement = document.createElement('div');
         orderPriceElement.textContent = `Price: ${orderElement.orderPrice}`;
         orderPriceElement.classList.add('orderElementText');
+        orderPriceElement.classList.add('orderResponsive');
         orderElementDiv.appendChild(orderPriceElement);
 
         // Append the order element to the content container
@@ -195,7 +203,7 @@ function createStateDropdown(currentState) {
 // Apply colors to the dropdown
 function getColorForState(state, fontColor = false) {
     const stateColorMapping = {
-        billed: {background: '#215a6c', font: '#ffffff'},
+        pending: {background: '#215a6c', font: '#ffffff'},
         printed: {background: '#5a3286', font: '#ffffff'},
         sliced: {background: '#0a53a8', font: '#ffffff'},
         printing: {background: '#fd731e', font: '#000000'}

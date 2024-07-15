@@ -108,6 +108,12 @@ const orderDataDummy = [{
 
 const orderContainer = document.getElementById('orderContainer');
 
+/*--------------------------
+
+Main logic
+
+--------------------------*/
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // Sort order list
@@ -148,26 +154,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Set color state for each order
-function getColorForState(state) {
-    const stateColorMapping = {
-        pending: {background: '#215a6c', font: '#ffffff', frText: "En attente"},
-        billed: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        printed: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        sliced: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        printing: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        finished: {background: '#0A53A8', font: '#ffffff', frText: "Terminée"},
-    };
+/*--------------------------
 
-    return stateColorMapping[state] || {background: '#bdbdbd', font: '#000000'}; // Default colors
-}
+Functions
+
+--------------------------*/
 
 // Function to display order details in #orderContainer
 function displayOrderDetails(order) {
-    orderContainer.innerHTML = '';
+
+    if (document.getElementById('orderElement')) {
+        document.getElementById('orderElement').remove();
+    }
 
     const orderElementDiv = document.createElement('div');
     orderElementDiv.classList.add('orderElement');
+    orderElementDiv.id = 'orderElement';
 
     // Order Element Header
     const orderElementHeader = document.createElement('div');
@@ -231,7 +233,9 @@ function displayOrderDetails(order) {
 
     orderElementBody.appendChild(orderElementSummary);
 
-    // Order Files or message container
+    // Order files/chat container
+
+    // Header
     const orderElementFilesMessage = document.createElement('div');
     orderElementFilesMessage.classList.add('orderElementFilesMessage');
 
@@ -250,7 +254,12 @@ function displayOrderDetails(order) {
     orderElementMessageButton.classList.add('hoverButton');
     orderElementFilesMessageHeader.appendChild(orderElementMessageButton);
 
+    const orderElementFilesMessageContent = document.createElement('div');
+    orderElementFilesMessageContent.classList.add('orderElementFilesMessageContent');
+
+
     orderElementFilesMessage.appendChild(orderElementFilesMessageHeader);
+    orderElementFilesMessage.appendChild(orderElementFilesMessageContent);
     orderElementBody.appendChild(orderElementFilesMessage);
 
     // Adding all parts to the order element division
@@ -258,5 +267,42 @@ function displayOrderDetails(order) {
     orderElementDiv.appendChild(orderElementBody);
 
     orderContainer.appendChild(orderElementDiv);
-    setTimeout(() => orderElementDiv.classList.add('active'), 10);
+    setTimeoutWithRAF(() => {
+        orderElementDiv.classList.add('active');
+    }, 10);
+}
+
+function displayFilesList(orderID) {
+
+}
+
+
+// Set color state for each order
+function getColorForState(state) {
+    const stateColorMapping = {
+        pending: {background: '#215a6c', font: '#ffffff', frText: "En attente"},
+        billed: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
+        printed: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
+        sliced: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
+        printing: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
+        finished: {background: '#0A53A8', font: '#ffffff', frText: "Terminée"},
+    };
+
+    return stateColorMapping[state] || {background: '#bdbdbd', font: '#000000'}; // Default colors
+}
+
+
+// Function to properly show the order element animation
+function setTimeoutWithRAF(callback, delay) {
+    const start = performance.now();
+
+    function frame(time) {
+        if (time - start >= delay) {
+            callback();
+        } else {
+            requestAnimationFrame(frame);
+        }
+    }
+
+    requestAnimationFrame(frame);
 }

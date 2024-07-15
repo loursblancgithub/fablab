@@ -1,3 +1,9 @@
+/*--------------------------
+
+Generic elements
+
+--------------------------*/
+
 strong {
     color: #2e4798;
 }
@@ -6,10 +12,11 @@ option {
     font-family: LexendDeca, sans-serif;
 }
 
-.required:after {
-    content: " *";
-    color: red;
-}
+/*--------------------------
+
+Content
+
+--------------------------*/
 
 #bodyContainer {
     display: flex;
@@ -19,6 +26,7 @@ option {
     height: 100vh;
 }
 
+/*------> Header <------*/
 #fablabLogo {
     width: 7.5vw;
     max-width: 120px;
@@ -35,42 +43,8 @@ option {
     top: 0.5vw;
     margin-right: -90vw;
     margin-top: -6.25vh;
-}
 
-#loginForm {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-    position: relative;
-}
-
-#loginForm.disappear {
-    opacity: 0;
-    transition: opacity 0.5s ease-out;
-}
-
-.hideElement {
-    opacity: 0;
-    transition: opacity 1s;
-}
-
-#password {
-    margin-bottom: 2vh;
-}
-
-.formTitle {
-    font-size: 2vh;
-    font-weight: 325;
-    margin: 1.5vh 0 0.5vh 0;
-}
-
-hr.solid {
-    border-top: 1px solid #3e3e3e;
-    width: 25vw;
-}
-
+}/*------> Order form <------*/
 #orderForm {
     display: flex;
     flex-direction: column;
@@ -78,7 +52,6 @@ hr.solid {
     align-items: center;
     width: 40vw;
     z-index: 0;
-    filter: blur(2px);
     pointer-events: none;
 }
 
@@ -130,6 +103,7 @@ hr.solid {
     resize: none;
 }
 
+/*------> Good practices <------*/
 #goodPracticesTextContainer {
     border-radius: 5px;
     margin: 2vh 0 2vh 0;
