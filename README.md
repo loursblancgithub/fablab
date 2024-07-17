@@ -1,6 +1,6 @@
 # Plateforme fablab Garage-ISEP
 
-une plateforme pour emettre et gerer les commandes au fablab
+Une plateforme pour émettre et gérer les commandes au fablab
 
 ## Auteurs
 
