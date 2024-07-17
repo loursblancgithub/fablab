@@ -12,6 +12,10 @@ option {
     font-family: LexendDeca, sans-serif;
 }
 
+body {
+    overflow-x: hidden;
+}
+
 /*--------------------------
 
 Content
@@ -44,7 +48,72 @@ Content
     margin-right: -90vw;
     margin-top: -6.25vh;
 
-}/*------> Order form <------*/
+}
+
+#expertModeTitle {
+    text-wrap: nowrap;
+    font-size: 80%;
+}
+
+/*------> Slider <------*/
+
+:root {
+    --switch-width: 3vw;
+    --switch-height: calc(var(--switch-width) / 1.76);
+    /* Parameter here so that size is easy to change while keeping proportions */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    min-width: var(--switch-width);
+    height: var(--switch-height);
+    margin: 0 1vw 0 0.5vw;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: calc(var(--switch-height) * 0.76); /* Adjust the multiplier based on desired proportions */
+    width: calc(var(--switch-width) * 0.43); /* Adjust the multiplier based on desired proportions */
+    left: 6%;
+    bottom: 12.5%;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2E4798;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2E4798;
+}
+
+input:checked + .slider:before {
+    transform: translateX(calc(var(--switch-width) - var(--switch-width) * 0.43 - 8px)); /* Calculate the translation based on the width of the slider and its child */
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/*------> Order form <------*/
 #orderForm {
     display: flex;
     flex-direction: column;
@@ -52,7 +121,6 @@ Content
     align-items: center;
     width: 40vw;
     z-index: 0;
-    pointer-events: none;
 }
 
 #subForm {
