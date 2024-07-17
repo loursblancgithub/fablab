@@ -5,7 +5,8 @@ import {socket} from './websocket_setup.js';
 socket.send("Message specific to admin_orders_fetcher functionality.");
 */
 
-import removeAllChildren from "../../scripts/utils.js";
+import {removeAllChildren} from "../../scripts/utils.js";
+import {showHover} from "../../scripts/utils.js";
 
 
 // peut etre ajouter id pour tout refresh et donc refaire apparaitre dans le bon ordre
@@ -147,6 +148,7 @@ function createOrderElements(orderElements) {
         const orderNameElement = document.createElement('div');
         orderNameElement.textContent = `${orderElement.orderName}`;
         orderNameElement.classList.add('orderElementText');
+        showHover(orderNameElement, `${orderElement.orderName}`);
         orderElementHeaderColumn1.appendChild(orderNameElement);
 
         // Client Name
@@ -179,7 +181,7 @@ function createOrderElements(orderElements) {
 
         const buttonIcon = document.createElement('span');
         buttonIcon.classList.add('orderElementDetailsIcon');
-        buttonIcon.textContent = '⯅'; 
+        orderElement.details ? buttonIcon.textContent = '⯅' : buttonIcon.textContent = '⯆'; 
 
         orderDetailsElement.appendChild(buttonText);
         orderDetailsElement.appendChild(buttonIcon);
@@ -192,7 +194,7 @@ function createOrderElements(orderElements) {
             createOrderElements(orderElements);
         });
 
-        if (orderElement.details){        
+        if (orderElement.details){
             // Client Email
             const orderClientEmailElement = document.createElement('div');
             orderClientEmailElement.textContent = `E-mail: ${orderElement.orderClientEmail}`;

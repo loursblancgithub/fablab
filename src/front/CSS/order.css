@@ -1,3 +1,9 @@
+/*--------------------------
+
+Generic elements
+
+--------------------------*/
+
 strong {
     color: #2e4798;
 }
@@ -6,10 +12,15 @@ option {
     font-family: LexendDeca, sans-serif;
 }
 
-.required:after {
-    content: " *";
-    color: red;
+body {
+    overflow-x: hidden;
 }
+
+/*--------------------------
+
+Content
+
+--------------------------*/
 
 #bodyContainer {
     display: flex;
@@ -19,6 +30,7 @@ option {
     height: 100vh;
 }
 
+/*------> Header <------*/
 #fablabLogo {
     width: 7.5vw;
     max-width: 120px;
@@ -35,42 +47,73 @@ option {
     top: 0.5vw;
     margin-right: -90vw;
     margin-top: -6.25vh;
+
 }
 
-#loginForm {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
+#expertModeTitle {
+    text-wrap: nowrap;
+    font-size: 80%;
+}
+
+/*------> Slider <------*/
+
+:root {
+    --switch-width: 3vw;
+    --switch-height: calc(var(--switch-width) / 1.76);
+    /* Parameter here so that size is easy to change while keeping proportions */
+}
+
+.switch {
     position: relative;
+    display: inline-block;
+    min-width: var(--switch-width);
+    height: var(--switch-height);
+    margin: 0 1vw 0 0.5vw;
 }
 
-#loginForm.disappear {
-    opacity: 0;
-    transition: opacity 0.5s ease-out;
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
 }
 
-.hideElement {
-    opacity: 0;
-    transition: opacity 1s;
+.slider:before {
+    position: absolute;
+    content: "";
+    height: calc(var(--switch-height) * 0.76); /* Adjust the multiplier based on desired proportions */
+    width: calc(var(--switch-width) * 0.43); /* Adjust the multiplier based on desired proportions */
+    left: 6%;
+    bottom: 12.5%;
+    background-color: white;
+    transition: .4s;
 }
 
-#password {
-    margin-bottom: 2vh;
+input:checked + .slider {
+    background-color: #2E4798;
 }
 
-.formTitle {
-    font-size: 2vh;
-    font-weight: 325;
-    margin: 1.5vh 0 0.5vh 0;
+input:focus + .slider {
+    box-shadow: 0 0 1px #2E4798;
 }
 
-hr.solid {
-    border-top: 1px solid #3e3e3e;
-    width: 25vw;
+input:checked + .slider:before {
+    transform: translateX(calc(var(--switch-width) - var(--switch-width) * 0.43 - 8px)); /* Calculate the translation based on the width of the slider and its child */
 }
 
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/*------> Order form <------*/
 #orderForm {
     display: flex;
     flex-direction: column;
@@ -78,8 +121,6 @@ hr.solid {
     align-items: center;
     width: 40vw;
     z-index: 0;
-    filter: blur(2px);
-    pointer-events: none;
 }
 
 #subForm {
@@ -130,6 +171,7 @@ hr.solid {
     resize: none;
 }
 
+/*------> Good practices <------*/
 #goodPracticesTextContainer {
     border-radius: 5px;
     margin: 2vh 0 2vh 0;
