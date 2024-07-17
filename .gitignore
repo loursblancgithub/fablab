@@ -1,1 +1,8 @@
 /target
+.idea/vcs.xml
+.idea/prettier.xml
+.idea/modules.xml
+.idea/jsLinters/eslint.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/fablab.iml
+.idea/codeStyles/codeStyleConfig.xml
