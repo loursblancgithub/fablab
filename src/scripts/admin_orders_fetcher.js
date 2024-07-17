@@ -5,49 +5,67 @@ import {socket} from './websocket_setup.js';
 socket.send("Message specific to admin_orders_fetcher functionality.");
 */
 
-const orderDataDummy = [{
-    "orderName": "Custom Widget",
-    "orderState": "billed",
-    "orderClient": "Jane Doe",
-    "orderClientEmail": "jane.doe@example.com",
-    "orderMaterial": "Aluminum",
-    "orderTotalWeight": "5kg",
-    "orderQuantity": 100,
-    "orderPrice": "$2000"
-},
+import removeAllChildren from "./utils.js";
+
+
+// peut etre ajouter id pour tout refresh et donc refaire apparaitre dans le bon ordre
+
+const orderDataDummy = [
     {
+        "id": 0,
+        "orderName": "Cirrus Vision Jet",
+        "orderState": "pending",
+        "orderClient": "Jane Doe",
+        "orderClientEmail": "jane.doe@example.com",
+        "orderMaterial": "Aluminum",
+        "orderTotalWeight": "5kg",
+        "orderQuantity": 100,
+        "orderPrice": "$2000",
+        "details": false
+    },
+    {
+        "id": 1,
         "orderName": "Airbus A220",
-        "orderState": "printed",
+        "orderState": "finished",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€"
+        "orderPrice": "8€",
+        "details": false
     },
     {
-        "orderName": "Airbus A220",
+        "id": 2,
+        "orderName": "Boeing 787",
         "orderState": "sliced",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€"
+        "orderPrice": "8€",
+        "details": false
     },
     {
-        "orderName": "Airbus A220",
+        "id": 3,
+        "orderName": "Embraer E190",
         "orderState": "printing",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€"
-    }];
+        "orderPrice": "8€",
+        "details": false
+    }
+];
+
+
+const contentContainer = document.getElementById('contentContainer');
+
 
 document.addEventListener('DOMContentLoaded', () => {
-    const contentContainer = document.getElementById('contentContainer');
 
     /*// Use the `socket` object for sending messages, etc.
     socket.send("Requesting order data");
@@ -56,6 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Assuming the server sends a JSON string with order data
         const orderData = JSON.parse(event.data);
     });*/
+
+    
 
     document.querySelectorAll('.sidePanelStateButton').forEach(button => {
         button.addEventListener('click', function () {
@@ -69,11 +89,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+
+    //afficher toutes les commandes par défaut
+    document.getElementById('sidePanelStateButtonAll').classList.add('active');
+    createOrderElements(orderDataDummy);
+
     document.getElementById('sidePanelStateButtonAll').addEventListener('click', () => {
         console.log('Button clicked');
 
         contentContainer.innerHTML = '';
         createOrderElements(orderDataDummy);
+    });
+ 
+    document.getElementById('sidePanelStateButtonToDo').addEventListener('click', () => {
+        console.log('Button clicked');
+
+        contentContainer.innerHTML = '';
+        createOrderElements(orderDataDummy.filter(order => order.orderState == "pending"));
+    });
+
+    document.getElementById('sidePanelStateButtonOngoing').addEventListener('click', () => {
+        console.log('Button clicked');
+
+        contentContainer.innerHTML = '';
+        createOrderElements(orderDataDummy.filter(order => order.orderState != "pending" && order.orderState != "finished"));
+    });
+
+    document.getElementById('sidePanelStateButtonFinished').addEventListener('click', () => {
+        console.log('Button clicked');
+
+        contentContainer.innerHTML = '';
+        createOrderElements(orderDataDummy.filter(order => order.orderState == "finished"));
     });
 });
 
@@ -85,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Dynamically create elements based on the order data
 function createOrderElements(orderElements) {
+    orderElements.sort((a,b) => b.id - a.id);
     orderElements.forEach(function (orderElement) {
         const orderElementDiv = document.createElement('div');
         orderElementDiv.classList.add('orderElement');
@@ -121,48 +168,93 @@ function createOrderElements(orderElements) {
         orderElementHeader.appendChild(orderElementHeaderColumn2);
         orderElementDiv.appendChild(orderElementHeader);
 
-        // Client Email
-        const orderClientEmailElement = document.createElement('div');
-        orderClientEmailElement.textContent = `E-mail: ${orderElement.orderClientEmail}`;
-        orderClientEmailElement.classList.add('orderElementText');
-        orderElementDiv.appendChild(orderClientEmailElement);
+        // Details
+        const orderDetailsElement = document.createElement('button');
+        orderDetailsElement.classList.add('orderElementDetails');
 
-        // Material
-        const orderMaterialElement = document.createElement('div');
-        orderMaterialElement.textContent = `Matériau: ${orderElement.orderMaterial}`;
-        orderMaterialElement.classList.add('orderElementText');
-        orderElementDiv.appendChild(orderMaterialElement);
+        const buttonText = document.createElement('span');
+        buttonText.textContent = 'Détails';
+        buttonText.classList.add('orderElementDetailsText');
 
-        // Total Weight
-        const orderTotalWeightElement = document.createElement('div');
-        orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight}`;
-        orderTotalWeightElement.classList.add('orderElementText');
-        orderElementDiv.appendChild(orderTotalWeightElement);
+        const buttonIcon = document.createElement('span');
+        buttonIcon.classList.add('orderElementDetailsIcon');
+        buttonIcon.textContent = '⯅'; 
 
-        // Quantity
-        const orderQuantityElement = document.createElement('div');
-        orderQuantityElement.textContent = `Quantité: ${orderElement.orderQuantity}`;
-        orderQuantityElement.classList.add('orderElementText');
-        orderElementDiv.appendChild(orderQuantityElement);
+        orderDetailsElement.appendChild(buttonText);
+        orderDetailsElement.appendChild(buttonIcon);
 
-        // Price
-        const orderPriceElement = document.createElement('div');
-        orderPriceElement.textContent = `Price: ${orderElement.orderPrice}`;
-        orderPriceElement.classList.add('orderElementText');
-        orderElementDiv.appendChild(orderPriceElement);
+        orderDetailsElement.addEventListener('click', () => {
+            orderElement.details = !orderElement.details;
+            console.log("Button clicked");
+            removeAllChildren(orderElementDiv);
+            removeAllChildren(contentContainer);
+            createOrderElements(orderElements);
+        });
 
+        if (orderElement.details){        
+            // Client Email
+            const orderClientEmailElement = document.createElement('div');
+            orderClientEmailElement.textContent = `E-mail: ${orderElement.orderClientEmail}`;
+            orderClientEmailElement.classList.add('orderElementText');
+            orderElementDiv.appendChild(orderClientEmailElement);
+        
+            // Material
+            const orderMaterialElement = document.createElement('div');
+            orderMaterialElement.textContent = `Matériau: ${orderElement.orderMaterial}`;
+            orderMaterialElement.classList.add('orderElementText');
+            orderElementDiv.appendChild(orderMaterialElement);
+        
+            // Total Weight
+            const orderTotalWeightElement = document.createElement('div');
+            orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight}`;
+            orderTotalWeightElement.classList.add('orderElementText');
+            orderElementDiv.appendChild(orderTotalWeightElement);
+        
+            // Quantity
+            const orderQuantityElement = document.createElement('div');
+            orderQuantityElement.textContent = `Quantité: ${orderElement.orderQuantity}`;
+            orderQuantityElement.classList.add('orderElementText');
+            orderElementDiv.appendChild(orderQuantityElement);
+        
+            // Price
+            const orderPriceElement = document.createElement('div');
+            orderPriceElement.textContent = `Price: ${orderElement.orderPrice}`;
+            orderPriceElement.classList.add('orderElementText');
+            orderElementDiv.appendChild(orderPriceElement);
+        
+            // Details
+            const orderDetailsElement = document.createElement('button');
+            orderDetailsElement.classList.add('orderElementDetails');
+        
+            // Ajouter le texte et l'icône au bouton
+            const buttonText = document.createElement('span');
+            buttonText.textContent = 'Détails';
+            buttonText.classList.add('orderElementDetailsText');
+        
+            const buttonIcon = document.createElement('span');
+            buttonIcon.classList.add('orderElementDetailsIcon');
+            buttonIcon.textContent = '⯅'; 
+        
+            orderDetailsElement.appendChild(buttonText);
+            orderDetailsElement.appendChild(buttonIcon);
+        }
+
+        orderElementDiv.appendChild(orderDetailsElement);
         // Append the order element to the content container
         contentContainer.appendChild(orderElementDiv);
-    });
+    })
 }
+
 
 // Function to create the order state dropdown
 function createStateDropdown(currentState) {
     const stateOptions = {
+        pending: 'En attente',
         billed: 'Facturé',
         printed: 'Imprimé',
         sliced: 'Slicé',
-        printing: 'En cours d\'impression'
+        printing: 'En cours d\'impression',
+        finished: 'Terminé'
     };
 
     const dropdown = document.createElement('select');
@@ -195,10 +287,12 @@ function createStateDropdown(currentState) {
 // Apply colors to the dropdown
 function getColorForState(state, fontColor = false) {
     const stateColorMapping = {
-        billed: {background: '#215a6c', font: '#ffffff'},
-        printed: {background: '#5a3286', font: '#ffffff'},
-        sliced: {background: '#0a53a8', font: '#ffffff'},
-        printing: {background: '#fd731e', font: '#000000'}
+        pending: {background: '#215a6c', font: '#ffffff', frText: "En attente"},
+        billed: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
+        printed: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
+        sliced: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
+        printing: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
+        finished: {background: '#0A53A8', font: '#ffffff', frText: "Terminée"},
     };
 
     if (fontColor) {
