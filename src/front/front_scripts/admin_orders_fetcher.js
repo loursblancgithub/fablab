@@ -155,6 +155,7 @@ function createOrderElements(orderElements) {
         const orderClientElement = document.createElement('div');
         orderClientElement.textContent = `${orderElement.orderClient}`;
         orderClientElement.classList.add('orderElementText');
+        showHover(orderClientElement,`${orderElement.orderClient}`);
         orderElementHeaderColumn1.appendChild(orderClientElement);
 
         orderElementHeader.appendChild(orderElementHeaderColumn1);
@@ -198,6 +199,7 @@ function createOrderElements(orderElements) {
             // Client Email
             const orderClientEmailElement = document.createElement('div');
             orderClientEmailElement.textContent = `E-mail: ${orderElement.orderClientEmail}`;
+            showHover(orderClientEmailElement,`${orderElement.orderClientEmail}`);
             orderClientEmailElement.classList.add('orderElementText');
             //orderClientEmailElement.classList.add('orderResponsive');
 
