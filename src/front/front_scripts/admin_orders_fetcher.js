@@ -6,10 +6,17 @@ socket.send("Message specific to admin_orders_fetcher functionality.");
 */
 
 import {removeAllChildren} from "../../scripts/utils.js";
-import {showHover} from "../../scripts/utils.js";
+import {applyHoverIfNecessary} from "../../scripts/utils.js";
 
 
-// peut etre ajouter id pour tout refresh et donc refaire apparaitre dans le bon ordre
+const stateOptions = {
+    pending: 'En attente',
+    billed: 'Facturé',
+    printed: 'Imprimé',
+    sliced: 'Slicé',
+    printing: 'En cours d\'impression',
+    finished: 'Terminé'
+}
 
 const orderDataDummy = [
     {
@@ -148,14 +155,14 @@ function createOrderElements(orderElements) {
         const orderNameElement = document.createElement('div');
         orderNameElement.textContent = `${orderElement.orderName}`;
         orderNameElement.classList.add('orderElementText');
-        showHover(orderNameElement, `${orderElement.orderName}`);
+        applyHoverIfNecessary(orderNameElement, `${orderElement.orderName}`);
         orderElementHeaderColumn1.appendChild(orderNameElement);
 
         // Client Name
         const orderClientElement = document.createElement('div');
         orderClientElement.textContent = `${orderElement.orderClient}`;
         orderClientElement.classList.add('orderElementText');
-        showHover(orderClientElement,`${orderElement.orderClient}`);
+        applyHoverIfNecessary(orderClientElement,`${orderElement.orderClient}`);
         orderElementHeaderColumn1.appendChild(orderClientElement);
 
         orderElementHeader.appendChild(orderElementHeaderColumn1);
@@ -167,6 +174,7 @@ function createOrderElements(orderElements) {
         // Order State
         const orderStateDropdown = createStateDropdown(orderElement.orderState);
         orderStateDropdown.style.margin = '1vh 0 1vh 0';
+        applyHoverIfNecessary(orderStateDropdown, stateOptions[orderElement.orderState]);
         orderElementHeaderColumn2.appendChild(orderStateDropdown);
 
         orderElementHeader.appendChild(orderElementHeaderColumn2);
@@ -199,7 +207,7 @@ function createOrderElements(orderElements) {
             // Client Email
             const orderClientEmailElement = document.createElement('div');
             orderClientEmailElement.textContent = `E-mail: ${orderElement.orderClientEmail}`;
-            showHover(orderClientEmailElement,`${orderElement.orderClientEmail}`);
+            applyHoverIfNecessary(orderClientEmailElement,`${orderElement.orderClientEmail}`);
             orderClientEmailElement.classList.add('orderElementText');
             //orderClientEmailElement.classList.add('orderResponsive');
 
@@ -261,15 +269,6 @@ function createOrderElements(orderElements) {
 
 // Function to create the order state dropdown
 function createStateDropdown(currentState) {
-    const stateOptions = {
-        pending: 'En attente',
-        billed: 'Facturé',
-        printed: 'Imprimé',
-        sliced: 'Slicé',
-        printing: 'En cours d\'impression',
-        finished: 'Terminé'
-    };
-
     const dropdown = document.createElement('select');
     dropdown.classList.add('orderStateDropdown');
 

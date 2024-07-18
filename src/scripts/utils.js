@@ -7,7 +7,7 @@ export function removeAllChildren(element) {
 }
 
 
-export function showHover(element,hoverText){
+function showHover(element,hoverText){
     // Create the hover text element
     const hoverElement = document.createElement('div');
     hoverElement.textContent = hoverText;
@@ -25,5 +25,15 @@ export function showHover(element,hoverText){
 
     element.addEventListener('mouseout', function() {
         hoverElement.style.display = 'none';
+    });
+}
+
+export function applyHoverIfNecessary(element, hoverText) {
+    element.addEventListener('mouseover', function () {
+        if (element.scrollWidth > element.clientWidth) {
+            showHover(element, hoverText);
+        } else {
+            element.removeAttribute('title');
+        }
     });
 }
