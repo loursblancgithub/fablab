@@ -16,7 +16,10 @@ body {
 
 :root {
     overscroll-behavior: none;
+    --backgroundLightBlue: #7287ca;
+    --logoBlue: #2e4798;
 }
+
 
 /*------> Generic grey input with box shadow <------*/
 .inputStyle {
@@ -78,7 +81,7 @@ Header side
 
 --------------------------*/
 
-#headerSide {
+#headerRight {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -154,7 +157,7 @@ Feedback Form
     left: 0;
     margin: auto;
     padding: 0 1vw 1vh 1vw;
-    border: 10px solid #2E4798;
+    border: 10px solid var(--logoBlue);
     border-radius: 10px;
     animation: fadeInScaleUp 0.25s ease-out forwards;
 }
@@ -199,7 +202,7 @@ Feedback Form
 
 /*------> Responsive elements <------*/
 @media only screen and (max-width: 768px) {
-    #headerSide {
+    #headerRight {
         right: 5vw;
         top: 3vw;
         flex-direction: column-reverse;
