@@ -1,6 +1,6 @@
 .hoverButton:hover {
     cursor: pointer;
-    background-color: #00000051 !important !important;
+    background-color: #00000051 !important;
     color: #ffffff;
     transition: background-color 0.25s ease;
 }
