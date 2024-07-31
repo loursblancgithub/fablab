@@ -1,0 +1,32 @@
+#bodyContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+}
+
+#fablabLogo {
+    width: 7.5vw;
+    max-width: 120px;
+    margin: 1vh 0 1vh 0;
+}
+
+#loginForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    position: relative;
+}
+
+#password {
+    margin-bottom: 2vh;
+}
+
+.formTitle {
+    font-size: 2vh;
+    font-weight: 325;
+    margin: 1.5vh 0 0.5vh 0;
+}

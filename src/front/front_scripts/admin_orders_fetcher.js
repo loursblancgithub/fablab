@@ -36,8 +36,7 @@ const orderDataDummy = [
         "details": false
     },
     {
-        "id": 2,
-        "orderName": "Boeing 787",
+        "orderName": "Airbus A220",
         "orderState": "sliced",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
@@ -57,13 +56,14 @@ const orderDataDummy = [
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
         "orderPrice": "8€",
-        "details": false
+        "details": false,
+        "orderQuestion": "Faites attention les winglets sont fragiles"
     }
 ];
 
 
-const contentContainer = document.getElementById('contentContainer');
 
+const contentContainer = document.getElementById('contentContainer');
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.remove('active');
             });
 
-            // Add active class to the clicked button
+            // Add active class to the clicked buttons
             this.classList.add('active');
         });
     });
@@ -141,6 +141,7 @@ function createOrderElements(orderElements) {
 
         const orderElementHeaderColumn1 = document.createElement('div');
         orderElementHeaderColumn1.classList.add('orderElementHeaderColumn');
+        orderElementHeaderColumn1.id = 'orderElementHeaderColumn1';
 
         // Order Name
         const orderNameElement = document.createElement('div');
@@ -196,31 +197,36 @@ function createOrderElements(orderElements) {
             const orderClientEmailElement = document.createElement('div');
             orderClientEmailElement.textContent = `E-mail: ${orderElement.orderClientEmail}`;
             orderClientEmailElement.classList.add('orderElementText');
-            orderElementDiv.appendChild(orderClientEmailElement);
+            orderClientEmailElement.classList.add('orderResponsive');
+        orderElementDiv.appendChild(orderClientEmailElement);
         
             // Material
             const orderMaterialElement = document.createElement('div');
             orderMaterialElement.textContent = `Matériau: ${orderElement.orderMaterial}`;
             orderMaterialElement.classList.add('orderElementText');
-            orderElementDiv.appendChild(orderMaterialElement);
+            orderMaterialElement.classList.add('orderResponsive');
+        orderElementDiv.appendChild(orderMaterialElement);
         
             // Total Weight
             const orderTotalWeightElement = document.createElement('div');
             orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight}`;
             orderTotalWeightElement.classList.add('orderElementText');
-            orderElementDiv.appendChild(orderTotalWeightElement);
+            orderTotalWeightElement.classList.add('orderResponsive');
+        orderElementDiv.appendChild(orderTotalWeightElement);
         
             // Quantity
             const orderQuantityElement = document.createElement('div');
             orderQuantityElement.textContent = `Quantité: ${orderElement.orderQuantity}`;
             orderQuantityElement.classList.add('orderElementText');
-            orderElementDiv.appendChild(orderQuantityElement);
+            orderQuantityElement.classList.add('orderResponsive');
+        orderElementDiv.appendChild(orderQuantityElement);
         
             // Price
             const orderPriceElement = document.createElement('div');
             orderPriceElement.textContent = `Price: ${orderElement.orderPrice}`;
             orderPriceElement.classList.add('orderElementText');
-            orderElementDiv.appendChild(orderPriceElement);
+            orderPriceElement.classList.add('orderResponsive');
+        orderElementDiv.appendChild(orderPriceElement);
         
             // Details
             const orderDetailsElement = document.createElement('button');
