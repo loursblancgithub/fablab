@@ -37,7 +37,6 @@ body {
 }
 
 /*------> Generic #2e4798 blue button <------*/
-/*------> Generic #2e4798 blue button <------*/
 .blueButton {
     background-color: #2E4798;
     color: #ffffff;
@@ -62,18 +61,6 @@ body {
 
 select > option {
     font-family: LexendDeca, sans-serif;
-}
-
-/*------> Generic grey input with box shadow <------*/
-.formTitle {
-    font-size: 2vh;
-    font-weight: 325;
-    margin: 1.5vh 0 0.5vh 0;
-}
-
-.required:after {
-    content: " *";
-    color: red;
 }
 
 /*------> Generic grey input with box shadow <------*/
@@ -182,7 +169,6 @@ Feedback Form
 }
 
 /*------> Pop-in animation <------*/
-/*------> Pop-in animation <------*/
 @keyframes popIn {
     from {
         opacity: 0;
@@ -194,7 +180,6 @@ Feedback Form
     }
 }
 
-/*------> Pop-out animation <------*/
 /*------> Pop-out animation <------*/
 @keyframes popOut {
     from {
@@ -215,7 +200,6 @@ Feedback Form
     animation: popOut 0.25s forwards;
 }
 
-/*------> Responsive elements <------*/
 /*------> Responsive elements <------*/
 @media only screen and (max-width: 768px) {
     #headerRight {

@@ -4,12 +4,6 @@ Generic elements
 
 --------------------------*/
 
-/*--------------------------
-
-Generic elements
-
---------------------------*/
-
 strong {
     color: #2e4798;
 }
@@ -18,15 +12,6 @@ option {
     font-family: LexendDeca, sans-serif;
 }
 
-body {
-    overflow-x: hidden;
-}
-
-/*--------------------------
-
-Content
-
---------------------------*/
 body {
     overflow-x: hidden;
 }
@@ -45,7 +30,6 @@ Content
     height: 100vh;
 }
 
-/*------> Header <------*/
 /*------> Header <------*/
 #fablabLogo {
     width: 7.5vw;
@@ -141,7 +125,6 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
-/*------> Order form <------*/
 /*------> Order form <------*/
 #orderForm {
     display: flex;
