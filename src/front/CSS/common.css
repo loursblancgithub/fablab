@@ -57,6 +57,7 @@ body {
 .blueButton:hover {
     background-color: #1a2f66;
     cursor: pointer;
+    transition: background-color 0.25s ease;
 }
 
 select > option {
