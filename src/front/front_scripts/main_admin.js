@@ -61,7 +61,6 @@ const orderDataDummy = [
 ];
 
 
-
 const contentContainer = document.getElementById('contentContainer');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -74,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const orderData = JSON.parse(event.data);
     });*/
 
-    
 
     document.querySelectorAll('.sidePanelStateButton').forEach(button => {
         button.addEventListener('click', function () {
@@ -99,26 +97,26 @@ document.addEventListener('DOMContentLoaded', () => {
         contentContainer.innerHTML = '';
         createOrderElements(orderDataDummy);
     });
- 
+
     document.getElementById('sidePanelStateButtonToDo').addEventListener('click', () => {
         console.log('Button clicked');
 
         contentContainer.innerHTML = '';
-        createOrderElements(orderDataDummy.filter(order => order.orderState == "pending"));
+        createOrderElements(orderDataDummy.filter(order => order.orderState === "pending"));
     });
 
     document.getElementById('sidePanelStateButtonOngoing').addEventListener('click', () => {
         console.log('Button clicked');
 
         contentContainer.innerHTML = '';
-        createOrderElements(orderDataDummy.filter(order => order.orderState != "pending" && order.orderState != "finished"));
+        createOrderElements(orderDataDummy.filter(order => order.orderState !== "pending" && order.orderState !== "finished"));
     });
 
     document.getElementById('sidePanelStateButtonFinished').addEventListener('click', () => {
         console.log('Button clicked');
 
         contentContainer.innerHTML = '';
-        createOrderElements(orderDataDummy.filter(order => order.orderState == "finished"));
+        createOrderElements(orderDataDummy.filter(order => order.orderState === "finished"));
     });
 });
 
@@ -130,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Dynamically create elements based on the order data
 function createOrderElements(orderElements) {
-    orderElements.sort((a,b) => b.id - a.id);
+    orderElements.sort((a, b) => b.id - a.id);
     orderElements.forEach(function (orderElement) {
         const orderElementDiv = document.createElement('div');
         orderElementDiv.classList.add('orderElement');
@@ -178,7 +176,7 @@ function createOrderElements(orderElements) {
 
         const buttonIcon = document.createElement('span');
         buttonIcon.classList.add('orderElementDetailsIcon');
-        buttonIcon.textContent = '⯅'; 
+        buttonIcon.textContent = '⯅';
 
         orderDetailsElement.appendChild(buttonText);
         orderDetailsElement.appendChild(buttonIcon);
@@ -191,57 +189,41 @@ function createOrderElements(orderElements) {
             createOrderElements(orderElements);
         });
 
-        if (orderElement.details){        
+        if (orderElement.details) {
             // Client Email
             const orderClientEmailElement = document.createElement('div');
             orderClientEmailElement.textContent = `E-mail: ${orderElement.orderClientEmail}`;
             orderClientEmailElement.classList.add('orderElementText');
             orderClientEmailElement.classList.add('orderResponsive');
-        orderElementDiv.appendChild(orderClientEmailElement);
-        
+            orderElementDiv.appendChild(orderClientEmailElement);
+
             // Material
             const orderMaterialElement = document.createElement('div');
             orderMaterialElement.textContent = `Matériau: ${orderElement.orderMaterial}`;
             orderMaterialElement.classList.add('orderElementText');
             orderMaterialElement.classList.add('orderResponsive');
-        orderElementDiv.appendChild(orderMaterialElement);
-        
+            orderElementDiv.appendChild(orderMaterialElement);
+
             // Total Weight
             const orderTotalWeightElement = document.createElement('div');
             orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight}`;
             orderTotalWeightElement.classList.add('orderElementText');
             orderTotalWeightElement.classList.add('orderResponsive');
-        orderElementDiv.appendChild(orderTotalWeightElement);
-        
+            orderElementDiv.appendChild(orderTotalWeightElement);
+
             // Quantity
             const orderQuantityElement = document.createElement('div');
             orderQuantityElement.textContent = `Quantité: ${orderElement.orderQuantity}`;
             orderQuantityElement.classList.add('orderElementText');
             orderQuantityElement.classList.add('orderResponsive');
-        orderElementDiv.appendChild(orderQuantityElement);
-        
+            orderElementDiv.appendChild(orderQuantityElement);
+
             // Price
             const orderPriceElement = document.createElement('div');
             orderPriceElement.textContent = `Price: ${orderElement.orderPrice}`;
             orderPriceElement.classList.add('orderElementText');
             orderPriceElement.classList.add('orderResponsive');
-        orderElementDiv.appendChild(orderPriceElement);
-        
-            // Details
-            const orderDetailsElement = document.createElement('button');
-            orderDetailsElement.classList.add('orderElementDetails');
-        
-            // Ajouter le texte et l'icône au bouton
-            const buttonText = document.createElement('span');
-            buttonText.textContent = 'Détails';
-            buttonText.classList.add('orderElementDetailsText');
-        
-            const buttonIcon = document.createElement('span');
-            buttonIcon.classList.add('orderElementDetailsIcon');
-            buttonIcon.textContent = '⯅'; 
-        
-            orderDetailsElement.appendChild(buttonText);
-            orderDetailsElement.appendChild(buttonIcon);
+            orderElementDiv.appendChild(orderPriceElement);
         }
 
         orderElementDiv.appendChild(orderDetailsElement);
