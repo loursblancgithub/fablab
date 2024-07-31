@@ -7,7 +7,6 @@ socket.send("Message specific to admin_orders_fetcher functionality.");
 
 import removeAllChildren from "/src/scripts/utils.js"
 
-
 // peut etre ajouter id pour tout refresh et donc refaire apparaitre dans le bon ordre
 
 const orderDataDummy = [
