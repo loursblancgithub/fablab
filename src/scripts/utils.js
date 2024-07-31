@@ -36,3 +36,45 @@ export function applyHoverIfNecessary(element, hoverText) {
         }
     });
 }
+
+
+function showCustomAlert(message) {
+    // Create the alert popup
+    const alertPopup = document.createElement('div');
+    alertPopup.classList.add('alertPopup', 'alertPopupPopIn');
+    alertPopup.style.zIndex = '15';
+
+    // Close button container
+    const alertCloseContainer = document.createElement('div');
+    alertCloseContainer.style.display = 'flex';
+    alertCloseContainer.style.justifyContent = 'flex-end';
+    alertCloseContainer.style.alignContent = 'flex-start';
+    alertCloseContainer.style.width = '100%';
+
+    // Close button
+    const alertClose = document.createElement('span');
+    alertClose.textContent = '×';
+    alertClose.id = 'alertClose';
+    alertCloseContainer.appendChild(alertClose);
+
+    alertPopup.appendChild(alertCloseContainer);
+
+    // Alert message
+    const alertMessage = document.createElement('div');
+    alertMessage.textContent = message;
+    alertMessage.style.maxWidth = '100%';
+    alertPopup.appendChild(alertMessage);
+
+    document.body.appendChild(alertPopup);
+
+    // Close button event listener
+    alertClose.addEventListener('click', () => {
+        alertPopup.classList.remove('alertPopupPopIn');
+        alertPopup.classList.add('alertPopupPopOut');
+        alertPopup.addEventListener('animationend', () => {
+            document.body.removeChild(alertPopup);
+        }, { once: true });
+    });
+}
+
+export { showCustomAlert };

@@ -233,3 +233,70 @@ Feedback Form
         padding: 2%;
     }
 }
+
+/*--------------------------
+
+Alert Popup
+
+--------------------------*/
+
+@keyframes alertPopIn {
+    0% {
+        transform: translateX(0)
+    }
+    25% {
+        transform: translateX(5px)
+    }
+    50% {
+        transform: translateX(-5px)
+    }
+    75% {
+        transform: translateX(5px)
+    }
+    100% {
+        transform: translateX(0)
+    }
+}
+
+@keyframes alertPopOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+}
+
+.alertPopup {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 20vw;
+    height: fit-content;
+    background-color: #ffffff;
+    position: fixed;
+    top: 40vh;
+    left: 40vw;
+    margin: auto;
+    padding: 0 1vw 1vh 1vw;
+    border-radius: 10px;
+    animation: alertPopIn 0.1s ease-out forwards;
+    box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
+}
+
+.alertPopupPopIn {
+    animation: alertPopIn 0.25s forwards;
+}
+
+.alertPopupPopOut {
+    animation: alertPopOut 0.25s forwards;
+}
+
+#alertClose {
+    font-size: 4vh;
+    cursor: pointer;
+    margin: 0 0 1vh 0;
+}

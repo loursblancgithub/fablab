@@ -1,9 +1,12 @@
+import {showCustomAlert} from "/src/scripts/utils.js";
 /*
 import {socket} from './websocket_setup.js';
 
 // Use the `socket` object for sending messages, etc.
 socket.send("Message specific to admin_orders_fetcher functionality.");
 */
+
+
 
 //-------------------------->
 
@@ -78,10 +81,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.log(orderDetails);
                 /*socket.send(JSON.stringify(orderDetails));*/
             } else {
-                alert('Merci de remplir tous les champs obligatoires');
+                showCustomAlert('Merci de remplir tous les champs obligatoires');
             }
         } else {
-            alert('Il faut lire et accepter les points importants afin de pouvoir valider la commande');
+            showCustomAlert('Il faut lire et accepter les points importants afin de pouvoir valider la commande');
         }
     })
 });
