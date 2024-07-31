@@ -143,18 +143,11 @@
     transform: scale(1);
 }
 
-.orderElementHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 5%;
-}
-
 .orderStateElement {
     font-size: 2em;
     border-radius: 10px;
     padding: 0.5%;
+    margin: 0 0 5vh 0;
 }
 
 .orderElementBody {

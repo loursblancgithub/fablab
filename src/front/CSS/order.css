@@ -186,20 +186,6 @@ input:checked + .slider:before {
     resize: none;
 }
 
-/* Expert mode only ! Print settings container*/
-#orderPrintSettings {
-    box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
-    border-radius: 3px;
-    display: none;
-    max-height: 50vh;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-#orderPrintSettingsTitle{
-    display: none;
-}
-
 .categoryTitle {
     font-weight: bold;
     font-size: 1.2em;
@@ -224,6 +210,56 @@ input:checked + .slider:before {
 .parameterItem input {
     width: 0.1vw;
     margin: 0 0.5vw 0 0.5vw;
+}
+
+/*------> Print settings <------*/
+#orderPrintSettings {
+    box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
+    border-radius: 3px;
+    display: none;
+    max-height: 50vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 60%;
+}
+
+#orderPrintSettingsTitle {
+    display: none;
+}
+
+.expertModeInput {
+    margin: 0 0 0 0;
+    max-width: 50px;
+}
+
+.parameterItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-height: 4vh;
+}
+
+.parameterItem label {
+    flex: 1;
+    text-align: left;
+}
+
+.parameterItem > input[type="text"], .parameterItem > input[type="select"] {
+    box-shadow: unset;
+}
+
+.parameterItem div {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.parameterItem span {
+    width: 50px;
+    text-align: right;
 }
 
 /*------> Good practices <------*/

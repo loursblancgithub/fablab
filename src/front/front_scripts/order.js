@@ -7,33 +7,12 @@ socket.send("Message specific to admin_orders_fetcher functionality.");
 
 //-------------------------->
 
-//Constants
+//Variables declaration
 
 //-------------------------->
 
-// Define the parameters tree
-const parametersTree = {
-    "Vitesse": {
-        "Inner Wall Speed": {defaultValue: 50, unit: "mm/s"},
-        "Outer Wall Speed": {defaultValue: 40, unit: "mm/s"},
-        "Infill Speed": {defaultValue: 60, unit: "mm/s"}
-    },
-    "Rigidite": {
-        "Infill Pattern": {
-            type: "select",
-            options: ["Grid", "Triangles", "Lines"],
-            defaultValue: "Grid"
-        },
-        "Infill Density": {defaultValue: 20, unit: "%"}
-    },
-    "Supports": {
-        "Enable Supports": {defaultValue: "No", unit: "", type: "checkbox"},
-        "Build Plate Only": {defaultValue: "No", unit: "", dependsOn: "Enable Supports"},
-        "Support Infill Density": {defaultValue: 15, unit: "%", dependsOn: "Enable Supports"}
-    }
-};
-
 const wipeInputs = document.querySelectorAll('input[type="text"], input[type="password"],input[type="quantity"], input[type="checkbox"], input[type="select"], textarea');
+let printParameters;
 const expertModeSwitch = document.getElementById('expertModeSwitch');
 const orderPrintSettings = document.getElementById('orderPrintSettings');
 const orderPrintSettingsTitle = document.getElementById('orderPrintSettingsTitle');
@@ -44,7 +23,7 @@ const orderPrintSettingsTitle = document.getElementById('orderPrintSettingsTitle
 
 //-------------------------->
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
     //Initializing inputs
 
@@ -58,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //Initializing the expert mode switch
     initializeSlider();
 
+    printParameters = await fetchPrintParameters();
+
     expertModeSwitch.addEventListener('change', function () {
         orderPrintSettings.innerHTML = '';
         orderPrintSettings.style.display = this.checked ? 'block' : 'none';
@@ -65,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         orderPrintSettingsTitle.style.display = this.checked ? 'block' : 'none';
 
-        generateParametersHTML(parametersTree, orderPrintSettings);
+        generateParametersHTML(printParameters, orderPrintSettings);
     });
 
     // Retrieving, formatting and sending the order informations
@@ -79,14 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (allFieldsFilled) {
-                let inputsContent = document.querySelectorAll('input[type="text"], input[type="password"], textarea');
-                inputsContent.forEach(input => {
-                    input.value = input.value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                });
 
-                const now = new Date();
+                const now = new Date().toLocaleString().replace(',', '');
                 const dateTimeString = now.toString();
-                console.log(dateTimeString);
 
                 const orderDetails = {
                     orderName: escapeOutput(document.getElementById('orderName').value),
@@ -95,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     orderMaterial: escapeOutput(document.getElementById('orderMaterial').value),
                     orderQuestions: escapeOutput(document.getElementById('orderQuestions').value),
                     goodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
+                    expertModeCheck: expertModeSwitch.checked,
                     orderDateTime: dateTimeString
                 };
 
@@ -124,6 +101,20 @@ function escapeOutput(toOutput) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#x27;')
         .replace(/\//g, '&#x2F;');
+}
+
+// Function to retrieve print parameters from print_parameters.json
+async function fetchPrintParameters() {
+    try {
+        const response = await fetch('../JSON/print_parameters.json');
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching print parameters:', error);
+        return null;
+    }
 }
 
 // Function to initialize the slider
@@ -163,12 +154,11 @@ function generateParametersHTML(parameters, parentElement, depth = 0) {
             container.appendChild(label);
 
             if (value.type === "select") {
-                // Create a select element
                 const select = document.createElement('select');
                 select.id = key + 'Value';
+                select.classList.add('expertModeInput');
                 select.classList.add('inputStyle');
 
-                // Populate the select element with options
                 value.options.forEach(optionValue => {
                     const option = document.createElement('option');
                     option.value = optionValue;
@@ -176,19 +166,25 @@ function generateParametersHTML(parameters, parentElement, depth = 0) {
                     select.appendChild(option);
                 });
 
-                // Set the default selected option if specified
                 if (value.defaultValue) {
                     select.value = value.defaultValue;
                 }
 
-                // Append the select element to the container
                 container.appendChild(select);
             } else {
-                // Create and append input element only if not handling a select
+                if (value.unit) {
+                    const unit = document.createElement('span');
+                    unit.textContent = ` (${value.unit})`;
+                    unit.style.fontSize = '0.9em';
+                    unit.style.display = 'inline-block';
+                    container.appendChild(unit);
+                }
+
                 const input = document.createElement('input');
                 input.id = key + 'Value';
                 input.type = value.type || 'text';
                 input.classList.add('inputStyle');
+                input.size = 10;
 
                 if (input.type === 'checkbox') {
                     input.checked = value.defaultValue === "Yes";
@@ -197,13 +193,6 @@ function generateParametersHTML(parameters, parentElement, depth = 0) {
                 }
 
                 container.appendChild(input);
-
-                if (value.unit) {
-                    const unit = document.createElement('span');
-                    unit.textContent = value.unit;
-                    unit.style.fontSize = '0.9em';
-                    container.appendChild(unit);
-                }
             }
 
             parentElement.appendChild(container);
@@ -218,7 +207,6 @@ function generateParametersHTML(parameters, parentElement, depth = 0) {
             categoryTitle.style.paddingLeft = `${20 * depth}px`;
 
             categoryContainer.appendChild(categoryTitle);
-
             parentElement.appendChild(categoryContainer);
 
             generateParametersHTML(value, categoryContainer, depth + 1);
