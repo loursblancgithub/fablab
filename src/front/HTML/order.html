@@ -16,12 +16,14 @@
 </head>
 <body>
 <div id="bodyContainer">
-    <div id="headerSide">
+    <div id="expertModeContainer">
         <div id="expertModeTitle">Mode expert</div>
         <label class="switch">
-            <input type="checkbox">
+            <input type="checkbox" id="expertModeSwitch">
             <span class="slider round"></span>
         </label>
+    </div>
+    <div id="headerRight">
         <img src="../Assets/bulb.svg" alt="logo" id="formBulb">
         <div id="logoutButton" class="blueButton">Se déconnecter</div>
         <script src="../front_scripts/feedback_form.js"></script>
@@ -71,7 +73,10 @@
             </div>
         </div>
 
-        <div class="formTitle">Questions et commentaires</div>
+        <div class="formTitle" id="orderPrintSettingsTitle">Paramètres d'impression</div>
+        <div id="orderPrintSettings"></div>
+
+        <div class="formTitle" id="questionCommentaryTitle">Questions et commentaires</div>
         <label for="orderQuestions"></label><textarea class="inputStyle" id="orderQuestions"
                                                       name="questions"></textarea>
 
@@ -132,6 +137,5 @@
 </div>
 
 <script src="../front_scripts/order.js"></script>
-<script src="../front_scripts/login.js"></script>
 </body>
 </html>

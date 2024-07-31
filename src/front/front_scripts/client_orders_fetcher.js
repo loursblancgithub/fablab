@@ -50,7 +50,7 @@ const orderDataDummy = [{
         "orderQuestion": "Faites attention les winglets sont fragiles"
     },
     {
-        "orderName": "Embraer E190",
+        "orderName": "Figurine Harry Potterdsdsdsds",
         "orderState": "printing",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
@@ -61,7 +61,7 @@ const orderDataDummy = [{
         "orderQuestion": "Faites attention les winglets sont fragiles"
     },
     {
-        "orderName": "Embraer E190",
+        "orderName": "Trophée",
         "orderState": "printing",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
@@ -107,6 +107,8 @@ const orderDataDummy = [{
 
 
 const orderContainer = document.getElementById('orderContainer');
+const newOrder = document.getElementById('newOrder');
+const ordersList = document.getElementById('ordersList');
 
 /*--------------------------
 
@@ -116,9 +118,13 @@ Main logic
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Sort order list
-    const ordersList = document.getElementById('ordersList');
+    // If clicking #newOrder, redirect to the order page
+    newOrder.addEventListener('click', function () {
+        window.location.href = "../HTML/order.html";
+    });
 
+    // Sort order list
+    // By state
     orderDataDummy.sort((a, b) => {
         if (a.orderState === 'pending') return -1;
         if (b.orderState === 'pending') return 1;
@@ -152,6 +158,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ordersList.appendChild(ordersListElement);
     });
+
+    // When clicking on any element with the class .ordersListElement, add the class .active to change the background color
+    document.querySelectorAll('.ordersListElement').forEach(element => {
+        element.addEventListener('click', function () {
+            document.querySelectorAll('.ordersListElement').forEach(el => el.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
 });
 
 /*--------------------------
@@ -171,34 +185,26 @@ function displayOrderDetails(order) {
     orderElementDiv.classList.add('orderElement');
     orderElementDiv.id = 'orderElement';
 
-    // Order Element Header
-    const orderElementHeader = document.createElement('div');
-    orderElementHeader.classList.add('orderElementHeader');
-
-    const orderNameElement = document.createElement('div');
-    orderNameElement.textContent = `${order.orderName}`;
-    orderNameElement.style.fontSize = '2em';
-    orderElementHeader.appendChild(orderNameElement);
-
-    const orderStateElement = document.createElement('div');
-    orderStateElement.classList.add('orderStateElement');
-    orderStateElement.textContent = `${order.orderState}`;
-    orderStateElement.style.backgroundColor = getColorForState(order.orderState).background;
-    orderStateElement.style.color = getColorForState(order.orderState).font;
-    orderStateElement.textContent = getColorForState(order.orderState).frText;
-    orderElementHeader.appendChild(orderStateElement);
-
-    orderElementDiv.appendChild(orderElementHeader);
-
-
     // Order Element Body
     const orderElementBody = document.createElement('div');
     orderElementBody.classList.add('orderElementBody');
 
-    // Order Element Summary
+    // Order Element Summary Container (Left part)
     const orderElementSummary = document.createElement('div');
     orderElementSummary.classList.add('orderElementSummary');
     orderElementSummary.style.width = '50%';
+
+    const orderNameElement = document.createElement('div');
+    orderNameElement.textContent = `${order.orderName}`;
+    orderNameElement.style.fontSize = '2em';
+    orderElementSummary.appendChild(orderNameElement);
+
+    const orderStateElement = document.createElement('div');
+    orderStateElement.classList.add('orderStateElement');
+    orderStateElement.textContent = `${order.orderState}`;
+    orderStateElement.style.color = getColorForState(order.orderState).background;
+    orderStateElement.textContent = getColorForState(order.orderState).frText;
+    orderElementSummary.appendChild(orderStateElement);
 
     const orderElementSummaryTitle = document.createElement('div');
     orderElementSummaryTitle.textContent = 'Vue d\'ensemble';
@@ -218,22 +224,22 @@ function displayOrderDetails(order) {
     orderElementDetails.appendChild(orderElementSummaryTotalWeight);
 
     const orderElementSummaryQuantity = document.createElement('div');
-    orderElementSummaryQuantity.textContent = `Quantité: ${order.orderQuantity}`;
+    if (order.orderQuantity > 1) {
+        orderElementSummaryQuantity.textContent = `${order.orderQuantity} pièces`;
+    } else {
+        orderElementSummaryQuantity.textContent = `${order.orderQuantity} pièce`;
+    }
     orderElementDetails.appendChild(orderElementSummaryQuantity);
 
     const orderElementSummaryPrice = document.createElement('div');
     orderElementSummaryPrice.textContent = `Prix: ${order.orderPrice}`;
     orderElementDetails.appendChild(orderElementSummaryPrice);
 
-    const orderElementSummaryQuestions = document.createElement('div');
-    orderElementSummaryQuestions.textContent = `Questions et commentaires: ${order.orderQuestion}`;
-    orderElementDetails.appendChild(orderElementSummaryQuestions);
-
     orderElementSummary.appendChild(orderElementDetails);
 
     orderElementBody.appendChild(orderElementSummary);
 
-    // Order files/chat container
+    // Order files/chat container (Right part)
 
     // Header
     const orderElementFilesMessage = document.createElement('div');
@@ -263,7 +269,6 @@ function displayOrderDetails(order) {
     orderElementBody.appendChild(orderElementFilesMessage);
 
     // Adding all parts to the order element division
-    orderElementDiv.appendChild(orderElementHeader);
     orderElementDiv.appendChild(orderElementBody);
 
     orderContainer.appendChild(orderElementDiv);
@@ -272,6 +277,7 @@ function displayOrderDetails(order) {
     }, 10);
 }
 
+// Show the files list for each order
 function displayFilesList(orderID) {
 
 }

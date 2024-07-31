@@ -16,7 +16,10 @@ body {
 
 :root {
     overscroll-behavior: none;
+    --backgroundLightBlue: #7287ca;
+    --logoBlue: #2e4798;
 }
+
 
 /*------> Generic grey input with box shadow <------*/
 .inputStyle {
@@ -33,6 +36,7 @@ body {
     margin-bottom: 2vh;
 }
 
+/*------> Generic #2e4798 blue button <------*/
 /*------> Generic #2e4798 blue button <------*/
 .blueButton {
     background-color: #2E4798;
@@ -72,13 +76,25 @@ select > option {
     color: red;
 }
 
+/*------> Generic grey input with box shadow <------*/
+.formTitle {
+    font-size: 2vh;
+    font-weight: 325;
+    margin: 1.5vh 0 0.5vh 0;
+}
+
+.required:after {
+    content: " *";
+    color: red;
+}
+
 /*--------------------------
 
 Header side
 
 --------------------------*/
 
-#headerSide {
+#headerRight {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -154,7 +170,7 @@ Feedback Form
     left: 0;
     margin: auto;
     padding: 0 1vw 1vh 1vw;
-    border: 10px solid #2E4798;
+    border: 10px solid var(--logoBlue);
     border-radius: 10px;
     animation: fadeInScaleUp 0.25s ease-out forwards;
 }
@@ -165,6 +181,7 @@ Feedback Form
     margin: 0 0 1vh 0;
 }
 
+/*------> Pop-in animation <------*/
 /*------> Pop-in animation <------*/
 @keyframes popIn {
     from {
@@ -177,6 +194,7 @@ Feedback Form
     }
 }
 
+/*------> Pop-out animation <------*/
 /*------> Pop-out animation <------*/
 @keyframes popOut {
     from {
@@ -198,8 +216,9 @@ Feedback Form
 }
 
 /*------> Responsive elements <------*/
+/*------> Responsive elements <------*/
 @media only screen and (max-width: 768px) {
-    #headerSide {
+    #headerRight {
         right: 5vw;
         top: 3vw;
         flex-direction: column-reverse;
