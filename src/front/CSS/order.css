@@ -42,12 +42,9 @@ Content
     justify-content: flex-end;
     align-items: center;
     width: fit-content;
-    position: sticky;
+    position: fixed;
     right: 1vw;
     top: 0.5vw;
-    margin-right: -90vw;
-    margin-top: -6.25vh;
-
 }
 
 #expertModeContainer {
@@ -55,8 +52,8 @@ Content
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: sticky;
-    margin: -6.25vh 95vw 0 1vw;
+    position: fixed;
+    margin: 0 95vw 0 1vw;
     left: 1vw;
     top: 0.5vw;
 }
@@ -274,14 +271,13 @@ input:checked + .slider:before {
 }
 
 #goodPracticesTextHeader {
-    height: fit-content(2vh);
-    margin-top: 1vh;
+    height: 2vh;
+    margin: 1vh 0 3vh 0;
     display: flex;
     justify-content: center;
     align-content: center;
     font-weight: bold;
     font-size: 3vh;
-    margin-bottom: 2vh;
     color: #2e4798;
 }
 

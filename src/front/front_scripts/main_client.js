@@ -264,7 +264,6 @@ function displayOrderDetails(order) {
     const orderElementFilesMessageContent = document.createElement('div');
     orderElementFilesMessageContent.classList.add('orderElementFilesMessageContent');
 
-
     orderElementFilesMessage.appendChild(orderElementFilesMessageHeader);
     orderElementFilesMessage.appendChild(orderElementFilesMessageContent);
     orderElementBody.appendChild(orderElementFilesMessage);
@@ -296,20 +295,4 @@ function getColorForState(state) {
     };
 
     return stateColorMapping[state] || {background: '#bdbdbd', font: '#000000'}; // Default colors
-}
-
-
-// Function to properly show the order element animation
-function setTimeoutWithRAF(callback, delay) {
-    const start = performance.now();
-
-    function frame(time) {
-        if (time - start >= delay) {
-            callback();
-        } else {
-            requestAnimationFrame(frame);
-        }
-    }
-
-    requestAnimationFrame(frame);
 }
