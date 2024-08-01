@@ -14,7 +14,7 @@ const orderDataDummy = [{
     "orderMaterial": "Aluminum",
     "orderTotalWeight": "5kg",
     "orderQuantity": 100,
-    "orderPrice": "$2000",
+    "orderPrice": "2000",
     "orderQuestion": "Beautiful but underpowered lul"
 },
     {
@@ -25,7 +25,7 @@ const orderDataDummy = [{
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€",
+        "orderPrice": "8",
         "orderQuestion": "Bombardier on vous aime"
     },
     {
@@ -36,7 +36,7 @@ const orderDataDummy = [{
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€",
+        "orderPrice": "8",
         "orderQuestion": "Belle machine faite par des sagouins"
     },
     {
@@ -47,7 +47,7 @@ const orderDataDummy = [{
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€",
+        "orderPrice": "8",
         "orderQuestion": "Faites attention les winglets sont fragiles"
     },
     {
@@ -58,7 +58,7 @@ const orderDataDummy = [{
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€",
+        "orderPrice": "8",
         "orderQuestion": "Faites attention les winglets sont fragiles"
     },
     {
@@ -69,7 +69,7 @@ const orderDataDummy = [{
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€",
+        "orderPrice": "8",
         "orderQuestion": "Faites attention les winglets sont fragiles"
     },
     {
@@ -91,7 +91,7 @@ const orderDataDummy = [{
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€",
+        "orderPrice": "8",
         "orderQuestion": "Faites attention les winglets sont fragiles"
     },
     {
@@ -102,7 +102,7 @@ const orderDataDummy = [{
         "orderMaterial": "PLA",
         "orderTotalWeight": "300g",
         "orderQuantity": 1,
-        "orderPrice": "8€",
+        "orderPrice": "8",
         "orderQuestion": "Faites attention les winglets sont fragiles"
     }];
 
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ordersListElement.appendChild(ordersListElementState);
 
         ordersListElement.addEventListener('click', () => {
-            displayOrderDetails(orderElement);
+            displayOrderContent(orderElement);
         });
 
         ordersList.appendChild(ordersListElement);
@@ -176,7 +176,7 @@ Functions
 --------------------------*/
 
 // Function to display order details in #orderContainer
-function displayOrderDetails(order) {
+function displayOrderContent(order) {
 
     if (document.getElementById('orderElement')) {
         document.getElementById('orderElement').remove();
@@ -214,15 +214,30 @@ function displayOrderDetails(order) {
 
     const orderElementDetails = document.createElement('div');
     orderElementDetails.classList.add('orderElementDetails');
+    orderElementDetails.style.display = 'flex';
+    orderElementDetails.style.flexDirection = 'row';
+    orderElementDetails.style.justifyContent = 'space-between';
+    orderElementDetails.style.alignContent = 'center';
+    orderElementDetails.style.width = '100%';
 
     // Order Details
+    const orderElementSummaryLeftColumn = document.createElement('div');
+    orderElementSummaryLeftColumn.classList.add('orderElementSummaryColumn');
+    orderElementSummaryLeftColumn.style.display = 'flex';
+    orderElementSummaryLeftColumn.style.flexDirection = 'column';
+    orderElementSummaryLeftColumn.style.width = 'fit-content';
+    orderElementSummaryLeftColumn.style.justifyContent = 'flex-start';
+    orderElementSummaryLeftColumn.style.alignContent = 'flex-start';
+
     const orderElementSummaryMaterial = document.createElement('div');
     orderElementSummaryMaterial.textContent = `Matériau: ${order.orderMaterial}`;
-    orderElementDetails.appendChild(orderElementSummaryMaterial);
+    orderElementSummaryMaterial.style.width = 'fit-content';
+    orderElementSummaryLeftColumn.appendChild(orderElementSummaryMaterial);
 
     const orderElementSummaryTotalWeight = document.createElement('div');
     orderElementSummaryTotalWeight.textContent = `Poids total: ${order.orderTotalWeight}`;
-    orderElementDetails.appendChild(orderElementSummaryTotalWeight);
+    orderElementSummaryTotalWeight.style.width = 'fit-content';
+    orderElementSummaryLeftColumn.appendChild(orderElementSummaryTotalWeight);
 
     const orderElementSummaryQuantity = document.createElement('div');
     if (order.orderQuantity > 1) {
@@ -230,11 +245,27 @@ function displayOrderDetails(order) {
     } else {
         orderElementSummaryQuantity.textContent = `${order.orderQuantity} pièce`;
     }
-    orderElementDetails.appendChild(orderElementSummaryQuantity);
+    orderElementSummaryQuantity.style.width = 'fit-content';
+    orderElementSummaryLeftColumn.appendChild(orderElementSummaryQuantity);
+
+    orderElementDetails.appendChild(orderElementSummaryLeftColumn);
+
+    const orderElementSummaryRightColumn = document.createElement('div');
+    orderElementSummaryRightColumn.classList.add('orderElementSummaryColumn');
+    orderElementSummaryRightColumn.style.display = 'flex';
+    orderElementSummaryRightColumn.style.flexDirection = 'column';
+    orderElementSummaryRightColumn.style.width = 'fit-content';
+    orderElementSummaryRightColumn.style.justifyContent = 'flex-end';
+    orderElementSummaryRightColumn.style.alignContent = 'flex-end';
 
     const orderElementSummaryPrice = document.createElement('div');
-    orderElementSummaryPrice.textContent = `Prix: ${order.orderPrice}`;
-    orderElementDetails.appendChild(orderElementSummaryPrice);
+    orderElementSummaryPrice.textContent = `${order.orderPrice}€`;
+    orderElementSummaryPrice.style.fontSize = '1.5em';
+    orderElementSummaryPrice.style.color = 'var(--logoBlue)';
+    orderElementSummaryPrice.style.width = 'fit-content';
+    orderElementSummaryRightColumn.appendChild(orderElementSummaryPrice);
+
+    orderElementDetails.appendChild(orderElementSummaryRightColumn);
 
     orderElementSummary.appendChild(orderElementDetails);
 
@@ -281,7 +312,6 @@ function displayOrderDetails(order) {
 function displayFilesList(orderID) {
 
 }
-
 
 // Set color state for each order
 function getColorForState(state) {
