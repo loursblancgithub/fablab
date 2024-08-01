@@ -8,6 +8,23 @@ export default function removeAllChildren(element) {
 
 /*--------------------------
 
+Sanitize inputs
+
+--------------------------*/
+
+function sanitizeOutput(toOutput) {
+    return toOutput.replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;')
+        .replace(/\//g, '&#x2F;');
+}
+
+export { sanitizeOutput };
+
+/*--------------------------
+
 Show details on hover when ellipsed
 
 --------------------------*/
@@ -77,7 +94,7 @@ export { showCustomAlert };
 
 /*--------------------------
 
-Little function preventing the use of setTimeout() for security purposes
+Function preventing the use of setTimeout() for security purposes when needing a delay
 
 --------------------------*/
 

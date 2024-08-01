@@ -1,4 +1,6 @@
 import {showCustomAlert} from "/src/scripts/utils.js";
+import {sanitizeOutput} from "/src/scripts/utils.js";
+
 /*
 import {socket} from './websocket_setup.js';
 
@@ -68,11 +70,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const dateTimeString = now.toString();
 
                 const orderDetails = {
-                    orderName: escapeOutput(document.getElementById('orderName').value),
-                    orderTool: escapeOutput(document.getElementById('orderTool').value),
-                    orderQuantity: escapeOutput(document.getElementById('orderQuantity').value),
-                    orderMaterial: escapeOutput(document.getElementById('orderMaterial').value),
-                    orderQuestions: escapeOutput(document.getElementById('orderQuestions').value),
+                    orderName: sanitizeOutput(document.getElementById('orderName').value),
+                    orderTool: sanitizeOutput(document.getElementById('orderTool').value),
+                    orderQuantity: sanitizeOutput(document.getElementById('orderQuantity').value),
+                    orderMaterial: sanitizeOutput(document.getElementById('orderMaterial').value),
+                    orderQuestions: sanitizeOutput(document.getElementById('orderQuestions').value),
                     goodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
                     expertModeCheck: expertModeSwitch.checked,
                     orderDateTime: dateTimeString
@@ -94,17 +96,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 Functions
 
 --------------------------*/
-
-
-// Input sanitizer
-function escapeOutput(toOutput) {
-    return toOutput.replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#x27;')
-        .replace(/\//g, '&#x2F;');
-}
 
 // Function to retrieve print parameters from print_parameters.json
 async function fetchPrintParameters() {
