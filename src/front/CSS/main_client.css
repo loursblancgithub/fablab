@@ -175,6 +175,12 @@
     align-self: flex-start;
 }
 
+.orderElementSummaryColumn {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .orderElementFilesMessage {
     display: flex;
     flex-direction: column;
