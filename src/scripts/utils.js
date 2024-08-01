@@ -6,6 +6,12 @@ export default function removeAllChildren(element) {
     }
 }
 
+/*--------------------------
+
+Show details on hover when ellipsed
+
+--------------------------*/
+
 function showHover(element, hoverText) {
     // Create the hover text element
     const hoverElement = document.createElement('div');
@@ -15,7 +21,7 @@ function showHover(element, hoverText) {
     document.body.appendChild(hoverElement);
 
     // Event listeners to show and hide the hover text
-    element.addEventListener('mouseover', function (event) {
+    element.addEventListener('mouseover', function () {
         const rect = element.getBoundingClientRect();
         hoverElement.style.left = `${rect.left}px`;
         hoverElement.style.top = `${rect.top + rect.height + 5}px`;
@@ -37,27 +43,17 @@ export function applyHoverIfNecessary(element, hoverText) {
     });
 }
 
+/*--------------------------
+
+Custom alert popup
+
+--------------------------*/
 
 function showCustomAlert(message) {
     // Create the alert popup
     const alertPopup = document.createElement('div');
     alertPopup.classList.add('alertPopup', 'alertPopupPopIn');
     alertPopup.style.zIndex = '15';
-
-    // Close button container
-    const alertCloseContainer = document.createElement('div');
-    alertCloseContainer.style.display = 'flex';
-    alertCloseContainer.style.justifyContent = 'flex-end';
-    alertCloseContainer.style.alignContent = 'flex-start';
-    alertCloseContainer.style.width = '100%';
-
-    // Close button
-    const alertClose = document.createElement('span');
-    alertClose.textContent = '×';
-    alertClose.id = 'alertClose';
-    alertCloseContainer.appendChild(alertClose);
-
-    alertPopup.appendChild(alertCloseContainer);
 
     // Alert message
     const alertMessage = document.createElement('div');
@@ -67,14 +63,36 @@ function showCustomAlert(message) {
 
     document.body.appendChild(alertPopup);
 
-    // Close button event listener
-    alertClose.addEventListener('click', () => {
+    // Auto close the alert after 2 seconds
+    setTimeoutWithRAF(() => {
         alertPopup.classList.remove('alertPopupPopIn');
         alertPopup.classList.add('alertPopupPopOut');
         alertPopup.addEventListener('animationend', () => {
             document.body.removeChild(alertPopup);
         }, { once: true });
-    });
+    }, 2000);
 }
 
 export { showCustomAlert };
+
+/*--------------------------
+
+Little function preventing the use of setTimeout() for security purposes
+
+--------------------------*/
+
+function setTimeoutWithRAF(callback, delay) {
+    const start = performance.now();
+
+    function frame(time) {
+        if (time - start >= delay) {
+            callback();
+        } else {
+            requestAnimationFrame(frame);
+        }
+    }
+
+    requestAnimationFrame(frame);
+}
+
+export { setTimeoutWithRAF };
