@@ -143,6 +143,142 @@ const orderDataDummy = [{
         "orderDateTime": "08/08/2024 10:12:29"
     },
     {
+        "orderID": 158736,
+        "orderName": "Beechcraft Bonanza",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 10,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "08/08/2024 10:12:29"
+    },
+    {
+        "orderID": 158736,
+        "orderName": "Beechcraft Bonanza",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 10,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "08/08/2024 10:12:29"
+    },
+    {
+        "orderID": 158736,
+        "orderName": "Beechcraft Bonanza",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 10,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "08/08/2024 10:12:29"
+    },
+    {
+        "orderID": 158736,
+        "orderName": "Beechcraft Bonanza",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 10,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "08/08/2024 10:12:29"
+    },
+    {
+        "orderID": 158736,
+        "orderName": "Beechcraft Bonanza",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 10,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "08/08/2024 10:12:29"
+    },
+    {
+        "orderID": 158736,
+        "orderName": "Beechcraft Bonanza",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 10,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "08/08/2024 10:12:29"
+    },
+    {
+        "orderID": 158736,
+        "orderName": "Beechcraft Bonanza",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 10,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "08/08/2024 10:12:29"
+    },
+    {
+        "orderID": 158736,
+        "orderName": "Beechcraft Bonanza",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 10,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "08/08/2024 10:12:29"
+    },
+    {
         "orderID": 151436,
         "orderName": "Gulfstream G650",
         "orderState": "printing",
@@ -390,7 +526,50 @@ function displayOrderContent(order) {
 // Show the files list for a specific order
 function displayFilesList(order) {
     orderElementFilesMessageContent.innerHTML = '';
-    console.log('Order files', order.orderFiles);
+
+    const uploadFileContainer = document.createElement('div');
+    uploadFileContainer.style.display = 'flex';
+    uploadFileContainer.style.flexDirection = 'column';
+    uploadFileContainer.style.justifyContent = 'flex-start';
+    uploadFileContainer.style.alignItems = 'center';
+    uploadFileContainer.style.width = '100%';
+    uploadFileContainer.margin = '2vh 0 4vh 0';
+
+    const uploadFileInput = document.createElement('input');
+    uploadFileInput.type = 'file';
+    uploadFileInput.id = 'uploadFileInput';
+    uploadFileInput.classList.add('inputStyle');
+    uploadFileInput.style.padding = '0.5vh 0.5vw 0.5vh 0.5vw';
+    uploadFileContainer.appendChild(uploadFileInput);
+
+    const uploadFileButton = document.createElement('div');
+    uploadFileButton.textContent = 'Déposer un fichier';
+    uploadFileButton.classList.add('hoverButton');
+    uploadFileButton.id = 'uploadFileButton';
+    uploadFileButton.style.padding = '5px 10px';
+    uploadFileButton.style.height = 'fit-content';
+    uploadFileButton.style.width = 'fit-content';
+    uploadFileButton.style.borderRadius = '5px';
+    uploadFileButton.style.backgroundColor = 'grey';
+    uploadFileButton.style.cursor = 'not-allowed';
+    uploadFileButton.setAttribute('disabled', 'true');
+    uploadFileContainer.appendChild(uploadFileButton);
+
+    orderElementFilesMessageContent.appendChild(uploadFileContainer);
+
+    uploadFileInput.addEventListener('change', () => {
+        if (uploadFileInput.files.length > 0) {
+            uploadFileButton.style.backgroundColor = 'var(--logoBlue)';
+            uploadFileButton.style.cursor = 'pointer';
+            uploadFileButton.style.color = '#ffffff';
+            uploadFileButton.removeAttribute('disabled');
+        } else {
+            uploadFileButton.style.backgroundColor = 'grey';
+            uploadFileButton.style.cursor = 'not-allowed';
+            uploadFileButton.setAttribute('disabled', 'true');
+        }
+    });
+
     Object.values(order.orderFiles).forEach((file) => {
         const fileElement = document.createElement('div');
         fileElement.classList.add('filesListElement');
