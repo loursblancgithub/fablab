@@ -12,7 +12,7 @@ const orderDataDummy = [{
     "orderState": "pending",
     "orderClient": "Jane Doe",
     "orderClientEmail": "jane.doe@example.com",
-    "orderMaterial": "Aluminum",
+    "orderMaterial": "PETG",
     "orderTotalWeight": 5000,
     "orderQuantity": 100,
     "orderPrice": 2000,
@@ -143,142 +143,6 @@ const orderDataDummy = [{
         "orderDateTime": "08/08/2024 10:12:29"
     },
     {
-        "orderID": 158736,
-        "orderName": "Beechcraft Bonanza",
-        "orderState": "printing",
-        "orderClient": "John Doe",
-        "orderClientEmail": "john.doe@example.com",
-        "orderMaterial": "PLA",
-        "orderTotalWeight": 300,
-        "orderQuantity": 1,
-        "orderPrice": 10,
-        "orderQuestion": "Faites attention les winglets sont fragiles",
-        "orderFiles": {
-            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
-            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
-        },
-        "orderDateTime": "08/08/2024 10:12:29"
-    },
-    {
-        "orderID": 158736,
-        "orderName": "Beechcraft Bonanza",
-        "orderState": "printing",
-        "orderClient": "John Doe",
-        "orderClientEmail": "john.doe@example.com",
-        "orderMaterial": "PLA",
-        "orderTotalWeight": 300,
-        "orderQuantity": 1,
-        "orderPrice": 10,
-        "orderQuestion": "Faites attention les winglets sont fragiles",
-        "orderFiles": {
-            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
-            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
-        },
-        "orderDateTime": "08/08/2024 10:12:29"
-    },
-    {
-        "orderID": 158736,
-        "orderName": "Beechcraft Bonanza",
-        "orderState": "printing",
-        "orderClient": "John Doe",
-        "orderClientEmail": "john.doe@example.com",
-        "orderMaterial": "PLA",
-        "orderTotalWeight": 300,
-        "orderQuantity": 1,
-        "orderPrice": 10,
-        "orderQuestion": "Faites attention les winglets sont fragiles",
-        "orderFiles": {
-            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
-            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
-        },
-        "orderDateTime": "08/08/2024 10:12:29"
-    },
-    {
-        "orderID": 158736,
-        "orderName": "Beechcraft Bonanza",
-        "orderState": "printing",
-        "orderClient": "John Doe",
-        "orderClientEmail": "john.doe@example.com",
-        "orderMaterial": "PLA",
-        "orderTotalWeight": 300,
-        "orderQuantity": 1,
-        "orderPrice": 10,
-        "orderQuestion": "Faites attention les winglets sont fragiles",
-        "orderFiles": {
-            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
-            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
-        },
-        "orderDateTime": "08/08/2024 10:12:29"
-    },
-    {
-        "orderID": 158736,
-        "orderName": "Beechcraft Bonanza",
-        "orderState": "printing",
-        "orderClient": "John Doe",
-        "orderClientEmail": "john.doe@example.com",
-        "orderMaterial": "PLA",
-        "orderTotalWeight": 300,
-        "orderQuantity": 1,
-        "orderPrice": 10,
-        "orderQuestion": "Faites attention les winglets sont fragiles",
-        "orderFiles": {
-            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
-            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
-        },
-        "orderDateTime": "08/08/2024 10:12:29"
-    },
-    {
-        "orderID": 158736,
-        "orderName": "Beechcraft Bonanza",
-        "orderState": "printing",
-        "orderClient": "John Doe",
-        "orderClientEmail": "john.doe@example.com",
-        "orderMaterial": "PLA",
-        "orderTotalWeight": 300,
-        "orderQuantity": 1,
-        "orderPrice": 10,
-        "orderQuestion": "Faites attention les winglets sont fragiles",
-        "orderFiles": {
-            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
-            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
-        },
-        "orderDateTime": "08/08/2024 10:12:29"
-    },
-    {
-        "orderID": 158736,
-        "orderName": "Beechcraft Bonanza",
-        "orderState": "printing",
-        "orderClient": "John Doe",
-        "orderClientEmail": "john.doe@example.com",
-        "orderMaterial": "PLA",
-        "orderTotalWeight": 300,
-        "orderQuantity": 1,
-        "orderPrice": 10,
-        "orderQuestion": "Faites attention les winglets sont fragiles",
-        "orderFiles": {
-            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
-            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
-        },
-        "orderDateTime": "08/08/2024 10:12:29"
-    },
-    {
-        "orderID": 158736,
-        "orderName": "Beechcraft Bonanza",
-        "orderState": "printing",
-        "orderClient": "John Doe",
-        "orderClientEmail": "john.doe@example.com",
-        "orderMaterial": "PLA",
-        "orderTotalWeight": 300,
-        "orderQuantity": 1,
-        "orderPrice": 10,
-        "orderQuestion": "Faites attention les winglets sont fragiles",
-        "orderFiles": {
-            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
-            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
-        },
-        "orderDateTime": "08/08/2024 10:12:29"
-    },
-    {
         "orderID": 151436,
         "orderName": "Gulfstream G650",
         "orderState": "printing",
@@ -296,10 +160,9 @@ const orderDataDummy = [{
         "orderDateTime": "09/08/2024 10:12:29"
     }];
 
-
+const leftContentContainer = document.getElementById('leftContentContainer');
 const orderContainer = document.getElementById('orderContainer');
-const newOrder = document.getElementById('newOrder');
-const ordersList = document.getElementById('ordersList');
+let newOrder;
 let orderElementFilesMessageContent;
 let currentOrderID;
 
@@ -310,11 +173,6 @@ Main logic
 --------------------------*/
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    // If clicking #newOrder, redirect to the order page
-    newOrder.addEventListener('click', function () {
-        window.location.href = "../HTML/order.html";
-    });
 
     // Sort order list
     // By state
@@ -328,6 +186,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Filling the order list
     displayOrdersList(orderDataDummy);
+
+    // If clicking #newOrder, redirect to the order page
+    newOrder.addEventListener('click', function () {
+        window.location.href = "../HTML/order.html";
+    });
 
     // When clicking on any element with the class .ordersListElement, add the class .active to change the background color
     document.querySelectorAll('.ordersListElement').forEach(element => {
@@ -343,9 +206,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 showFilesOfActiveOrder(currentOrderID);
             });
 
-            /*document.getElementById('orderElementMessageButton').addEventListener('click', () => {
+            document.getElementById('orderElementMessageButton').addEventListener('click', () => {
                 displayMessages(currentOrderID);
-            });*/
+            });
         });
     });
 });
@@ -358,6 +221,17 @@ Functions
 
 // Function to fill the order list
 function displayOrdersList(orders) {
+    const ordersList = document.createElement('div');
+    ordersList.id = 'ordersList';
+    leftContentContainer.appendChild(ordersList);
+
+    newOrder = document.createElement('div');
+    newOrder.classList.add('hoverButton');
+    newOrder.classList.add('ordersListElement');
+    newOrder.id = 'newOrder';
+    newOrder.textContent = 'Nouvelle commande';
+    ordersList.appendChild(newOrder);
+
     orders.forEach((orderElement) => {
         const ordersListElement = document.createElement('div');
         ordersListElement.classList.add('ordersListElement');
@@ -421,27 +295,31 @@ function displayOrderContent(order) {
     orderElementSummaryTitle.classList.add('orderElementSummaryTitle');
     orderElementSummary.appendChild(orderElementSummaryTitle);
 
+    const orderElementDate = document.createElement('div');
+    const [date, time] = order.orderDateTime.split(' ');
+    orderElementDate.textContent = `Commande passée le ${date} à ${time}`;
+    orderElementDate.style.fontSize = '0.7em';
+    orderElementDate.style.marginBottom = '1vh';
+    orderElementSummary.appendChild(orderElementDate);
+
     const orderElementDetails = document.createElement('div');
     orderElementDetails.classList.add('orderElementDetails');
     orderElementDetails.style.display = 'flex';
-    orderElementDetails.style.flexDirection = 'row';
+    orderElementDetails.style.flexDirection = 'column';
     orderElementDetails.style.justifyContent = 'space-between';
     orderElementDetails.style.alignContent = 'center';
     orderElementDetails.style.width = '100%';
 
     // Order Details
-    const orderElementSummaryLeftColumn = document.createElement('div');
-    orderElementSummaryLeftColumn.classList.add('orderElementSummaryColumn');
-    orderElementSummaryLeftColumn.style.display = 'flex';
-    orderElementSummaryLeftColumn.style.flexDirection = 'column';
-    orderElementSummaryLeftColumn.style.width = 'fit-content';
-    orderElementSummaryLeftColumn.style.justifyContent = 'flex-start';
-    orderElementSummaryLeftColumn.style.alignContent = 'flex-start';
 
     const orderElementSummaryMaterial = document.createElement('div');
-    orderElementSummaryMaterial.textContent = `Matériau: ${order.orderMaterial}`;
+    if (order.orderMaterial === 'PLA' || order.orderMaterial === 'PETG' || order.orderMaterial === 'ABS') {
+        orderElementSummaryMaterial.textContent = `${order.orderMaterial} (Plastique)`;
+    } else if (order.orderMaterial === 'Résine') {
+        orderElementSummaryMaterial.textContent = `${order.orderMaterial}`;
+    }
     orderElementSummaryMaterial.style.width = 'fit-content';
-    orderElementSummaryLeftColumn.appendChild(orderElementSummaryMaterial);
+    orderElementDetails.appendChild(orderElementSummaryMaterial);
 
     const orderElementSummaryTotalWeight = document.createElement('div');
     if (order.orderTotalWeight > 1000) {
@@ -450,7 +328,13 @@ function displayOrderContent(order) {
         orderElementSummaryTotalWeight.textContent = `Poids total: ${order.orderTotalWeight}g`;
     }
     orderElementSummaryTotalWeight.style.width = 'fit-content';
-    orderElementSummaryLeftColumn.appendChild(orderElementSummaryTotalWeight);
+    orderElementDetails.appendChild(orderElementSummaryTotalWeight);
+
+    const orderElementSummaryQuantityPrice = document.createElement('div');
+    orderElementSummaryQuantityPrice.style.display = 'flex';
+    orderElementSummaryQuantityPrice.style.flexDirection = 'row';
+    orderElementSummaryQuantityPrice.style.justifyContent = 'space-between';
+    orderElementSummaryQuantityPrice.style.alignItems = 'baseline';
 
     const orderElementSummaryQuantity = document.createElement('div');
     if (order.orderQuantity > 1) {
@@ -459,26 +343,16 @@ function displayOrderContent(order) {
         orderElementSummaryQuantity.textContent = `${order.orderQuantity} pièce`;
     }
     orderElementSummaryQuantity.style.width = 'fit-content';
-    orderElementSummaryLeftColumn.appendChild(orderElementSummaryQuantity);
-
-    orderElementDetails.appendChild(orderElementSummaryLeftColumn);
-
-    const orderElementSummaryRightColumn = document.createElement('div');
-    orderElementSummaryRightColumn.classList.add('orderElementSummaryColumn');
-    orderElementSummaryRightColumn.style.display = 'flex';
-    orderElementSummaryRightColumn.style.flexDirection = 'column';
-    orderElementSummaryRightColumn.style.width = 'fit-content';
-    orderElementSummaryRightColumn.style.justifyContent = 'flex-end';
-    orderElementSummaryRightColumn.style.alignContent = 'flex-end';
+    orderElementSummaryQuantity.style.color = 'var(--logoBlue)';
+    orderElementSummaryQuantityPrice.appendChild(orderElementSummaryQuantity);
 
     const orderElementSummaryPrice = document.createElement('div');
     orderElementSummaryPrice.textContent = `${order.orderPrice}€`;
     orderElementSummaryPrice.style.fontSize = '1.5em';
-    orderElementSummaryPrice.style.color = 'var(--logoBlue)';
     orderElementSummaryPrice.style.width = 'fit-content';
-    orderElementSummaryRightColumn.appendChild(orderElementSummaryPrice);
+    orderElementSummaryQuantityPrice.appendChild(orderElementSummaryPrice);
 
-    orderElementDetails.appendChild(orderElementSummaryRightColumn);
+    orderElementDetails.appendChild(orderElementSummaryQuantityPrice);
 
     orderElementSummary.appendChild(orderElementDetails);
 
@@ -527,49 +401,6 @@ function displayOrderContent(order) {
 function displayFilesList(order) {
     orderElementFilesMessageContent.innerHTML = '';
 
-    const uploadFileContainer = document.createElement('div');
-    uploadFileContainer.style.display = 'flex';
-    uploadFileContainer.style.flexDirection = 'column';
-    uploadFileContainer.style.justifyContent = 'flex-start';
-    uploadFileContainer.style.alignItems = 'center';
-    uploadFileContainer.style.width = '100%';
-    uploadFileContainer.margin = '2vh 0 4vh 0';
-
-    const uploadFileInput = document.createElement('input');
-    uploadFileInput.type = 'file';
-    uploadFileInput.id = 'uploadFileInput';
-    uploadFileInput.classList.add('inputStyle');
-    uploadFileInput.style.padding = '0.5vh 0.5vw 0.5vh 0.5vw';
-    uploadFileContainer.appendChild(uploadFileInput);
-
-    const uploadFileButton = document.createElement('div');
-    uploadFileButton.textContent = 'Déposer un fichier';
-    uploadFileButton.classList.add('hoverButton');
-    uploadFileButton.id = 'uploadFileButton';
-    uploadFileButton.style.padding = '5px 10px';
-    uploadFileButton.style.height = 'fit-content';
-    uploadFileButton.style.width = 'fit-content';
-    uploadFileButton.style.borderRadius = '5px';
-    uploadFileButton.style.backgroundColor = 'grey';
-    uploadFileButton.style.cursor = 'not-allowed';
-    uploadFileButton.setAttribute('disabled', 'true');
-    uploadFileContainer.appendChild(uploadFileButton);
-
-    orderElementFilesMessageContent.appendChild(uploadFileContainer);
-
-    uploadFileInput.addEventListener('change', () => {
-        if (uploadFileInput.files.length > 0) {
-            uploadFileButton.style.backgroundColor = 'var(--logoBlue)';
-            uploadFileButton.style.cursor = 'pointer';
-            uploadFileButton.style.color = '#ffffff';
-            uploadFileButton.removeAttribute('disabled');
-        } else {
-            uploadFileButton.style.backgroundColor = 'grey';
-            uploadFileButton.style.cursor = 'not-allowed';
-            uploadFileButton.setAttribute('disabled', 'true');
-        }
-    });
-
     Object.values(order.orderFiles).forEach((file) => {
         const fileElement = document.createElement('div');
         fileElement.classList.add('filesListElement');
@@ -590,8 +421,7 @@ function displayFilesList(order) {
         fileElementRightPart.style.whiteSpace = 'nowrap';
 
         const fileElementDate = document.createElement('div');
-        fileElementDate.classList.add('filesListElementDate');
-        fileElementDate.classList.add('filesListSubElement');
+        fileElementDate.classList.add('filesListElementDate', 'filesListSubElement');
         const [date, time] = file.fileDateTime.split(' ');
         fileElementDate.textContent = `Déposé le ${date} à ${time}`;
         fileElementRightPart.appendChild(fileElementDate);
@@ -617,12 +447,24 @@ function displayFilesList(order) {
 
         orderElementFilesMessageContent.appendChild(fileElement);
     });
+
+    sortFilesByDate();
+}
+
+// Function to show files of the active order
+function showFilesOfActiveOrder(activeOrderId) {
+    if (activeOrderId) {
+        const activeOrder = orderDataDummy.find(order => order.orderID === Number(activeOrderId));
+        if (activeOrder) {
+            displayFilesList(activeOrder);
+        }
+    }
 }
 
 // Show the chat for a specific order
-/*function displayMessages(order) {
+function displayMessages(order) {
     orderElementFilesMessageContent.innerHTML = '';
-}*/
+}
 
 // Set color state for each order
 function getColorForState(state) {
@@ -638,12 +480,16 @@ function getColorForState(state) {
     return stateColorMapping[state] || {background: '#bdbdbd', font: '#000000'}; // Default colors
 }
 
-// Function to show files of the active order
-function showFilesOfActiveOrder(activeOrderId) {
-    if (activeOrderId) {
-        const activeOrder = orderDataDummy.find(order => order.orderID === Number(activeOrderId));
-        if (activeOrder) {
-            displayFilesList(activeOrder);
-        }
-    }
+//Function to sort all file elements by date (most recent to oldest)
+function sortFilesByDate() {
+    const fileElements = Array.from(document.querySelectorAll('.filesListElement'));
+    fileElements.sort((a, b) => {
+        const dateA = new Date(a.querySelector('.filesListElementDate').textContent.split(' ')[2].split('/').reverse().join('-') + 'T' + a.querySelector('.filesListElementDate').textContent.split(' ')[4]);
+        const dateB = new Date(b.querySelector('.filesListElementDate').textContent.split(' ')[2].split('/').reverse().join('-') + 'T' + b.querySelector('.filesListElementDate').textContent.split(' ')[4]);
+        return dateB - dateA;
+    });
+
+    const container = document.querySelector('.orderElementFilesMessageContent');
+    container.innerHTML = '';
+    fileElements.forEach(element => container.appendChild(element));
 }
