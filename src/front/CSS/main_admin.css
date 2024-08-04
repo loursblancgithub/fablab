@@ -4,6 +4,7 @@
     align-items: center;
     height: 95vh;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 option {
@@ -17,6 +18,7 @@ option {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    box-sizing: border-box;
 }
 
 #fablabLogo {
@@ -57,39 +59,57 @@ option {
 /* peut etre faire apparaitre par colonne que par ligne pour que ce soit plus beau*/
 #contentContainer {
     width: 80vw;
-    height: 95%;
+    height: 100%;
+    padding: 1%;
     background-color: #2e4798;
     border-radius: 10px;
-    padding-left: auto;
-    padding-right: auto;
     overflow-x: hidden;
     overflow-y: auto;
-    text-wrap: clip;
-    display: grid;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-evenly;
     align-items: flex-start;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 2vh;
-    grid-template-rows: 50%;
+    box-sizing: border-box;
 }
 
+#contentContainer::after {
+    content: "";
+    flex: auto;
+}
+
+@keyframes grow {
+    from {
+        transform: scaleY(0);
+        opacity: 0;
+    }
+    to {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
 
 .orderElement {
     display: flex;
     flex-direction: column;
     height: auto;
-    width:65%;
+    width: 30%;
     padding: 1vh 1vw 1vh 1vw;
-    margin: 3vh auto 3vh auto;
     background-color: white;
     border-radius: 10px;
     overflow: hidden;
+    transform-origin: top;
+    transition: transform 3s ease-in-out, opacity 0.3s ease;
+}
+
+.orderElement.expanded {
+    animation: grow 0.3s ease forwards;
 }
 
 .orderElementHeader {
     display: flex;
     justify-content: space-between;
     align-content: center;
-    width: 100%;   
+    width: 100%;
 }
 
 .orderElementHeaderColumn {
@@ -116,7 +136,7 @@ option {
     border: none;
     border-radius: 5px;
     font-size: 2vh;
-    max-width: 7xvw;
+    max-width: 7vw;
 }
 
 .orderElementDetails {
@@ -134,15 +154,14 @@ option {
     color: black !important;
 }
 
-
 .orderElementDetailsText {
-    margin-left: auto !important; 
+    margin-left: auto !important;
 }
 
 .orderElementDetailsIcon {
     width: 1rem !important;
     height: 1rem !important;
-    position: absolute !important; 
+    position: absolute !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     color: #2e4798 !important;
@@ -169,6 +188,6 @@ option {
     border: 1px solid #ccc;
     padding: 5px;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: none;
 }
