@@ -290,17 +290,17 @@ function displayOrderContent(order) {
     orderStateElement.textContent = getColorForState(order.orderState).frText;
     orderElementSummary.appendChild(orderStateElement);
 
-    const orderElementSummaryTitle = document.createElement('div');
-    orderElementSummaryTitle.textContent = 'Vue d\'ensemble';
-    orderElementSummaryTitle.classList.add('orderElementSummaryTitle');
-    orderElementSummary.appendChild(orderElementSummaryTitle);
-
     const orderElementDate = document.createElement('div');
     const [date, time] = order.orderDateTime.split(' ');
     orderElementDate.textContent = `Commande passée le ${date} à ${time}`;
     orderElementDate.style.fontSize = '0.7em';
-    orderElementDate.style.marginBottom = '1vh';
+    orderElementDate.style.margin = '0 0 5vh 0';
     orderElementSummary.appendChild(orderElementDate);
+
+    const orderElementSummaryTitle = document.createElement('div');
+    orderElementSummaryTitle.textContent = 'Vue d\'ensemble';
+    orderElementSummaryTitle.classList.add('orderElementSummaryTitle');
+    orderElementSummary.appendChild(orderElementSummaryTitle);
 
     const orderElementDetails = document.createElement('div');
     orderElementDetails.classList.add('orderElementDetails');
