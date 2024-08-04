@@ -14,8 +14,14 @@ body {
     font-family: LexendDeca, sans-serif;
 }
 
-/* Generic grey input with box shadow */
+:root {
+    overscroll-behavior: none;
+    --backgroundLightBlue: #7287ca;
+    --logoBlue: #2e4798;
+}
 
+
+/*------> Generic grey input with box shadow <------*/
 .inputStyle {
     font-family: LexendDeca, sans-serif;
     background-color: #e6e9f0;
@@ -30,8 +36,7 @@ body {
     margin-bottom: 2vh;
 }
 
-/* Generic #2e4798 blue button */
-
+/*------> Generic #2e4798 blue button <------*/
 .blueButton {
     background-color: #2E4798;
     color: #ffffff;
@@ -52,10 +57,23 @@ body {
 .blueButton:hover {
     background-color: #1a2f66;
     cursor: pointer;
+    transition: background-color 0.25s ease;
 }
 
 select > option {
     font-family: LexendDeca, sans-serif;
+}
+
+/*------> Generic grey input with box shadow <------*/
+.formTitle {
+    font-size: 2vh;
+    font-weight: 325;
+    margin: 1.5vh 0 0.5vh 0;
+}
+
+.required:after {
+    content: " *";
+    color: red;
 }
 
 /*--------------------------
@@ -64,7 +82,7 @@ Header side
 
 --------------------------*/
 
-#headerSide {
+#headerRight {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -129,7 +147,7 @@ Feedback Form
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
     width: 20vw;
     height: fit-content;
     background-color: #ffffff;
@@ -139,8 +157,8 @@ Feedback Form
     bottom: 0;
     left: 0;
     margin: auto;
-    padding: 2vh 1vw 1vh 1vw;
-    border: 10px solid #2E4798;
+    padding: 0 1vw 1vh 1vw;
+    border: 10px solid var(--logoBlue);
     border-radius: 10px;
     animation: fadeInScaleUp 0.25s ease-out forwards;
 }
@@ -151,7 +169,7 @@ Feedback Form
     margin: 0 0 1vh 0;
 }
 
-/* Pop-in animation */
+/*------> Pop-in animation <------*/
 @keyframes popIn {
     from {
         opacity: 0;
@@ -163,7 +181,7 @@ Feedback Form
     }
 }
 
-/* Pop-out animation */
+/*------> Pop-out animation <------*/
 @keyframes popOut {
     from {
         opacity: 1;
@@ -183,9 +201,9 @@ Feedback Form
     animation: popOut 0.25s forwards;
 }
 
-/* Responsive elements */
+/*------> Responsive elements <------*/
 @media only screen and (max-width: 768px) {
-    #headerSide {
+    #headerRight {
         right: 5vw;
         top: 3vw;
         flex-direction: column-reverse;
@@ -214,4 +232,72 @@ Feedback Form
         width: 60vw;
         padding: 2%;
     }
+}
+
+/*--------------------------
+
+Alert Popup
+
+--------------------------*/
+
+@keyframes alertPopIn {
+    0% {
+        transform: translateX(0)
+    }
+    25% {
+        transform: translateX(5px)
+    }
+    50% {
+        transform: translateX(-5px)
+    }
+    75% {
+        transform: translateX(5px)
+    }
+    100% {
+        transform: translateX(0)
+    }
+}
+
+@keyframes alertPopOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+}
+
+.alertPopup {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 20vw;
+    height: fit-content;
+    background-color: #eaa5a5;
+    color: #931c1c;
+    position: fixed;
+    top: 40vh;
+    left: 40vw;
+    margin: auto;
+    padding: 1vh 1vw 1vh 1vw;
+    border-radius: 10px;
+    animation: alertPopIn 0.1s ease-out forwards;
+    box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
+}
+
+.alertPopupPopIn {
+    animation: alertPopIn 0.25s forwards;
+}
+
+.alertPopupPopOut {
+    animation: alertPopOut 0.25s forwards;
+}
+
+#alertClose {
+    font-size: 4vh;
+    cursor: pointer;
+    margin: 0 0 1vh 0;
 }

@@ -16,12 +16,14 @@
 </head>
 <body>
 <div id="bodyContainer">
-    <div id="headerSide">
+    <div id="expertModeContainer">
         <div id="expertModeTitle">Mode expert</div>
         <label class="switch">
-            <input type="checkbox">
+            <input type="checkbox" id="expertModeSwitch">
             <span class="slider round"></span>
         </label>
+    </div>
+    <div id="headerRight">
         <img src="../Assets/bulb.svg" alt="logo" id="formBulb">
         <div id="logoutButton" class="blueButton">Se déconnecter</div>
         <script src="../front_scripts/feedback_form.js"></script>
@@ -71,7 +73,10 @@
             </div>
         </div>
 
-        <div class="formTitle">Questions et commentaires</div>
+        <div class="formTitle" id="orderPrintSettingsTitle">Paramètres d'impression</div>
+        <div id="orderPrintSettings"></div>
+
+        <div class="formTitle" id="questionCommentaryTitle">Questions et commentaires</div>
         <label for="orderQuestions"></label><textarea class="inputStyle" id="orderQuestions"
                                                       name="questions"></textarea>
 
@@ -94,7 +99,8 @@
                 mât,
                 le mât doit faire partie du modèle de la coque. Seul cas accepté de plusieurs pièces sur un même
                 fichier : le print-in-place. Si ce terme ne vous dit rien, merci de mettre une seule pièce par
-                fichier.<br><br>
+                fichier. <strong>Pour envoyer plusieurs modèles, merci de les mettre dans un fichier zip en respectant
+                les consignes indiquées ici.</strong><br><br>
                 <strong>Si vous modélisez vous-mêmes vos pièces</strong><br>
                 La tolérance (précision maximale) de l'impression 3D est de 0.2mm, c'est à dire qu'une boîte sur
                 laquelle s'assemble un couvercle doit avoir un espace de 0.2mm minimum entre le couvercle et la
@@ -109,7 +115,7 @@
                 <a href="https://www.tinkercad.com/">https://www.tinkercad.com/</a>. Le personnel du FabLab ne fait
                 pas de modification de pièces pour ne pas imprimer de pièces inutilement.<br><br>
                 <strong>Après l'envoi de votre demande</strong><br>
-                Vérifiez votre boîte de réception régulièrement pour ne pas manquer toute
+                Vérifiez la discussion dans votre commande régulièrement pour ne manquer aucune
                 réponse de notre part contenant :<br>
                 - Votre devis<br>
                 - Une remarque sur votre modèle<br>
@@ -131,7 +137,6 @@
 
 </div>
 
-<script src="../front_scripts/order.js"></script>
-<script src="../front_scripts/login.js"></script>
+<script type="module" src="../front_scripts/order.js"></script>
 </body>
 </html>

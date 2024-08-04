@@ -1,0 +1,79 @@
+{
+  "Vitesse": {
+    "Inner Wall Speed": {
+      "defaultValue": 50,
+      "unit": "mm/s"
+    },
+    "Outer Wall Speed": {
+      "defaultValue": 40,
+      "unit": "mm/s"
+    },
+    "Infill Speed": {
+      "defaultValue": 60,
+      "unit": "mm/s"
+    }
+  },
+  "fefze": {
+    "Inner Wall Speed": {
+      "defaultValue": 50,
+      "unit": "mm/s"
+    },
+    "Outer Wall Speed": {
+      "defaultValue": 40,
+      "unit": "mm/s"
+    },
+    "Infill Speed": {
+      "defaultValue": 60,
+      "unit": "mm/s"
+    }
+  },
+  "nfuebfubfue": {
+    "Inner Wall Speed": {
+      "defaultValue": 50,
+      "unit": "mm/s"
+    },
+    "Outer Wall Speed": {
+      "defaultValue": 40,
+      "unit": "mm/s"
+    },
+    "Infill Speed": {
+      "defaultValue": 60,
+      "unit": "mm/s"
+    }
+  },
+  "Rigidite": {
+    "Infill Pattern": {
+      "type": "select",
+      "options": [
+        "Grille",
+        "Triangles",
+        "Lignes"
+      ],
+      "defaultValue": "Grille"
+    },
+    "Infill Density": {
+      "defaultValue": 20,
+      "unit": "%"
+    }
+  },
+  "Supports": {
+    "Enable Supports": {
+      "defaultValue": "No",
+      "type": "checkbox"
+    },
+    "Sur le plateau uniquement": {
+      "type": "select",
+      "defaultValue": "Non",
+      "options": [
+        "Oui",
+        "Non"
+      ],
+      "dependsOn": "Enable Supports"
+    },
+    "Support Infill Density": {
+      "defaultValue": 15,
+      "unit": "%",
+      "dependsOn": "Enable Supports"
+    }
+  }
+}

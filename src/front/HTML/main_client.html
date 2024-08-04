@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Mes commandes - FabLab</title>
+    <title>FabLab - Mes commandes</title>
 
     <link rel="apple-touch-icon" sizes="180x180" href="../Assets/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../Assets/favicon/favicon-32x32.png">
@@ -16,6 +16,11 @@
 </head>
 <body>
 <div id="bodyContainer">
+    <div id="headerRight">
+        <img src="../Assets/bulb.svg" alt="logo" id="formBulb">
+        <div id="logoutButton" class="blueButton">Se déconnecter</div>
+        <script src="../front_scripts/feedback_form.js"></script>
+    </div>
     <img src="../Assets/logo_fablab.svg" alt="logo" id="fablabLogo">
     <div id="contentContainer">
         <div id="leftContentContainer">
@@ -25,6 +30,6 @@
         <div id="orderContainer"></div>
     </div>
 </div>
-<script src="../../scripts/client_orders_fetcher.js"></script>
+<script type="module" src="../front_scripts/main_client.js"></script>
 </body>
 </html>
