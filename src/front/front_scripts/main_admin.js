@@ -18,58 +18,159 @@ const stateOptions = {
     finished: 'Terminé'
 }
 
-const orderDataDummy = [
-    {
-        "id": 0,
-        "orderName": "Cirrus Vision Jet",
-        "orderState": "pending",
-        "orderClient": "Jane Doe",
-        "orderClientEmail": "jane.doe@example.com",
-        "orderMaterial": "Aluminum",
-        "orderTotalWeight": "5kg",
-        "orderQuantity": 100,
-        "orderPrice": "$2000",
-        "details": false
+const orderDataDummy = [{
+    "orderID": 158436,
+    "orderName": "Cirrus Vision Jet",
+    "orderState": "pending",
+    "orderClient": "Jane Doe",
+    "orderClientEmail": "jane.doe@example.com",
+    "orderMaterial": "PETG",
+    "orderTotalWeight": 5000,
+    "orderQuantity": 100,
+    "orderPrice": 2000,
+    "orderQuestion": "Beautiful but underpowered lul",
+    "orderFiles": {
+        "file1": {fileID: 1, fileName: "fuselage.3mf", fileDateTime: "31/07/2024 10:25:32", fileWeight: 3000},
+        "file2": {fileID: 2, fileName: "aileron.3mf", fileDateTime: "02/08/2024 10:12:29", fileWeight: 500}
     },
+    "orderDateTime": "31/07/2024 10:25:32"
+},
     {
-        "id": 1,
+        "orderID": 158486,
         "orderName": "Airbus A220",
         "orderState": "finished",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
         "orderMaterial": "PLA",
-        "orderTotalWeight": "300g",
+        "orderTotalWeight": 300,
         "orderQuantity": 1,
-        "orderPrice": "8€",
-        "details": false
+        "orderPrice": 8,
+        "orderQuestion": "Bombardier on vous aime",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "02/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "05/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "02/08/2024 10:12:29"
     },
     {
-        "id": 2,
+        "orderID": 154436,
         "orderName": "Boeing 787",
         "orderState": "sliced",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
         "orderMaterial": "PLA",
-        "orderTotalWeight": "300g",
+        "orderTotalWeight": 3000,
         "orderQuantity": 1,
-        "orderPrice": "8€",
-        "details": false
+        "orderPrice": 15,
+        "orderQuestion": "Belle machine faite par des sagouins",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "03/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "07/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "03/08/2024 10:12:29"
     },
     {
-        "id": 3,
+        "orderID": 168436,
         "orderName": "Embraer E190",
         "orderState": "printing",
         "orderClient": "John Doe",
         "orderClientEmail": "john.doe@example.com",
         "orderMaterial": "PLA",
-        "orderTotalWeight": "300g",
+        "orderTotalWeight": 500,
         "orderQuantity": 1,
-        "orderPrice": "8€",
+        "orderPrice": 4,
         "orderQuestion": "Faites attention les winglets sont fragiles",
-        "details": false
-    }
-];
-
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "04/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "05/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "04/08/2024 10:12:29"
+    },
+    {
+        "orderID": 158431,
+        "orderName": "Lockheed Martin F-35",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 1500,
+        "orderQuantity": 1,
+        "orderPrice": 12,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "05/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "10/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "05/08/2024 10:12:29"
+    },
+    {
+        "orderID": 156436,
+        "orderName": "Cessna 172",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 8,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "06/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "06/08/2024 10:12:29"
+    },
+    {
+        "orderID": 158426,
+        "orderName": "Piper PA-28",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 8,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "07/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "09/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "07/08/2024 10:12:29"
+    },
+    {
+        "orderID": 158736,
+        "orderName": "Beechcraft Bonanza",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 10,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "08/08/2024 10:12:29"
+    },
+    {
+        "orderID": 151436,
+        "orderName": "Gulfstream G650",
+        "orderState": "printing",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 300,
+        "orderQuantity": 1,
+        "orderPrice": 8,
+        "orderQuestion": "Faites attention les winglets sont fragiles",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "09/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "21/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "09/08/2024 10:12:29"
+    }];
 
 const contentContainer = document.getElementById('contentContainer');
 
