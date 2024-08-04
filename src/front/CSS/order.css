@@ -283,6 +283,7 @@ input:checked + .slider:before {
 
 #goodPracticesText {
     font-size: 2vh;
+    hyphens: auto;
 }
 
 #goodPracticesCheckContainer {
