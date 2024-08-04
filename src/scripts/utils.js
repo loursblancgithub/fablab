@@ -54,7 +54,7 @@ function showHover(element, hoverText) {
 
 function applyHoverIfNecessary(element, hoverText) {
     element.addEventListener('mouseover', function () {
-        if (element.scrollWidth > element.clientWidth) {
+        if (element.scrollWidth > element.parentElement.clientWidth) {
             showHover(element, hoverText);
         } else {
             element.removeAttribute('title');
