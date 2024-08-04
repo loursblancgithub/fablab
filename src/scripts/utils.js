@@ -1,10 +1,12 @@
 //fichier avec toutes les fonctions qui peuvent servir un peu partout
 
-export default function removeAllChildren(element) {
+function removeAllChildren(element) {
     while (element.firstChild) {
         element.removeChild(element.firstChild);
     }
 }
+
+export { removeAllChildren };
 
 /*--------------------------
 
@@ -50,7 +52,7 @@ function showHover(element, hoverText) {
     });
 }
 
-export function applyHoverIfNecessary(element, hoverText) {
+function applyHoverIfNecessary(element, hoverText) {
     element.addEventListener('mouseover', function () {
         if (element.scrollWidth > element.clientWidth) {
             showHover(element, hoverText);
@@ -59,6 +61,8 @@ export function applyHoverIfNecessary(element, hoverText) {
         }
     });
 }
+
+export { applyHoverIfNecessary };
 
 /*--------------------------
 

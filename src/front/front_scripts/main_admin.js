@@ -1,12 +1,12 @@
+import {removeAllChildren} from "../../scripts/utils.js";
+import {applyHoverIfNecessary} from "../../scripts/utils.js";
+
 /*
 import {socket} from './websocket_setup.js';
 
 // Use the `socket` object for sending messages, etc.
 socket.send("Message specific to admin_orders_fetcher functionality.");
 */
-
-import {removeAllChildren} from "../../scripts/utils.js";
-import {applyHoverIfNecessary} from "../../scripts/utils.js";
 
 
 const stateOptions = {
@@ -113,21 +113,21 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Button clicked');
 
         contentContainer.innerHTML = '';
-        createOrderElements(orderDataDummy.filter(order => order.orderState == "pending"));
+        createOrderElements(orderDataDummy.filter(order => order.orderState === "pending"));
     });
 
     document.getElementById('sidePanelStateButtonOngoing').addEventListener('click', () => {
         console.log('Button clicked');
 
         contentContainer.innerHTML = '';
-        createOrderElements(orderDataDummy.filter(order => order.orderState != "pending" && order.orderState != "finished"));
+        createOrderElements(orderDataDummy.filter(order => order.orderState !== "pending" && order.orderState !== "finished"));
     });
 
     document.getElementById('sidePanelStateButtonFinished').addEventListener('click', () => {
         console.log('Button clicked');
 
         contentContainer.innerHTML = '';
-        createOrderElements(orderDataDummy.filter(order => order.orderState == "finished"));
+        createOrderElements(orderDataDummy.filter(order => order.orderState === "finished"));
     });
 });
 
@@ -241,20 +241,6 @@ function createOrderElements(orderElements) {
             orderPriceElement.classList.add('orderElementText');
             //orderPriceElement.classList.add('orderResponsive');
             orderElementDiv.appendChild(orderPriceElement);
-        
-            // Details
-            const orderDetailsElement = document.createElement('button');
-            orderDetailsElement.classList.add('orderElementDetails');
-            //orderDetailsElement.classList.add('orderResponsive')
-        
-            // Ajouter le texte et l'icône au bouton
-            const buttonText = document.createElement('span');
-            buttonText.textContent = 'Détails';
-            buttonText.classList.add('orderElementDetailsText');
-        
-            const buttonIcon = document.createElement('span');
-            buttonIcon.classList.add('orderElementDetailsIcon');
-            buttonIcon.textContent = '⯅'; 
         
             orderDetailsElement.appendChild(buttonText);
             orderDetailsElement.appendChild(buttonIcon);
