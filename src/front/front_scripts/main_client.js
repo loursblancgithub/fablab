@@ -1,4 +1,4 @@
-import {setTimeoutWithRAF} from "/src/scripts/utils.js";
+import {applyHoverIfNecessary, setTimeoutWithRAF} from "/src/scripts/utils.js";
 /*
 import {socket} from './websocket_setup.js';
 
@@ -160,6 +160,11 @@ const orderDataDummy = [{
         "orderDateTime": "09/08/2024 10:12:29"
     }];
 
+const userDataDummy = {
+    "userID": 1,
+    "userName": "Jane Doe",
+}
+
 const leftContentContainer = document.getElementById('leftContentContainer');
 const orderContainer = document.getElementById('orderContainer');
 let newOrder;
@@ -173,16 +178,8 @@ Main logic
 --------------------------*/
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    // Sort order list
-    // By state
-    orderDataDummy.sort((a, b) => {
-        if (a.orderState === 'pending') return -1;
-        if (b.orderState === 'pending') return 1;
-        if (a.orderState === 'finished') return 1;
-        if (b.orderState === 'finished') return -1;
-        return 0;
-    });
+    // By default, showing the landing page
+    displayLandingPage(userDataDummy, orderDataDummy);
 
     // Filling the order list
     displayOrdersList(orderDataDummy);
@@ -192,9 +189,14 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = "../HTML/order.html";
     });
 
-    // When clicking on any element with the class .ordersListElement, add the class .active to change the background color
+    document.getElementById('ordersListHome').addEventListener('click', () => {
+        displayLandingPage();
+    })
+
     document.querySelectorAll('.ordersListElement').forEach(element => {
         element.addEventListener('click', function () {
+
+            // When clicking on any element with the class .ordersListElement, add the class .active to change the background color
             document.querySelectorAll('.ordersListElement').forEach(el => el.classList.remove('active'));
             this.classList.add('active');
             currentOrderID = this.id;
@@ -202,10 +204,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // By default, loading the files list when loading an order
             showFilesOfActiveOrder(currentOrderID);
 
+            // When clicking on the files button, loading the files list
             document.getElementById('orderElementFilesButton').addEventListener('click', () => {
                 showFilesOfActiveOrder(currentOrderID);
             });
 
+            // When clicking on the chat button, loading the chat
             document.getElementById('orderElementMessageButton').addEventListener('click', () => {
                 displayMessages(currentOrderID);
             });
@@ -219,18 +223,47 @@ Functions
 
 --------------------------*/
 
+//Function showing the landing page of the user
+function displayLandingPage(user, orders) {
+    orderContainer.innerHTML = '';
+}
+
 // Function to fill the order list
 function displayOrdersList(orders) {
     const ordersList = document.createElement('div');
     ordersList.id = 'ordersList';
     leftContentContainer.appendChild(ordersList);
 
+    const ordersListHeader = document.createElement('div');
+    ordersListHeader.id = 'ordersListHeader';
+
+    const ordersListHome = document.createElement('img');
+    ordersListHome.src = '/src/front/Assets/home_icon.svg';
+    ordersListHome.id = 'ordersListHome';
+    ordersListHome.style.width = '1.75rem';
+    ordersListHome.style.backgroundColor = '#ffffff';
+    ordersListHome.style.borderRadius = '5px';
+    ordersListHome.style.padding = '5px';
+    ordersListHeader.appendChild(ordersListHome);
+
     newOrder = document.createElement('div');
     newOrder.classList.add('hoverButton');
     newOrder.classList.add('ordersListElement');
     newOrder.id = 'newOrder';
-    newOrder.textContent = 'Nouvelle commande';
-    ordersList.appendChild(newOrder);
+    newOrder.textContent = 'Commander';
+    newOrder.style.width = '100%';
+    ordersListHeader.appendChild(newOrder);
+
+    ordersList.appendChild(ordersListHeader);
+
+    // Sort orders list by state
+    orders.sort((a, b) => {
+        if (a.orderState === 'pending') return -1;
+        if (b.orderState === 'pending') return 1;
+        if (a.orderState === 'finished') return 1;
+        if (b.orderState === 'finished') return -1;
+        return 0;
+    });
 
     orders.forEach((orderElement) => {
         const ordersListElement = document.createElement('div');
@@ -241,6 +274,7 @@ function displayOrdersList(orders) {
         const ordersListElementName = document.createElement('div');
         ordersListElementName.classList.add('ordersListElementName');
         ordersListElementName.textContent = orderElement.orderName;
+        applyHoverIfNecessary(ordersListElementName, orderElement.orderName);
 
         const ordersListElementState = document.createElement('div');
         ordersListElementState.classList.add('ordersListElementState');
