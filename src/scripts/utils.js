@@ -6,7 +6,7 @@ function removeAllChildren(element) {
     }
 }
 
-export { removeAllChildren };
+export {removeAllChildren};
 
 /*--------------------------
 
@@ -23,7 +23,7 @@ function sanitizeOutput(toOutput) {
         .replace(/\//g, '&#x2F;');
 }
 
-export { sanitizeOutput };
+export {sanitizeOutput};
 
 /*--------------------------
 
@@ -35,17 +35,14 @@ function showHover(element, hoverText) {
     // Create the hover text element
     const hoverElement = document.createElement('div');
     hoverElement.textContent = hoverText;
-    hoverElement.classList.add('hover-text');
+    hoverElement.classList.add('hoverText');
     hoverElement.style.display = 'none';
     document.body.appendChild(hoverElement);
 
-    // Event listeners to show and hide the hover text
-    element.addEventListener('mouseover', function () {
-        const rect = element.getBoundingClientRect();
-        hoverElement.style.left = `${rect.left}px`;
-        hoverElement.style.top = `${rect.top + rect.height + 5}px`;
-        hoverElement.style.display = 'block';
-    });
+    const rect = element.getBoundingClientRect();
+    hoverElement.style.left = `${rect.left}px`;
+    hoverElement.style.top = `${rect.top + rect.height + 5}px`;
+    hoverElement.style.display = 'block';
 
     element.addEventListener('mouseout', function () {
         hoverElement.style.display = 'none';
@@ -54,15 +51,13 @@ function showHover(element, hoverText) {
 
 function applyHoverIfNecessary(element, hoverText) {
     element.addEventListener('mouseover', function () {
-        if (element.scrollWidth > element.parentElement.clientWidth) {
+        if (element.scrollWidth > element.clientWidth) {
             showHover(element, hoverText);
-        } else {
-            element.removeAttribute('title');
         }
     });
 }
 
-export { applyHoverIfNecessary };
+export {applyHoverIfNecessary};
 
 /*--------------------------
 
@@ -90,11 +85,11 @@ function showCustomAlert(message) {
         alertPopup.classList.add('alertPopupPopOut');
         alertPopup.addEventListener('animationend', () => {
             document.body.removeChild(alertPopup);
-        }, { once: true });
+        }, {once: true});
     }, 2000);
 }
 
-export { showCustomAlert };
+export {showCustomAlert};
 
 /*--------------------------
 
@@ -116,4 +111,4 @@ function setTimeoutWithRAF(callback, delay) {
     requestAnimationFrame(frame);
 }
 
-export { setTimeoutWithRAF };
+export {setTimeoutWithRAF};

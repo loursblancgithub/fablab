@@ -302,3 +302,20 @@ Alert Popup
     cursor: pointer;
     margin: 0 0 1vh 0;
 }
+
+/*--------------------------
+
+Hover popup for text that is too long
+
+--------------------------*/
+
+.hoverText {
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1000;
+}
