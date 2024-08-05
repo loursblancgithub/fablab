@@ -70,6 +70,57 @@ const orderDataDummy = [{
         "orderDateTime": "03/08/2024 10:12:29"
     },
     {
+        "orderID": 154436,
+        "orderName": "Boeing 787",
+        "orderState": "sliced",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 3000,
+        "orderQuantity": 1,
+        "orderPrice": 15,
+        "orderQuestion": "Belle machine faite par des sagouins",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "03/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "07/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "03/08/2024 10:12:29"
+    },
+    {
+        "orderID": 154436,
+        "orderName": "Boeing 787",
+        "orderState": "sliced",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 3000,
+        "orderQuantity": 1,
+        "orderPrice": 15,
+        "orderQuestion": "Belle machine faite par des sagouins",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "03/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "07/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "03/08/2024 10:12:29"
+    },
+    {
+        "orderID": 154436,
+        "orderName": "Boeing 787",
+        "orderState": "sliced",
+        "orderClient": "John Doe",
+        "orderClientEmail": "john.doe@example.com",
+        "orderMaterial": "PLA",
+        "orderTotalWeight": 3000,
+        "orderQuantity": 1,
+        "orderPrice": 15,
+        "orderQuestion": "Belle machine faite par des sagouins",
+        "orderFiles": {
+            "file1": {fileID: 1, fileName: "Fuselage", fileDateTime: "03/08/2024 10:12:29", fileWeight: 3000},
+            "file2": {fileID: 2, fileName: "Aileron", fileDateTime: "07/08/2024 10:12:29", fileWeight: 3000}
+        },
+        "orderDateTime": "03/08/2024 10:12:29"
+    },
+    {
         "orderID": 168436,
         "orderName": "Embraer E190",
         "orderState": "printing",
@@ -239,8 +290,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Dynamically create elements based on the order data
 function createOrderElements(orderElements) {
-    orderElements.sort((a, b) => b.id - a.id);
-    orderElements.forEach(function (orderElement) {
+    const columns = [document.createElement('div'), document.createElement('div'), document.createElement('div')];
+    columns.forEach(column => column.classList.add('column'));
+
+    orderElements.sort((a, b) => {
+        if (a.orderState === 'pending') return -1;
+        if (b.orderState === 'pending') return 1;
+        if (a.orderState === 'finished') return 1;
+        if (b.orderState === 'finished') return -1;
+        return 0;
+    });
+
+    orderElements.forEach((orderElement, index) => {
         const orderElementDiv = document.createElement('div');
         orderElementDiv.classList.add('orderElement');
 
@@ -251,14 +312,12 @@ function createOrderElements(orderElements) {
         orderElementHeaderColumn1.classList.add('orderElementHeaderColumn');
         orderElementHeaderColumn1.id = 'orderElementHeaderColumn1';
 
-        // Order Name
         const orderNameElement = document.createElement('div');
         orderNameElement.textContent = `${orderElement.orderName}`;
         orderNameElement.classList.add('orderElementText');
         applyHoverIfNecessary(orderNameElement, `${orderElement.orderName}`);
         orderElementHeaderColumn1.appendChild(orderNameElement);
 
-        // Client Name
         const orderClientElement = document.createElement('div');
         orderClientElement.textContent = `${orderElement.orderClient}`;
         orderClientElement.classList.add('orderElementText');
@@ -271,7 +330,6 @@ function createOrderElements(orderElements) {
         orderElementHeaderColumn2.classList.add('orderElementHeaderColumn');
         orderElementHeaderColumn2.style.justifyContent = 'flex-start';
 
-        // Order State
         const orderStateDropdown = createStateDropdown(orderElement.orderState);
         orderStateDropdown.style.margin = '1vh 0 1vh 0';
         applyHoverIfNecessary(orderStateDropdown, stateOptions[orderElement.orderState]);
@@ -280,7 +338,6 @@ function createOrderElements(orderElements) {
         orderElementHeader.appendChild(orderElementHeaderColumn2);
         orderElementDiv.appendChild(orderElementHeader);
 
-        // Details
         const orderDetailsElement = document.createElement('button');
         orderDetailsElement.classList.add('orderElementDetails');
 
@@ -304,48 +361,38 @@ function createOrderElements(orderElements) {
 
             if (orderElement.details) {
                 orderElementDiv.classList.add('expanded');
+                orderElementDiv.style.animation = 'grow 3s ease-in-out forwards';
             } else {
                 orderElementDiv.classList.remove('expanded');
+                orderElementDiv.style.animation = 'none';
             }
         });
 
         if (orderElement.details) {
-            // Client Email
             const orderClientEmailElement = document.createElement('div');
             orderClientEmailElement.textContent = `E-mail: ${orderElement.orderClientEmail}`;
             applyHoverIfNecessary(orderClientEmailElement, `${orderElement.orderClientEmail}`);
             orderClientEmailElement.classList.add('orderElementText');
-            //orderClientEmailElement.classList.add('orderResponsive');
-
             orderElementDiv.appendChild(orderClientEmailElement);
 
-            // Material
             const orderMaterialElement = document.createElement('div');
             orderMaterialElement.textContent = `Matériau: ${orderElement.orderMaterial}`;
             orderMaterialElement.classList.add('orderElementText');
-            //orderMaterialElement.classList.add('orderResponsive');
-
             orderElementDiv.appendChild(orderMaterialElement);
 
-            // Total Weight
             const orderTotalWeightElement = document.createElement('div');
             orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight}`;
             orderTotalWeightElement.classList.add('orderElementText');
-            //orderTotalWeightElement.classList.add('orderResponsive');
             orderElementDiv.appendChild(orderTotalWeightElement);
 
-            // Quantity
             const orderQuantityElement = document.createElement('div');
             orderQuantityElement.textContent = `Quantité: ${orderElement.orderQuantity}`;
             orderQuantityElement.classList.add('orderElementText');
-            //orderQuantityElement.classList.add('orderResponsive');
             orderElementDiv.appendChild(orderQuantityElement);
 
-            // Price
             const orderPriceElement = document.createElement('div');
             orderPriceElement.textContent = `Price: ${orderElement.orderPrice}`;
             orderPriceElement.classList.add('orderElementText');
-            //orderPriceElement.classList.add('orderResponsive');
             orderElementDiv.appendChild(orderPriceElement);
 
             orderDetailsElement.appendChild(buttonText);
@@ -353,9 +400,11 @@ function createOrderElements(orderElements) {
         }
 
         orderElementDiv.appendChild(orderDetailsElement);
-        // Append the order element to the content container
-        contentContainer.appendChild(orderElementDiv);
-    })
+        columns[index % 3].appendChild(orderElementDiv);
+    });
+
+    contentContainer.innerHTML = '';
+    columns.forEach(column => contentContainer.appendChild(column));
 }
 
 

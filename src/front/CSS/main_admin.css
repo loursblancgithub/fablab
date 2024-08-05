@@ -65,24 +65,51 @@ option {
     border-radius: 10px;
     overflow-x: hidden;
     overflow-y: auto;
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: space-evenly;
+    display: grid;
     align-items: flex-start;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2vh;
+    grid-template-rows: 50%;
     box-sizing: border-box;
 }
 
-#contentContainer::after {
-    content: "";
-    flex: auto;
+@media (max-width: 1200px) {
+    #contentContainer {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    #contentContainer {
+        grid-template-columns: 1fr;
+    }
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
 }
 
 @keyframes grow {
-    from {
+    0% {
         transform: scaleY(0);
         opacity: 0;
     }
-    to {
+    25% {
+        transform: scaleY(0.25);
+        opacity: 0.25;
+    }
+    50% {
+        transform: scaleY(0.5);
+        opacity: 0.5;
+    }
+    75% {
+        transform: scaleY(0.75);
+        opacity: 0.75;
+    }
+    100% {
         transform: scaleY(1);
         opacity: 1;
     }
@@ -92,17 +119,17 @@ option {
     display: flex;
     flex-direction: column;
     height: auto;
-    width: 30%;
+    width: 90%;
     padding: 1vh 1vw 1vh 1vw;
     background-color: white;
     border-radius: 10px;
     overflow: hidden;
     transform-origin: top;
-    transition: transform 3s ease-in-out, opacity 0.3s ease;
+    transition: grow 3s ease-in-out, opacity 0.3s ease;
 }
 
 .orderElement.expanded {
-    animation: grow 0.3s ease forwards;
+    animation: grow 3s ease-in-out forwards;
 }
 
 .orderElementHeader {
@@ -132,7 +159,7 @@ option {
 }
 
 .orderStateDropdown {
-    font-family: LexendDeca, serif;
+    font-family: LexendDeca, sans-serif;
     border: none;
     border-radius: 5px;
     font-size: 2vh;
@@ -172,7 +199,7 @@ option {
 }
 
 .orderStateDropdown {
-    font-family: LexendDeca, serif;
+    font-family: LexendDeca, sans-serif;
     border: none;
     border-radius: 5px;
     font-size: 2vh;
