@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('ordersListHome').addEventListener('click', () => {
-        displayLandingPage();
+        displayLandingPage(userDataDummy, orderDataDummy);
     })
 
     document.querySelectorAll('.ordersListElement').forEach(element => {
@@ -226,6 +226,33 @@ Functions
 //Function showing the landing page of the user
 function displayLandingPage(user, orders) {
     orderContainer.innerHTML = '';
+    document.querySelectorAll('.ordersListElement').forEach(el => el.classList.remove('active'));
+
+    const landingPageElement = document.createElement('div');
+    landingPageElement.id = 'landingPageElement';
+    landingPageElement.classList.add('landingPageElement');
+
+    const landingPageLeftColumn = document.createElement('div');
+    landingPageLeftColumn.id = 'landingPageLeftColumn';
+
+    const landingPageWelcome = document.createElement('div');
+    landingPageWelcome.id = 'landingPageWelcome';
+
+    const landingPageWelcomeText = document.createElement('div');
+    landingPageWelcomeText.textContent = `Bienvenue ${user.userName} !
+    Tu as passé ${orders.length} commandes auprès du FabLab. Merci pour ta confiance !
+    Si tu as une suggestion, une remarque ou besoin d'aide, n'hésite pas à nous contacter en cliquant sur l'ampoule visible en haut à droite.`;
+    landingPageLeftColumn.appendChild(landingPageWelcome);
+    landingPageLeftColumn.appendChild(landingPageWelcomeText);
+
+    landingPageElement.appendChild(landingPageLeftColumn);
+    orderContainer.appendChild(landingPageElement);
+
+    /*orderContainer.appendChild(landingPageChatContainer);*/
+
+    setTimeoutWithRAF(() => {
+        landingPageElement.classList.add('active');
+    }, 10);
 }
 
 // Function to fill the order list
@@ -299,6 +326,7 @@ function displayOrderContent(order) {
     if (document.getElementById('orderElement')) {
         document.getElementById('orderElement').remove();
     }
+    orderContainer.innerHTML = '';
 
     const orderElementDiv = document.createElement('div');
     orderElementDiv.classList.add('orderElement');

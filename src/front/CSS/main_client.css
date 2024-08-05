@@ -1,3 +1,9 @@
+/*--------------------------
+
+Generic elements
+
+--------------------------*/
+
 .hoverButton:hover {
     cursor: pointer;
     background-color: #00000051 !important;
@@ -38,6 +44,51 @@
     box-sizing: border-box;
     padding: 0 0 0 0;
 }
+
+/*--------------------------
+
+Landing page styling
+
+--------------------------*/
+
+#landingPageElement {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#landingPageElement.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+#landingPageLeftColumn {
+    border-radius: 10px;
+    background-color: #ffffff;
+    width: 40%;
+    height: 100%;
+    padding: 2%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-content: center;
+}
+
+#landingPageChatContainer {
+    background-color: #ffffff;
+    width: 60%;
+    height: 100%;
+}
+
+/*--------------------------
+
+Left column (Orders list, home and new order button)
+
+--------------------------*/
 
 #leftContentContainer {
     max-width: 33%;
@@ -138,6 +189,12 @@
     padding: 1%;
     border-radius: 2.5px;
 }
+
+/*--------------------------
+
+Order element styling
+
+--------------------------*/
 
 #orderContainer {
     display: flex;
