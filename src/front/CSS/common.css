@@ -162,6 +162,7 @@ Feedback Form
     border: 10px solid var(--logoBlue);
     border-radius: 10px;
     animation: fadeInScaleUp 0.25s ease-out forwards;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
 }
 
 #feedbackFormClose {
