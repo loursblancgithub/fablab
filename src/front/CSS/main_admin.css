@@ -115,7 +115,7 @@ option {
     }
 }
 
-.orderElement {
+.orderMosaicElement {
     display: flex;
     flex-direction: column;
     height: auto;
@@ -128,25 +128,25 @@ option {
     transition: grow 3s ease-in-out, opacity 0.3s ease;
 }
 
-.orderElement.expanded {
+.orderMosaicElement.expanded {
     animation: grow 3s ease-in-out forwards;
 }
 
-.orderElementHeader {
+.orderMosaicElementHeader {
     display: flex;
     justify-content: space-between;
     align-content: center;
     width: 100%;
 }
 
-.orderElementHeaderColumn {
+.orderMosaicElementHeaderColumn {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: flex-start;
 }
 
-.orderElementText {
+.orderMosaicElementText {
     font-size: 2.5vh;
     margin: 0.8vh 0 0.8vh 0;
     overflow: clip;
@@ -154,19 +154,11 @@ option {
     white-space: nowrap;
 }
 
-.orderElementHeaderColumn > .orderElementText {
+.orderMosaicElementHeaderColumn > .orderMosaicElementText {
     max-width: 10vw;
 }
 
-.orderStateDropdown {
-    font-family: LexendDeca, sans-serif;
-    border: none;
-    border-radius: 5px;
-    font-size: 2vh;
-    max-width: 7vw;
-}
-
-.orderElementDetails {
+.orderMosaicElementDetails {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
@@ -181,11 +173,11 @@ option {
     color: black !important;
 }
 
-.orderElementDetailsText {
+.orderMosaicElementDetailsText {
     margin-left: auto !important;
 }
 
-.orderElementDetailsIcon {
+.orderMosaicElementDetailsIcon {
     width: 1rem !important;
     height: 1rem !important;
     position: absolute !important;
@@ -194,7 +186,7 @@ option {
     color: #2e4798 !important;
 }
 
-.orderElementDetails:hover .orderElementDetailsIcon {
+.orderMosaicElementDetails:hover .orderMosaicElementDetailsIcon {
     color: darkblue !important;
 }
 
@@ -207,4 +199,30 @@ option {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/*--------------------------
+
+Expanded, detailed, order element
+
+--------------------------*/
+
+#orderElement {
+    z-index: 15;
+    position: fixed;
+    bottom: 15%;
+    right: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 60vw;
+    height: 70vh;
+    padding: 2%;
+    box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
+    border-radius: 10px;
+    background-color: #ffffff;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.1s ease;
+    transform: scale(0.9);
+    box-sizing: border-box;
 }
