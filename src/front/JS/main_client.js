@@ -357,11 +357,6 @@ function displayOrderContent(order) {
 
     const orderElementDetails = document.createElement('div');
     orderElementDetails.classList.add('orderElementDetails');
-    orderElementDetails.style.display = 'flex';
-    orderElementDetails.style.flexDirection = 'column';
-    orderElementDetails.style.justifyContent = 'space-between';
-    orderElementDetails.style.alignContent = 'center';
-    orderElementDetails.style.width = '100%';
 
     // Order Details
 

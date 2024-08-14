@@ -397,10 +397,12 @@ Order element styling
     align-self: flex-start;
 }
 
-.orderElementSummaryColumn {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.orderElementDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    width: 100%;
 }
 
 .orderElementFilesMessage {
