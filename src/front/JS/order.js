@@ -1,5 +1,5 @@
-import {showCustomAlert} from "/src/scripts/utils.js";
-import {sanitizeOutput} from "/src/scripts/utils.js";
+import {showCustomAlert} from "/src/front/JS/utils.js";
+import {sanitizeOutput} from "/src/front/JS/utils.js";
 
 /*
 import {socket} from './websocket_setup.js';

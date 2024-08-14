@@ -1,4 +1,4 @@
-import {applyHoverIfNecessary, setTimeoutWithRAF} from "/src/scripts/utils.js";
+import {applyHoverIfNecessary, setTimeoutWithRAF} from "/src/front/JS/utils.js";
 /*
 import {socket} from './websocket_setup.js';
 

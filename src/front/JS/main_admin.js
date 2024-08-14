@@ -1,5 +1,5 @@
-import {removeAllChildren, showCloseCross} from "../../scripts/utils.js";
-import {applyHoverIfNecessary} from "../../scripts/utils.js";
+import {removeAllChildren, showCloseCross} from "./utils.js";
+import {applyHoverIfNecessary} from "./utils.js";
 
 /*
 import {socket} from './websocket_setup.js';

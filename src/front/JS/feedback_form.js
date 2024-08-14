@@ -1,4 +1,4 @@
-import {sanitizeOutput} from "../../scripts/utils";
+import {sanitizeOutput} from "./utils";
 
 document.addEventListener('DOMContentLoaded', () => {
     const formBulb = document.getElementById('formBulb');
