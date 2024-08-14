@@ -25,20 +25,22 @@
         </div>
     </div>
 
+    <div class="pageMask"></div>
     <div id="orderElement">
         <div class="orderElementBody">
             <div class="orderElementSummary">
-                <div style="font-size: 2em;">Cirrus Vision Jet</div>
-                <div class="orderStateElement" style="color: rgb(33, 90, 108);">En attente</div>
-                <div style="font-size: 0.7em; margin: 0px 0px 5vh;">Commande passée le 31/07/2024 à 10:25:32</div>
+                <div id="orderName" style="font-size: 2em;"></div>
+                <div id="orderState" class="orderStateElement" style="color: rgb(33, 90, 108);"></div>
+                <div id="orderDateTime" style="font-size: 0.7em; margin: 0 0 5vh;">Commande passée le 31/07/2024 à 10:25:32</div>
                 <div class="orderElementSummaryTitle">Vue d'ensemble</div>
-                <div class="orderMosaicElementDetails" style="display: flex; flex-direction: column; place-content: center space-between; width: 100%;">
-                    <div style="width: fit-content;">PETG (Plastique)</div>
-                    <div style="width: fit-content;">Poids total: 5kg</div>
+                <div class="orderElementDetails" style="display: flex; flex-direction: column; place-content: center space-between; width: 100%;">
+                    <div id="orderMaterial" style="width: fit-content;"></div>
+                    <div id="orderTotalWeight" style="width: fit-content;"></div>
                     <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: baseline;">
-                        <div style="width: fit-content; color: var(--logoBlue);">100 pièces</div>
-                        <div style="font-size: 1.5em; width: fit-content;">2000€</div>
+                        <div id="orderQuantity" style="width: fit-content; color: var(--logoBlue);"></div>
+                        <div id="orderPrice" style="font-size: 1.5em; width: fit-content;"></div>
                     </div>
+                    <div id="orderQuestion"></div>
                 </div>
             </div>
             <div class="orderElementFilesMessage">
@@ -47,24 +49,7 @@
                     <div class="orderElementFilesMessageButton hoverButton" id="orderElementMessageButton">Discussion
                     </div>
                 </div>
-                <div class="orderElementFilesMessageContent">
-                    <div class="filesListElement">
-                        <div class="filesListElementName">aileron.3mf</div>
-                        <div style="display: flex; flex-direction: row; place-content: flex-end; width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                            <div class="filesListElementDate filesListSubElement">Déposé le 02/08/2024 à 10:12:29</div>
-                            <div class="filesListSubElement" style="font-size: 0.9em;">500KB</div>
-                            <img class="filesListDownload" src="/src/front/Assets/download_icon.svg" alt="Télécharger" style="height: 20px;">
-                        </div>
-                    </div>
-                    <div class="filesListElement">
-                        <div class="filesListElementName">fuselage.3mf</div>
-                        <div style="display: flex; flex-direction: row; place-content: flex-end; width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                            <div class="filesListElementDate filesListSubElement">Déposé le 31/07/2024 à 10:25:32</div>
-                            <div class="filesListSubElement" style="font-size: 0.9em;">3.00MB</div>
-                            <img class="filesListDownload" src="/src/front/Assets/download_icon.svg" alt="Télécharger" style="height: 20px;">
-                        </div>
-                    </div>
-                </div>
+                <div class="orderElementFilesMessageContent"></div>
             </div>
         </div>
     </div>

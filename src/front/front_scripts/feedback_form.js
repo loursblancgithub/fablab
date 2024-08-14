@@ -1,3 +1,5 @@
+import {sanitizeOutput} from "../../scripts/utils";
+
 document.addEventListener('DOMContentLoaded', () => {
     const formBulb = document.getElementById('formBulb');
     const pageMask = document.createElement('div');
@@ -98,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('feedbackSubmit').addEventListener('click', () => {
         const feedbackType = document.getElementById('feedbackType').value;
         const feedbackContent = document.getElementById('feedbackContent').value;
-        const sanitizedFeedbackContent = escapeOutput(feedbackContent);
+        const sanitizedFeedbackContent = sanitizeOutput(feedbackContent);
         const feedbackData = {
             feedbackType: feedbackType,
             feedbackMessage: sanitizedFeedbackContent
@@ -106,12 +108,3 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(feedbackData);
     });
 });
-
-function escapeOutput(toOutput) {
-    return toOutput.replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#x27;')
-        .replace(/\//g, '&#x2F;');
-}

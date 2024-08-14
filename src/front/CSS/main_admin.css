@@ -23,25 +23,28 @@ option {
 
 #fablabLogo {
     width: 7.5vw;
-    margin: 1vh 0 1vh 0;
+    margin: 1vh 0 6vh 0;
 }
 
 #sidePanelStateButtonsContainer {
-    width: fit-content;
+    width: 100%;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    height: 100%
+    align-items: flex-start;
+    padding: 0 1rem 0 0;
+    box-sizing: border-box;
 }
 
 .sidePanelStateButton {
     display: flex;
-    align-content: center;
-    justify-content: center;
-    width: 10vw;
+    align-items: baseline;
+    justify-content: flex-start;
+    width: 100%;
     height: 3vh;
     border-radius: 5px;
+    padding: 0.5%;
     font-size: 1vw;
     transition: background-color 0.5s ease;
     margin: 0.5vh 0 0.5vh 0;
@@ -132,18 +135,22 @@ option {
     animation: grow 3s ease-in-out forwards;
 }
 
+.orderMosaicElementTitle {
+    font-weight: 500 !important;
+}
+
 .orderMosaicElementHeader {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-content: center;
     width: 100%;
 }
 
-.orderMosaicElementHeaderColumn {
+.orderElementHeaderClientState {
     display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: flex-start;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .orderMosaicElementText {
@@ -195,10 +202,24 @@ option {
     border: none;
     border-radius: 5px;
     font-size: 2vh;
-    max-width: 7vw;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.orderMosaicElementWeightQuantity {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.orderQuantityElementText {
+    color: var(--logoBlue);
+}
+
+#orderQuestion {
+    margin: 2rem 0 0 0;
 }
 
 /*--------------------------
@@ -209,20 +230,24 @@ Expanded, detailed, order element
 
 #orderElement {
     z-index: 15;
-    position: fixed;
-    bottom: 15%;
-    right: 20%;
-    display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    display: none;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: 60vw;
-    height: 70vh;
-    padding: 2%;
-    box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
+    width: 70vw;
+    height: 80vh;
+    padding: 1.5rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 20px 50px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     background-color: #ffffff;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.1s ease;
-    transform: scale(0.9);
     box-sizing: border-box;
+}
+
+/* Styled in common.css */
+.pageMask {
+    display: none;
 }

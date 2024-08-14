@@ -1,4 +1,4 @@
-import {removeAllChildren} from "../../scripts/utils.js";
+import {removeAllChildren, showCloseCross} from "../../scripts/utils.js";
 import {applyHoverIfNecessary} from "../../scripts/utils.js";
 
 /*
@@ -19,7 +19,7 @@ const stateOptions = {
 }
 
 const orderDataDummy = [{
-    orderID: 158436,
+    orderID: 158486,
     orderName: "Cirrus Vision Jet",
     orderState: "pending",
     userID: 62194,
@@ -198,34 +198,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //afficher toutes les commandes par défaut
     document.getElementById('sidePanelStateButtonAll').classList.add('active');
-    createOrderElements(orderDataDummy, userDataDummy);
+    createOrderMosaicElements(orderDataDummy, userDataDummy);
 
     document.getElementById('sidePanelStateButtonAll').addEventListener('click', () => {
-        console.log('Button clicked');
-
         contentContainer.innerHTML = '';
-        createOrderElements(orderDataDummy, userDataDummy);
+        createOrderMosaicElements(orderDataDummy, userDataDummy);
     });
 
     document.getElementById('sidePanelStateButtonToDo').addEventListener('click', () => {
-        console.log('Button clicked');
-
         contentContainer.innerHTML = '';
-        createOrderElements(orderDataDummy.filter(order => order.orderState === "pending"), userDataDummy);
+        createOrderMosaicElements(orderDataDummy.filter(order => order.orderState === "pending"), userDataDummy);
     });
 
     document.getElementById('sidePanelStateButtonOngoing').addEventListener('click', () => {
-        console.log('Button clicked');
-
         contentContainer.innerHTML = '';
-        createOrderElements(orderDataDummy.filter(order => order.orderState !== "pending" && order.orderState !== "finished"), userDataDummy);
+        createOrderMosaicElements(orderDataDummy.filter(order => order.orderState !== "pending" && order.orderState !== "finished"), userDataDummy);
     });
 
     document.getElementById('sidePanelStateButtonFinished').addEventListener('click', () => {
-        console.log('Button clicked');
-
         contentContainer.innerHTML = '';
-        createOrderElements(orderDataDummy.filter(order => order.orderState === "finished"), userDataDummy);
+        createOrderMosaicElements(orderDataDummy.filter(order => order.orderState === "finished"), userDataDummy);
     });
 });
 
@@ -235,9 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //-------------------------->
 
-// Dynamically create elements based on the order data
-// Function to create order elements
-function createOrderElements(orderData, userData) {
+// Function to populate the order elements mosaic
+function createOrderMosaicElements(orderData, userData) {
     const contentContainer = document.getElementById('contentContainer');
     if (!contentContainer) {
         console.error('Content container not found');
@@ -262,34 +253,29 @@ function createOrderElements(orderData, userData) {
         const orderElementHeader = document.createElement('div');
         orderElementHeader.classList.add('orderMosaicElementHeader');
 
-        const orderElementHeaderColumn1 = document.createElement('div');
-        orderElementHeaderColumn1.classList.add('orderMosaicElementHeaderColumn');
-        orderElementHeaderColumn1.id = 'orderMosaicElementHeaderColumn1';
-
         const orderNameElement = document.createElement('div');
         orderNameElement.textContent = `${orderElement.orderName}`;
+        orderNameElement.classList.add('orderMosaicElementTitle');
         orderNameElement.classList.add('orderMosaicElementText');
         applyHoverIfNecessary(orderNameElement, `${orderElement.orderName}`);
-        orderElementHeaderColumn1.appendChild(orderNameElement);
+        orderElementHeader.appendChild(orderNameElement);
+
+        const orderElementHeaderClientState = document.createElement('div');
+        orderElementHeaderClientState.classList.add('orderElementHeaderClientState');
 
         const orderClientElement = document.createElement('div');
         orderClientElement.textContent = getUserNameById(orderElement.userID, userData);
         orderClientElement.classList.add('orderMosaicElementText');
         applyHoverIfNecessary(orderClientElement, `${orderClientElement.textContent}`);
-        orderElementHeaderColumn1.appendChild(orderClientElement);
-
-        orderElementHeader.appendChild(orderElementHeaderColumn1);
-
-        const orderElementHeaderColumn2 = document.createElement('div');
-        orderElementHeaderColumn2.classList.add('orderMosaicElementHeaderColumn');
-        orderElementHeaderColumn2.style.justifyContent = 'flex-start';
+        orderElementHeaderClientState.appendChild(orderClientElement);
 
         const orderStateDropdown = createStateDropdown(orderElement.orderState);
         orderStateDropdown.style.margin = '1vh 0 1vh 0';
         applyHoverIfNecessary(orderStateDropdown, stateOptions[orderElement.orderState]);
-        orderElementHeaderColumn2.appendChild(orderStateDropdown);
+        orderElementHeaderClientState.appendChild(orderStateDropdown);
 
-        orderElementHeader.appendChild(orderElementHeaderColumn2);
+        orderElementHeader.appendChild(orderElementHeaderClientState);
+
         orderMosaicElementDiv.appendChild(orderElementHeader);
 
         const orderDetailsElement = document.createElement('button');
@@ -298,10 +284,6 @@ function createOrderElements(orderData, userData) {
         const detailsExpandButton = document.createElement('span');
         detailsExpandButton.textContent = 'Détails';
         detailsExpandButton.classList.add('orderMosaicElementDetailsText');
-
-        detailsExpandButton.addEventListener('click', () => {
-            showFullOrder();
-        });
 
         const expandDownArrow = document.createElement('span');
         expandDownArrow.classList.add('orderMosaicElementDetailsIcon');
@@ -313,33 +295,56 @@ function createOrderElements(orderData, userData) {
         expandDownArrow.addEventListener('click', () => {
             orderElement.details = !orderElement.details;
             removeAllChildren(contentContainer);
-            createOrderElements(orderData, userData);
+            createOrderMosaicElements(orderData, userData);
         });
 
         if (orderElement.details) {
             const orderMaterialElement = document.createElement('div');
-            orderMaterialElement.textContent = `Matériau: ${orderElement.orderMaterial}`;
+            if (orderElement.orderMaterial === 'PLA' || orderElement.orderMaterial === 'PETG' || orderElement.orderMaterial === 'ABS') {
+                orderMaterialElement.textContent = `${orderElement.orderMaterial} (Plastique)`;
+            } else if (orderElement.orderMaterial === 'Résine') {
+                orderMaterialElement.textContent = `${orderElement.orderMaterial}`;
+            }
             orderMaterialElement.classList.add('orderMosaicElementText');
             orderMosaicElementDiv.appendChild(orderMaterialElement);
 
+            const weightQuantityDiv = document.createElement('div');
+            weightQuantityDiv.classList.add('orderMosaicElementweightQuantity');
+
             const orderTotalWeightElement = document.createElement('div');
-            orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight}`;
+            if (orderElement.orderTotalWeight > 1000) {
+                orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight / 1000}kg`;
+            } else {
+                orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight}g`;
+            }
             orderTotalWeightElement.classList.add('orderMosaicElementText');
-            orderMosaicElementDiv.appendChild(orderTotalWeightElement);
+            weightQuantityDiv.appendChild(orderTotalWeightElement);
 
             const orderQuantityElement = document.createElement('div');
-            orderQuantityElement.textContent = `Quantité: ${orderElement.orderQuantity}`;
+            if (orderElement.orderQuantity > 1) {
+                orderQuantityElement.textContent = `${orderElement.orderQuantity} pièces`;
+            } else {
+                orderQuantityElement.textContent = `${orderElement.orderQuantity} pièce`;
+            }
+            orderQuantityElement.classList.add('orderQuantityElementText');
             orderQuantityElement.classList.add('orderMosaicElementText');
-            orderMosaicElementDiv.appendChild(orderQuantityElement);
+            weightQuantityDiv.appendChild(orderQuantityElement);
+
+            orderMosaicElementDiv.appendChild(weightQuantityDiv);
 
             const orderPriceElement = document.createElement('div');
-            orderPriceElement.textContent = `Price: ${orderElement.orderPrice}`;
+            orderPriceElement.textContent = `${orderElement.orderPrice}€`;
             orderPriceElement.classList.add('orderMosaicElementText');
             orderMosaicElementDiv.appendChild(orderPriceElement);
         }
 
         orderMosaicElementDiv.appendChild(orderDetailsElement);
         columns[index % 3].appendChild(orderMosaicElementDiv);
+
+        detailsExpandButton.addEventListener('click', () => {
+            console.log(orderElement)
+            showOrderDetails(orderElement);
+        });
     });
 
     contentContainer.innerHTML = '';
@@ -347,8 +352,46 @@ function createOrderElements(orderData, userData) {
 }
 
 // Function to show the detailed order with the files list and the chat
-function showFullOrder() {
+function showOrderDetails(orderElement) {
+    document.getElementById('orderElement').style.display = 'flex';
+    document.querySelector('.pageMask').style.display = 'block';
 
+    const orderElementDiv = document.getElementById('orderElement');
+    showCloseCross(orderElementDiv);
+
+    // Order name
+    document.getElementById('orderName').textContent = orderElement.orderName;
+
+    // State
+    document.getElementById('orderState').textContent = stateOptions[orderElement.orderState];
+
+    // Date
+    const [date, time] = orderElement.orderDateTime.split(' ');
+    document.getElementById('orderDateTime').textContent = `Commande passée le ${date} à ${time}`;
+
+    // Material
+    if (orderElement.orderMaterial === 'PLA' || orderElement.orderMaterial === 'PETG' || orderElement.orderMaterial === 'ABS') {
+        document.getElementById('orderMaterial').textContent = `${orderElement.orderMaterial} (Plastique)`;
+    } else if (orderElement.orderMaterial === 'Résine') {
+        document.getElementById('orderMaterial').textContent = `${orderElement.orderMaterial}`;
+    }
+
+    // Weight
+    if (orderElement.orderTotalWeight > 1000) {
+        document.getElementById('orderTotalWeight').textContent = `Poids total: ${orderElement.orderTotalWeight / 1000}kg`;
+    } else {
+        document.getElementById('orderTotalWeight').textContent = `Poids total: ${orderElement.orderTotalWeight}g`;
+    }
+
+    // Quantity
+    if (orderElement.orderQuantity > 1) {
+        document.getElementById('orderQuantity').textContent = `${orderElement.orderQuantity} pièces`;
+    } else {
+        document.getElementById('orderQuantity').textContent = `${orderElement.orderQuantity} pièce`;
+    }
+
+    document.getElementById('orderPrice').textContent = `${orderElement.orderPrice}€`;
+    document.getElementById('orderQuestion').textContent = `Questions: ${orderElement.orderQuestion}`;
 }
 
 // Function to create the order state dropdown
