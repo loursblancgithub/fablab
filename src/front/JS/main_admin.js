@@ -1,5 +1,4 @@
-import {removeAllChildren, showCloseCross} from "./utils.js";
-import {applyHoverIfNecessary} from "./utils.js";
+import {removeAllChildren, applyHoverIfNecessary} from "./utils.js";
 
 /*
 import {socket} from './websocket_setup.js';
@@ -309,7 +308,7 @@ function createOrderMosaicElements(orderData, userData) {
             orderMosaicElementDiv.appendChild(orderMaterialElement);
 
             const weightQuantityDiv = document.createElement('div');
-            weightQuantityDiv.classList.add('orderMosaicElementweightQuantity');
+            weightQuantityDiv.classList.add('orderMosaicElementWeightQuantity');
 
             const orderTotalWeightElement = document.createElement('div');
             if (orderElement.orderTotalWeight > 1000) {
@@ -345,6 +344,10 @@ function createOrderMosaicElements(orderData, userData) {
             console.log(orderElement)
             showOrderDetails(orderElement);
         });
+
+        document.getElementById('hideOrderDetails').addEventListener('click', () => {
+            hideOrderDetails();
+        });
     });
 
     contentContainer.innerHTML = '';
@@ -355,9 +358,6 @@ function createOrderMosaicElements(orderData, userData) {
 function showOrderDetails(orderElement) {
     document.getElementById('orderElement').style.display = 'flex';
     document.querySelector('.pageMask').style.display = 'block';
-
-    const orderElementDiv = document.getElementById('orderElement');
-    showCloseCross(orderElementDiv);
 
     // Order name
     document.getElementById('orderName').textContent = orderElement.orderName;
@@ -392,6 +392,11 @@ function showOrderDetails(orderElement) {
 
     document.getElementById('orderPrice').textContent = `${orderElement.orderPrice}€`;
     document.getElementById('orderQuestion').textContent = `Questions: ${orderElement.orderQuestion}`;
+}
+
+function hideOrderDetails() {
+    document.getElementById('orderElement').style.display = 'none';
+    document.querySelector('.pageMask').style.display = 'none';
 }
 
 // Function to create the order state dropdown

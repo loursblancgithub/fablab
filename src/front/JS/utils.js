@@ -112,18 +112,3 @@ function setTimeoutWithRAF(callback, delay) {
 }
 
 export {setTimeoutWithRAF};
-
-/*--------------------------
-
-Function preventing the use of setTimeout() for security purposes when needing a delay
-
---------------------------*/
-
-function showCloseCross (element) {
-    const closeArrow = document.createElement('div');
-    closeArrow.classList.add('closeArrow');
-    closeArrow.textContent = '×';
-    element.parentNode.appendChild(closeArrow);
-}
-
-export {showCloseCross};

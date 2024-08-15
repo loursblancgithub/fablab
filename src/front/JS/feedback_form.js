@@ -1,5 +1,3 @@
-import {sanitizeOutput} from "./utils";
-
 document.addEventListener('DOMContentLoaded', () => {
     const formBulb = document.getElementById('formBulb');
     const pageMask = document.createElement('div');
@@ -8,7 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let feedbackForm;
 
     formBulb.addEventListener('click', () => {
-        console.log('Feedback form opened');
+        if (feedbackForm) {
+            return;
+        }
 
         // Page mask to emphasize the feedback form
         document.body.appendChild(pageMask);
@@ -108,3 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(feedbackData);
     });
 });
+
+function sanitizeOutput(toOutput) {
+    return toOutput.replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;')
+        .replace(/\//g, '&#x2F;');
+}
