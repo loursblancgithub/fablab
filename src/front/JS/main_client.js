@@ -158,7 +158,7 @@ const userDataDummy = {
 
 const leftContentContainer = document.getElementById('leftContentContainer');
 const orderContainer = document.getElementById('orderContainer');
-let newOrder;
+const newOrder = document.getElementById('newOrder');
 let orderElementFilesMessageContent;
 let currentOrderID;
 
@@ -248,31 +248,7 @@ function displayLandingPage(user, orders) {
 
 // Function to fill the order list
 function displayOrdersList(orders) {
-    const ordersList = document.createElement('div');
-    ordersList.id = 'ordersList';
-    leftContentContainer.appendChild(ordersList);
-
-    const ordersListHeader = document.createElement('div');
-    ordersListHeader.id = 'ordersListHeader';
-
-    const ordersListHome = document.createElement('img');
-    ordersListHome.src = '/src/front/Assets/home_icon.svg';
-    ordersListHome.id = 'ordersListHome';
-    ordersListHome.style.width = '1.75rem';
-    ordersListHome.style.backgroundColor = '#ffffff';
-    ordersListHome.style.borderRadius = '5px';
-    ordersListHome.style.padding = '5px';
-    ordersListHeader.appendChild(ordersListHome);
-
-    newOrder = document.createElement('div');
-    newOrder.classList.add('hoverButton');
-    newOrder.classList.add('ordersListElement');
-    newOrder.id = 'newOrder';
-    newOrder.textContent = 'Commander';
-    newOrder.style.width = '100%';
-    ordersListHeader.appendChild(newOrder);
-
-    ordersList.appendChild(ordersListHeader);
+    const ordersList = document.getElementById('ordersList');
 
     // Sort orders list by state
     orders.sort((a, b) => {
@@ -331,29 +307,28 @@ function displayOrderContent(order) {
     const orderElementSummary = document.createElement('div');
     orderElementSummary.classList.add('orderElementSummary');
 
-    const orderNameElement = document.createElement('div');
-    orderNameElement.textContent = `${order.orderName}`;
-    orderNameElement.style.fontSize = '2em';
-    orderElementSummary.appendChild(orderNameElement);
+    const orderElementName = document.createElement('div');
+    orderElementName.classList.add('orderElementName');
+    orderElementName.textContent = `${order.orderName}`;
+    orderElementSummary.appendChild(orderElementName);
 
-    const orderStateElement = document.createElement('div');
-    orderStateElement.classList.add('orderStateElement');
-    orderStateElement.textContent = `${order.orderState}`;
-    orderStateElement.style.color = getColorForState(order.orderState).background;
-    orderStateElement.textContent = getColorForState(order.orderState).frText;
-    orderElementSummary.appendChild(orderStateElement);
+    const orderElementState = document.createElement('div');
+    orderElementState.classList.add('orderElementState');
+    orderElementState.textContent = `${order.orderState}`;
+    orderElementState.style.color = getColorForState(order.orderState).background;
+    orderElementState.textContent = getColorForState(order.orderState).frText;
+    orderElementSummary.appendChild(orderElementState);
 
     const orderElementDate = document.createElement('div');
+    orderElementDate.classList.add('orderElementDate');
     const [date, time] = order.orderDateTime.split(' ');
     orderElementDate.textContent = `Commande passée le ${date} à ${time}`;
-    orderElementDate.style.fontSize = '0.7em';
-    orderElementDate.style.margin = '0 0 5vh 0';
     orderElementSummary.appendChild(orderElementDate);
 
-    const orderElementSummaryTitle = document.createElement('div');
-    orderElementSummaryTitle.textContent = 'Vue d\'ensemble';
-    orderElementSummaryTitle.classList.add('orderElementSummaryTitle');
-    orderElementSummary.appendChild(orderElementSummaryTitle);
+    const orderElementOverviewTitle = document.createElement('div');
+    orderElementOverviewTitle.textContent = 'Vue d\'ensemble';
+    orderElementOverviewTitle.classList.add('orderElementOverviewTitle');
+    orderElementSummary.appendChild(orderElementOverviewTitle);
 
     const orderElementDetails = document.createElement('div');
     orderElementDetails.classList.add('orderElementDetails');
@@ -379,6 +354,7 @@ function displayOrderContent(order) {
     orderElementDetails.appendChild(orderElementSummaryTotalWeight);
 
     const orderElementSummaryQuantityPrice = document.createElement('div');
+    orderElementSummaryQuantityPrice.classList.add('orderElementSummaryQuantityPrice');
     orderElementSummaryQuantityPrice.style.display = 'flex';
     orderElementSummaryQuantityPrice.style.flexDirection = 'row';
     orderElementSummaryQuantityPrice.style.justifyContent = 'space-between';
@@ -451,31 +427,24 @@ function displayFilesList(order) {
 
     Object.values(order.orderFiles).forEach((file) => {
         const fileElement = document.createElement('div');
-        fileElement.classList.add('filesListElement');
+        fileElement.classList.add('fileElement');
 
         const fileElementName = document.createElement('div');
-        fileElementName.classList.add('filesListElementName');
+        fileElementName.classList.add('fileElementName');
         fileElementName.textContent = file.fileName;
         fileElement.appendChild(fileElementName);
 
         const fileElementRightPart = document.createElement('div');
-        fileElementRightPart.style.display = 'flex';
-        fileElementRightPart.style.flexDirection = 'row';
-        fileElementRightPart.style.justifyContent = 'flex-end';
-        fileElementRightPart.style.alignContent = 'flex-end';
-        fileElementRightPart.style.width = '70%';
-        fileElementRightPart.style.overflow = 'hidden';
-        fileElementRightPart.style.textOverflow = 'ellipsis';
-        fileElementRightPart.style.whiteSpace = 'nowrap';
+        fileElementRightPart.classList.add('fileElementRightPart');
 
         const fileElementDate = document.createElement('div');
-        fileElementDate.classList.add('filesListElementDate', 'filesListSubElement');
+        fileElementDate.classList.add('fileElementDate', 'fileElementSubPart');
         const [date, time] = file.fileDateTime.split(' ');
         fileElementDate.textContent = `Déposé le ${date} à ${time}`;
         fileElementRightPart.appendChild(fileElementDate);
 
         const fileElementSize = document.createElement('div');
-        fileElementSize.classList.add('filesListSubElement');
+        fileElementSize.classList.add('fileElementSubPart');
         if (file.fileWeight >= 1000) {
             fileElementSize.textContent = `${(file.fileWeight / 1000).toFixed(2)}MB`;
         } else {
@@ -485,7 +454,7 @@ function displayFilesList(order) {
         fileElementRightPart.appendChild(fileElementSize);
 
         const fileElementDownloadButton = document.createElement('img');
-        fileElementDownloadButton.classList.add('filesListDownload');
+        fileElementDownloadButton.classList.add('fileElementDownload');
         fileElementDownloadButton.src = '/src/front/Assets/download_icon.svg';
         fileElementDownloadButton.alt = 'Télécharger';
         fileElementDownloadButton.style.height = '20px';
@@ -530,7 +499,7 @@ function getColorForState(state) {
 
 //Function to sort all file elements by date (most recent to oldest)
 function sortFilesByDate() {
-    const fileElements = Array.from(document.querySelectorAll('.filesListElement'));
+    const fileElements = Array.from(document.querySelectorAll('.fileElement'));
     fileElements.sort((a, b) => {
         const dateA = new Date(a.querySelector('.filesListElementDate').textContent.split(' ')[2].split('/').reverse().join('-') + 'T' + a.querySelector('.filesListElementDate').textContent.split(' ')[4]);
         const dateB = new Date(b.querySelector('.filesListElementDate').textContent.split(' ')[2].split('/').reverse().join('-') + 'T' + b.querySelector('.filesListElementDate').textContent.split(' ')[4]);

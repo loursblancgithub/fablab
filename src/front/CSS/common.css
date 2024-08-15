@@ -364,7 +364,7 @@ Order element styling
     transform: scale(1);
 }
 
-.orderStateElement {
+.orderElementState {
     font-size: 2em;
     border-radius: 10px;
     padding: 0.5%;
@@ -378,6 +378,23 @@ Order element styling
     height: 100%;
 }
 
+.orderElementName {
+    font-size: 2rem;
+    width: 100%;
+}
+
+.orderElementDate {
+    font-size: 0.7em;
+    margin-bottom: 2rem;
+}
+
+.orderElementOverviewTitle {
+    font-size: 1.5em;
+    margin-bottom: 1%;
+    width: 100%;
+    align-self: flex-start;
+}
+
 .orderElementSummary {
     display: flex;
     flex-direction: column;
@@ -388,13 +405,6 @@ Order element styling
     padding: 0 2% 0 0;
     text-align: left;
     box-sizing: border-box;
-}
-
-.orderElementSummaryTitle {
-    font-size: 1.5em;
-    margin-bottom: 1%;
-    width: 100%;
-    align-self: flex-start;
 }
 
 .orderElementDetails {
@@ -452,10 +462,10 @@ Order element styling
     opacity: 0.5;
 }
 
-.filesListElement {
+.fileElement {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: baseline;
     padding: 1%;
     margin: 0.5vh 0;
@@ -465,10 +475,61 @@ Order element styling
     box-sizing: border-box;
 }
 
-.filesListSubElement {
-    padding: 0 2.5% 0 2.5%;
+.fileElementName {
+    width: fit-content;
 }
 
-.filesListDownload:hover {
+.fileElementRightPart {
+    display: flex;
+    justify-content: flex-end;
+    align-content: flex-end;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fileElementSubPart {
+    padding: 0 2.5% 0 2.5%;
+    font-size: 0.9em;
+}
+
+.fileElementDate {
+    text-wrap: wrap;
+}
+
+.fileElementDownload:hover {
     cursor: pointer;
+}
+
+/* Responsive design */
+@media only screen and (max-width: 768px) {
+    .orderElementBody {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        height: 50vh;
+    }
+
+    .orderElementState {
+        padding: 1%;
+        font-size: 3vh;
+        text-wrap: nowrap;
+    }
+
+    .orderElementDate {
+        margin-bottom: 1rem;
+    }
+
+    .orderElementSummary {
+        width: 100% !important;
+        height: fit-content;
+        margin: 0 0 2vh 0;
+    }
+
+    .orderElementFilesMessage {
+        width: 100%;
+        margin: 0.5vh auto;
+        padding: 1% 0 0 0;
+    }
 }
