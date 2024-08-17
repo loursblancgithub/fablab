@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.ordersListElement').forEach(element => {
         element.addEventListener('click', function () {
 
-            // When clicking on any element with the class .ordersListElement, add the class .active to change the background color
+            // When clicking on any element with the class .ordersListElement, add the class .active to change its background color
             document.querySelectorAll('.ordersListElement').forEach(el => el.classList.remove('active'));
             this.classList.add('active');
             currentOrderID = this.id;
