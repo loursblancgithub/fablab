@@ -42,7 +42,6 @@ Generic elements
     margin: 0 0 0.5vh 0;
     background-color: var(--logoBlue);
     box-sizing: border-box;
-    padding: 0 0 0 0;
 }
 
 /*--------------------------
@@ -151,7 +150,7 @@ Left column (Orders list, home and new order button)
 
 .ordersListElement {
     width: 15vw;
-    font-size: 2vh;
+    font-size: 100%;
     margin: 0 0.5vw 2vh 0.5vw;
     background-color: #ffffff;
     display: flex;
@@ -232,11 +231,12 @@ Responsive design
 
     #fablabLogo {
         width: 15vw;
+        align-self: flex-start;
     }
 
     #contentContainer {
         flex-direction: column;
-        width: 90vw;
+        width: 100%;
         background-color: #ffffff;
         box-shadow: unset;
         align-content: center;
@@ -245,7 +245,7 @@ Responsive design
     #leftContentContainer {
         width: 100%;
         max-width: unset;
-        max-height: 40%;
+        height: 40%;
         padding: 2vh 0.5vw 2vh 0.5vw;
         margin: 0 0 0.5vh 0;
         background-color: #2E4798;

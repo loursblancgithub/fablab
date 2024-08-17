@@ -1,4 +1,4 @@
-import {applyHoverIfNecessary, setTimeoutWithRAF} from "/src/front/JS/utils.js";
+import {applyHoverIfNecessary, setTimeoutWithRAF, sortElementsByDate} from "/src/front/JS/utils.js";
 /*
 import {socket} from './websocket_setup.js';
 
@@ -20,7 +20,7 @@ const orderDataDummy = [{
         file1: {fileID: 1, fileName: "fuselage.3mf", fileDateTime: "31/07/2024 10:25:32", fileWeight: 3000},
         file2: {fileID: 2, fileName: "aileron.3mf", fileDateTime: "02/08/2024 10:12:29", fileWeight: 500}
     },
-    orderDateTime: "31/07/2024 10:25:32"
+    orderDateTime: "02/08/2024 10:12:29"
 },
     {
         orderID: 158486,
@@ -36,7 +36,7 @@ const orderDataDummy = [{
             file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "02/08/2024 10:12:29", fileWeight: 3000},
             file2: {fileID: 2, fileName: "Aileron", fileDateTime: "05/08/2024 10:12:29", fileWeight: 3000}
         },
-        orderDateTime: "02/08/2024 10:12:29"
+        orderDateTime: "31/07/2024 10:25:32"
     },
     {
         orderID: 154436,
@@ -156,7 +156,6 @@ const userDataDummy = {
     userName: "Jean MANOURY"
 }
 
-const leftContentContainer = document.getElementById('leftContentContainer');
 const orderContainer = document.getElementById('orderContainer');
 const newOrder = document.getElementById('newOrder');
 let orderElementFilesMessageContent;
@@ -250,8 +249,10 @@ function displayLandingPage(user, orders) {
 function displayOrdersList(orders) {
     const ordersList = document.getElementById('ordersList');
 
+    const timeSortedOrders = sortElementsByDate(orders);
+
     // Sort orders list by state
-    orders.sort((a, b) => {
+    timeSortedOrders.sort((a, b) => {
         if (a.orderState === 'pending') return -1;
         if (b.orderState === 'pending') return 1;
         if (a.orderState === 'finished') return 1;
@@ -259,7 +260,7 @@ function displayOrdersList(orders) {
         return 0;
     });
 
-    orders.forEach((orderElement) => {
+    timeSortedOrders.forEach((orderElement) => {
         const ordersListElement = document.createElement('div');
         ordersListElement.classList.add('ordersListElement');
         ordersListElement.classList.add('hoverButton');
@@ -355,10 +356,6 @@ function displayOrderContent(order) {
 
     const orderElementSummaryQuantityPrice = document.createElement('div');
     orderElementSummaryQuantityPrice.classList.add('orderElementSummaryQuantityPrice');
-    orderElementSummaryQuantityPrice.style.display = 'flex';
-    orderElementSummaryQuantityPrice.style.flexDirection = 'row';
-    orderElementSummaryQuantityPrice.style.justifyContent = 'space-between';
-    orderElementSummaryQuantityPrice.style.alignItems = 'baseline';
 
     const orderElementSummaryQuantity = document.createElement('div');
     if (order.orderQuantity > 1) {
@@ -371,9 +368,8 @@ function displayOrderContent(order) {
     orderElementSummaryQuantityPrice.appendChild(orderElementSummaryQuantity);
 
     const orderElementSummaryPrice = document.createElement('div');
+    orderElementSummaryPrice.classList.add('orderElementSummaryPrice');
     orderElementSummaryPrice.textContent = `${order.orderPrice}€`;
-    orderElementSummaryPrice.style.fontSize = '1.5em';
-    orderElementSummaryPrice.style.width = 'fit-content';
     orderElementSummaryQuantityPrice.appendChild(orderElementSummaryPrice);
 
     orderElementDetails.appendChild(orderElementSummaryQuantityPrice);
@@ -425,7 +421,9 @@ function displayOrderContent(order) {
 function displayFilesList(order) {
     orderElementFilesMessageContent.innerHTML = '';
 
-    Object.values(order.orderFiles).forEach((file) => {
+    const sortedFiles = sortElementsByDate(Object.values(order.orderFiles));
+
+    sortedFiles.forEach((file) => {
         const fileElement = document.createElement('div');
         fileElement.classList.add('fileElement');
 
@@ -464,8 +462,6 @@ function displayFilesList(order) {
 
         orderElementFilesMessageContent.appendChild(fileElement);
     });
-
-    sortFilesByDate();
 }
 
 // Function to show files of the active order
@@ -495,18 +491,4 @@ function getColorForState(state) {
     };
 
     return stateColorMapping[state] || {background: '#bdbdbd', font: '#000000'}; // Default colors
-}
-
-//Function to sort all file elements by date (most recent to oldest)
-function sortFilesByDate() {
-    const fileElements = Array.from(document.querySelectorAll('.fileElement'));
-    fileElements.sort((a, b) => {
-        const dateA = new Date(a.querySelector('.filesListElementDate').textContent.split(' ')[2].split('/').reverse().join('-') + 'T' + a.querySelector('.filesListElementDate').textContent.split(' ')[4]);
-        const dateB = new Date(b.querySelector('.filesListElementDate').textContent.split(' ')[2].split('/').reverse().join('-') + 'T' + b.querySelector('.filesListElementDate').textContent.split(' ')[4]);
-        return dateB - dateA;
-    });
-
-    const container = document.querySelector('.orderElementFilesMessageContent');
-    container.innerHTML = '';
-    fileElements.forEach(element => container.appendChild(element));
 }

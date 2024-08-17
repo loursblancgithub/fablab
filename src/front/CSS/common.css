@@ -356,6 +356,7 @@ Order element styling
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.1s ease;
     opacity: 0;
     transform: scale(0.9);
+    overflow: hidden;
     box-sizing: border-box;
 }
 
@@ -405,6 +406,15 @@ Order element styling
     padding: 0 2% 0 0;
     text-align: left;
     box-sizing: border-box;
+}
+.orderElementSummaryQuantityPrice {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.orderElementSummaryPrice {
+    font-size: 1.5em;
+    width: fit-content;
 }
 
 .orderElementDetails {
@@ -504,11 +514,21 @@ Order element styling
 
 /* Responsive design */
 @media only screen and (max-width: 768px) {
+    .orderElement {
+        height: fit-content;
+    }
+
     .orderElementBody {
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
-        height: 50vh;
+        height: fit-content;
+    }
+
+    .orderElementSummary {
+        width: 100% !important;
+        height: fit-content;
+        margin: 0 0 2vh 0;
     }
 
     .orderElementState {
@@ -521,14 +541,10 @@ Order element styling
         margin-bottom: 1rem;
     }
 
-    .orderElementSummary {
-        width: 100% !important;
-        height: fit-content;
-        margin: 0 0 2vh 0;
-    }
-
     .orderElementFilesMessage {
         width: 100%;
+        height: fit-content;
+        max-height: 34vh;
         margin: 0.5vh auto;
         padding: 1% 0 0 0;
     }
