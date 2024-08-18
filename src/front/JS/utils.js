@@ -130,6 +130,8 @@ function sortElementsByDate(elements) {
     });
 }
 
+export {sortElementsByDate};
+
 /*--------------------------
 
 Congratulations on finding this, on behalf of all the team
