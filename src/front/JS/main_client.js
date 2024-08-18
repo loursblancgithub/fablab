@@ -1,4 +1,4 @@
-import {applyHoverIfNecessary, setTimeoutWithRAF} from "/src/front/JS/utils.js";
+import {applyHoverIfNecessary, setTimeoutWithRAF, sortElementsByDate} from "/src/front/JS/utils.js";
 /*
 import {socket} from './websocket_setup.js';
 
@@ -7,11 +7,12 @@ socket.send("Message specific to admin_orders_fetcher functionality.");
 */
 
 const orderDataDummy = [{
-    orderID: 158436,
+    orderID: 158486,
     orderName: "Cirrus Vision Jet",
     orderState: "pending",
-    orderClient: 62194,
+    userID: 62194,
     orderMaterial: "PETG",
+    orderColor: "red",
     orderTotalWeight: 5000,
     orderQuantity: 100,
     orderPrice: 2000,
@@ -26,8 +27,9 @@ const orderDataDummy = [{
         orderID: 158486,
         orderName: "Airbus A220",
         orderState: "finished",
-        orderClient: 62194,
+        userID: 62194,
         orderMaterial: "PLA",
+        orderColor: "red",
         orderTotalWeight: 300,
         orderQuantity: 1,
         orderPrice: 8,
@@ -42,8 +44,9 @@ const orderDataDummy = [{
         orderID: 154436,
         orderName: "Boeing 787",
         orderState: "sliced",
-        orderClient: 62194,
+        userID: 62194,
         orderMaterial: "PLA",
+        orderColor: "red",
         orderTotalWeight: 3000,
         orderQuantity: 1,
         orderPrice: 15,
@@ -58,8 +61,9 @@ const orderDataDummy = [{
         orderID: 168436,
         orderName: "Embraer E190",
         orderState: "printing",
-        orderClient: 62194,
+        userID: 62194,
         orderMaterial: "PLA",
+        orderColor: "red",
         orderTotalWeight: 500,
         orderQuantity: 1,
         orderPrice: 4,
@@ -74,8 +78,9 @@ const orderDataDummy = [{
         orderID: 158431,
         orderName: "Lockheed Martin F-35",
         orderState: "printing",
-        orderClient: 62194,
+        userID: 62194,
         orderMaterial: "PLA",
+        orderColor: "red",
         orderTotalWeight: 1500,
         orderQuantity: 1,
         orderPrice: 12,
@@ -90,8 +95,9 @@ const orderDataDummy = [{
         orderID: 156436,
         orderName: "Cessna 172",
         orderState: "printing",
-        orderClient: 62194,
+        userID: 62194,
         orderMaterial: "PLA",
+        orderColor: "red",
         orderTotalWeight: 300,
         orderQuantity: 1,
         orderPrice: 8,
@@ -106,8 +112,9 @@ const orderDataDummy = [{
         orderID: 158426,
         orderName: "Piper PA-28",
         orderState: "printing",
-        orderClient: 62194,
+        userID: 62194,
         orderMaterial: "PLA",
+        orderColor: "red",
         orderTotalWeight: 300,
         orderQuantity: 1,
         orderPrice: 8,
@@ -122,8 +129,9 @@ const orderDataDummy = [{
         orderID: 158736,
         orderName: "Beechcraft Bonanza",
         orderState: "printing",
-        orderClient: 62194,
+        userID: 62194,
         orderMaterial: "PLA",
+        orderColor: "red",
         orderTotalWeight: 300,
         orderQuantity: 1,
         orderPrice: 10,
@@ -138,8 +146,9 @@ const orderDataDummy = [{
         orderID: 151436,
         orderName: "Gulfstream G650",
         orderState: "printing",
-        orderClient: 62194,
+        userID: 62194,
         orderMaterial: "PLA",
+        orderColor: "red",
         orderTotalWeight: 300,
         orderQuantity: 1,
         orderPrice: 8,
@@ -156,9 +165,8 @@ const userDataDummy = {
     userName: "Jean MANOURY"
 }
 
-const leftContentContainer = document.getElementById('leftContentContainer');
 const orderContainer = document.getElementById('orderContainer');
-let newOrder;
+const newOrder = document.getElementById('newOrder');
 let orderElementFilesMessageContent;
 let currentOrderID;
 
@@ -187,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.ordersListElement').forEach(element => {
         element.addEventListener('click', function () {
 
-            // When clicking on any element with the class .ordersListElement, add the class .active to change the background color
+            // When clicking on any element with the class .ordersListElement, add the class .active to change its background color
             document.querySelectorAll('.ordersListElement').forEach(el => el.classList.remove('active'));
             this.classList.add('active');
             currentOrderID = this.id;
@@ -248,34 +256,12 @@ function displayLandingPage(user, orders) {
 
 // Function to fill the order list
 function displayOrdersList(orders) {
-    const ordersList = document.createElement('div');
-    ordersList.id = 'ordersList';
-    leftContentContainer.appendChild(ordersList);
+    const ordersList = document.getElementById('ordersList');
 
-    const ordersListHeader = document.createElement('div');
-    ordersListHeader.id = 'ordersListHeader';
-
-    const ordersListHome = document.createElement('img');
-    ordersListHome.src = '/src/front/Assets/home_icon.svg';
-    ordersListHome.id = 'ordersListHome';
-    ordersListHome.style.width = '1.75rem';
-    ordersListHome.style.backgroundColor = '#ffffff';
-    ordersListHome.style.borderRadius = '5px';
-    ordersListHome.style.padding = '5px';
-    ordersListHeader.appendChild(ordersListHome);
-
-    newOrder = document.createElement('div');
-    newOrder.classList.add('hoverButton');
-    newOrder.classList.add('ordersListElement');
-    newOrder.id = 'newOrder';
-    newOrder.textContent = 'Commander';
-    newOrder.style.width = '100%';
-    ordersListHeader.appendChild(newOrder);
-
-    ordersList.appendChild(ordersListHeader);
+    const timeSortedOrders = sortElementsByDate(orders);
 
     // Sort orders list by state
-    orders.sort((a, b) => {
+    timeSortedOrders.sort((a, b) => {
         if (a.orderState === 'pending') return -1;
         if (b.orderState === 'pending') return 1;
         if (a.orderState === 'finished') return 1;
@@ -283,7 +269,7 @@ function displayOrdersList(orders) {
         return 0;
     });
 
-    orders.forEach((orderElement) => {
+    timeSortedOrders.forEach((orderElement) => {
         const ordersListElement = document.createElement('div');
         ordersListElement.classList.add('ordersListElement');
         ordersListElement.classList.add('hoverButton');
@@ -331,29 +317,28 @@ function displayOrderContent(order) {
     const orderElementSummary = document.createElement('div');
     orderElementSummary.classList.add('orderElementSummary');
 
-    const orderNameElement = document.createElement('div');
-    orderNameElement.textContent = `${order.orderName}`;
-    orderNameElement.style.fontSize = '2em';
-    orderElementSummary.appendChild(orderNameElement);
+    const orderElementName = document.createElement('div');
+    orderElementName.classList.add('orderElementName');
+    orderElementName.textContent = `${order.orderName}`;
+    orderElementSummary.appendChild(orderElementName);
 
-    const orderStateElement = document.createElement('div');
-    orderStateElement.classList.add('orderStateElement');
-    orderStateElement.textContent = `${order.orderState}`;
-    orderStateElement.style.color = getColorForState(order.orderState).background;
-    orderStateElement.textContent = getColorForState(order.orderState).frText;
-    orderElementSummary.appendChild(orderStateElement);
+    const orderElementState = document.createElement('div');
+    orderElementState.classList.add('orderElementState');
+    orderElementState.textContent = `${order.orderState}`;
+    orderElementState.style.color = getColorForState(order.orderState).background;
+    orderElementState.textContent = getColorForState(order.orderState).frText;
+    orderElementSummary.appendChild(orderElementState);
 
     const orderElementDate = document.createElement('div');
+    orderElementDate.classList.add('orderElementDate');
     const [date, time] = order.orderDateTime.split(' ');
     orderElementDate.textContent = `Commande passée le ${date} à ${time}`;
-    orderElementDate.style.fontSize = '0.7em';
-    orderElementDate.style.margin = '0 0 5vh 0';
     orderElementSummary.appendChild(orderElementDate);
 
-    const orderElementSummaryTitle = document.createElement('div');
-    orderElementSummaryTitle.textContent = 'Vue d\'ensemble';
-    orderElementSummaryTitle.classList.add('orderElementSummaryTitle');
-    orderElementSummary.appendChild(orderElementSummaryTitle);
+    const orderElementOverviewTitle = document.createElement('div');
+    orderElementOverviewTitle.textContent = 'Vue d\'ensemble';
+    orderElementOverviewTitle.classList.add('orderElementOverviewTitle');
+    orderElementSummary.appendChild(orderElementOverviewTitle);
 
     const orderElementDetails = document.createElement('div');
     orderElementDetails.classList.add('orderElementDetails');
@@ -379,10 +364,7 @@ function displayOrderContent(order) {
     orderElementDetails.appendChild(orderElementSummaryTotalWeight);
 
     const orderElementSummaryQuantityPrice = document.createElement('div');
-    orderElementSummaryQuantityPrice.style.display = 'flex';
-    orderElementSummaryQuantityPrice.style.flexDirection = 'row';
-    orderElementSummaryQuantityPrice.style.justifyContent = 'space-between';
-    orderElementSummaryQuantityPrice.style.alignItems = 'baseline';
+    orderElementSummaryQuantityPrice.classList.add('orderElementSummaryQuantityPrice');
 
     const orderElementSummaryQuantity = document.createElement('div');
     if (order.orderQuantity > 1) {
@@ -395,9 +377,8 @@ function displayOrderContent(order) {
     orderElementSummaryQuantityPrice.appendChild(orderElementSummaryQuantity);
 
     const orderElementSummaryPrice = document.createElement('div');
+    orderElementSummaryPrice.classList.add('orderElementSummaryPrice');
     orderElementSummaryPrice.textContent = `${order.orderPrice}€`;
-    orderElementSummaryPrice.style.fontSize = '1.5em';
-    orderElementSummaryPrice.style.width = 'fit-content';
     orderElementSummaryQuantityPrice.appendChild(orderElementSummaryPrice);
 
     orderElementDetails.appendChild(orderElementSummaryQuantityPrice);
@@ -449,33 +430,28 @@ function displayOrderContent(order) {
 function displayFilesList(order) {
     orderElementFilesMessageContent.innerHTML = '';
 
-    Object.values(order.orderFiles).forEach((file) => {
+    const sortedFiles = sortElementsByDate(Object.values(order.orderFiles));
+
+    sortedFiles.forEach((file) => {
         const fileElement = document.createElement('div');
-        fileElement.classList.add('filesListElement');
+        fileElement.classList.add('fileElement');
 
         const fileElementName = document.createElement('div');
-        fileElementName.classList.add('filesListElementName');
+        fileElementName.classList.add('fileElementName');
         fileElementName.textContent = file.fileName;
         fileElement.appendChild(fileElementName);
 
         const fileElementRightPart = document.createElement('div');
-        fileElementRightPart.style.display = 'flex';
-        fileElementRightPart.style.flexDirection = 'row';
-        fileElementRightPart.style.justifyContent = 'flex-end';
-        fileElementRightPart.style.alignContent = 'flex-end';
-        fileElementRightPart.style.width = '70%';
-        fileElementRightPart.style.overflow = 'hidden';
-        fileElementRightPart.style.textOverflow = 'ellipsis';
-        fileElementRightPart.style.whiteSpace = 'nowrap';
+        fileElementRightPart.classList.add('fileElementRightPart');
 
         const fileElementDate = document.createElement('div');
-        fileElementDate.classList.add('filesListElementDate', 'filesListSubElement');
+        fileElementDate.classList.add('fileElementDate', 'fileElementSubPart');
         const [date, time] = file.fileDateTime.split(' ');
         fileElementDate.textContent = `Déposé le ${date} à ${time}`;
         fileElementRightPart.appendChild(fileElementDate);
 
         const fileElementSize = document.createElement('div');
-        fileElementSize.classList.add('filesListSubElement');
+        fileElementSize.classList.add('fileElementSubPart');
         if (file.fileWeight >= 1000) {
             fileElementSize.textContent = `${(file.fileWeight / 1000).toFixed(2)}MB`;
         } else {
@@ -485,7 +461,7 @@ function displayFilesList(order) {
         fileElementRightPart.appendChild(fileElementSize);
 
         const fileElementDownloadButton = document.createElement('img');
-        fileElementDownloadButton.classList.add('filesListDownload');
+        fileElementDownloadButton.classList.add('fileElementDownload');
         fileElementDownloadButton.src = '/src/front/Assets/download_icon.svg';
         fileElementDownloadButton.alt = 'Télécharger';
         fileElementDownloadButton.style.height = '20px';
@@ -495,8 +471,6 @@ function displayFilesList(order) {
 
         orderElementFilesMessageContent.appendChild(fileElement);
     });
-
-    sortFilesByDate();
 }
 
 // Function to show files of the active order
@@ -526,18 +500,4 @@ function getColorForState(state) {
     };
 
     return stateColorMapping[state] || {background: '#bdbdbd', font: '#000000'}; // Default colors
-}
-
-//Function to sort all file elements by date (most recent to oldest)
-function sortFilesByDate() {
-    const fileElements = Array.from(document.querySelectorAll('.filesListElement'));
-    fileElements.sort((a, b) => {
-        const dateA = new Date(a.querySelector('.filesListElementDate').textContent.split(' ')[2].split('/').reverse().join('-') + 'T' + a.querySelector('.filesListElementDate').textContent.split(' ')[4]);
-        const dateB = new Date(b.querySelector('.filesListElementDate').textContent.split(' ')[2].split('/').reverse().join('-') + 'T' + b.querySelector('.filesListElementDate').textContent.split(' ')[4]);
-        return dateB - dateA;
-    });
-
-    const container = document.querySelector('.orderElementFilesMessageContent');
-    container.innerHTML = '';
-    fileElements.forEach(element => container.appendChild(element));
 }

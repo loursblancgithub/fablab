@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let feedbackForm;
 
     formBulb.addEventListener('click', () => {
-        if (feedbackForm) {
+        if (document.getElementById('feedbackForm')) {
             return;
         }
 
