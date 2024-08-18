@@ -31,6 +31,14 @@ Content
 }
 
 /*------> Header <------*/
+
+#header {
+    height: fit-content;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 #fablabLogo {
     width: 7.5vw;
     max-width: 120px;
@@ -304,8 +312,35 @@ Responsive design
 
 @media only screen and (max-width: 768px) {
 
+    #header {
+        background-color: #ffffff;
+        z-index: 15;
+        width: 90%;
+        border-radius: 5px;
+        position: fixed;
+        margin: 2% 2% 2% 2%;
+        padding: 2% 2% 2% 2%;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), 0 20px 50px rgba(0, 0, 0, 0.1);
+    }
+
+    #expertModeContainer, #headerRight {
+        position: unset;
+        margin: unset;
+        top: unset;
+        right: unset;
+        left: unset;
+    }
+
+    #headerRight {
+        flex-direction: column-reverse;
+    }
+
     #fablabLogo {
         width: 15vw;
+    }
+
+    #orderForm {
+        margin-top: 30%;
     }
 
     .blueButton {

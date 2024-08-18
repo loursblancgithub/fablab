@@ -16,18 +16,28 @@
 </head>
 <body>
 <div id="bodyContainer">
-    <div id="expertModeContainer">
-        <div id="expertModeTitle">Mode expert</div>
-        <label class="switch">
-            <input type="checkbox" id="expertModeSwitch">
-            <span class="slider round"></span>
-        </label>
+    <div id="header">
+        <div id="expertModeContainer">
+            <div id="expertModeTitle">Mode expert</div>
+            <label class="switch">
+                <input type="checkbox" id="expertModeSwitch">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <img src="../Assets/logo_fablab.svg" alt="logo" id="fablabLogo">
+        <div id="headerRight">
+            <img src="../Assets/bulb.svg" alt="logo" id="formBulb">
+            <div id="logoutButton" class="blueButton">Se déconnecter</div>
+        </div>
     </div>
+<<<<<<< Updated upstream
     <div id="headerRight">
         <img src="../Assets/bulb.svg" alt="logo" id="formBulb">
         <div id="logoutButton" class="blueButton">Se déconnecter</div>
     </div>
     <img src="../Assets/logo_fablab.svg" alt="logo" id="fablabLogo">
+=======
+>>>>>>> Stashed changes
 
     <div id="orderForm">
         <div class="formTitle required">Nom de la commande</div>
@@ -37,7 +47,8 @@
             <div class="subFormLine">
                 <div class="subFormElement">
                     <div class="formTitle required">Fichier(s)</div>
-                    <label for="orderFile"></label><input class="inputStyle" type="file" id="orderFile" name="file" accept=".stl, .3mf, .stp, .step">
+                    <label for="orderFile"></label><input class="inputStyle" type="file" id="orderFile" name="file"
+                                                          accept=".stl, .3mf, .stp, .step">
                 </div>
 
                 <div class="subFormElement">
@@ -66,7 +77,8 @@
 
                 <div class="subFormElement">
                     <div class="formTitle required">Quantité</div>
-                    <label for="orderQuantity"></label><input class="inputStyle" type="text" id="orderQuantity" name="quantity">
+                    <label for="orderQuantity"></label><input class="inputStyle" type="text" id="orderQuantity"
+                                                              name="quantity">
                 </div>
 
             </div>
