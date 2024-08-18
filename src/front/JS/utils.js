@@ -126,4 +126,50 @@ function showCloseCross (element) {
     element.parentNode.appendChild(closeArrow);
 }
 
+<<<<<<< Updated upstream
 export {showCloseCross};
+=======
+export {sortElementsByDate};
+
+/*--------------------------
+
+Congratulations on finding this, on behalf of all the team
+
+--------------------------*/
+
+function fiveElements(bodyContainer) {
+    let buffer = '';
+    const fireSequence = 'fire';
+    const leafSequence = 'leaf';
+    const earthSequence = 'earth';
+
+    if (bodyContainer.classList === null) {
+        bodyContainer.className = '';
+    }
+
+    document.addEventListener('keydown', (event) => {
+        buffer += event.key.toLowerCase();
+        if (buffer.includes(fireSequence)) {
+            console.log('Fire for you :D')
+            bodyContainer.classList.add('fire');
+            bodyContainer.classList.remove('leaf', 'earth', 'fablabBlueGradient');
+            buffer = '';
+        } else if (buffer.includes(leafSequence)) {
+            bodyContainer.classList.add('leaf');
+            bodyContainer.classList.remove('fire', 'earth', 'fablabBlueGradient');
+            buffer = '';
+        } else if (buffer.includes(earthSequence)) {
+            bodyContainer.classList.add('earth');
+            bodyContainer.classList.remove('fire', 'leaf', 'fablabBlueGradient');
+            buffer = '';
+        }
+        if (buffer.length > Math.max(fireSequence.length, leafSequence.length, earthSequence.length)) {
+            buffer = buffer.slice(-Math.max(fireSequence.length, leafSequence.length, earthSequence.length));
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', fiveElements);
+
+export {fiveElements};
+>>>>>>> Stashed changes
