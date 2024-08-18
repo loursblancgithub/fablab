@@ -115,21 +115,20 @@ export {setTimeoutWithRAF};
 
 /*--------------------------
 
-Function preventing the use of setTimeout() for security purposes when needing a delay
+Function sorting elements in received json by date
 
 --------------------------*/
 
-function showCloseCross (element) {
-    const closeArrow = document.createElement('div');
-    closeArrow.classList.add('closeArrow');
-    closeArrow.textContent = '×';
-    element.parentNode.appendChild(closeArrow);
+function sortElementsByDate(elements) {
+    return elements.sort((a, b) => {
+        if (!a.orderDateTime || !b.orderDateTime) {
+            return !a.orderDateTime ? 1 : -1;
+        }
+        const dateA = new Date(a.orderDateTime.split(' ')[0].split('/').reverse().join('-') + ' ' + a.orderDateTime.split(' ')[1]);
+        const dateB = new Date(b.orderDateTime.split(' ')[0].split('/').reverse().join('-') + ' ' + b.orderDateTime.split(' ')[1]);
+        return dateB - dateA;
+    });
 }
-
-<<<<<<< Updated upstream
-export {showCloseCross};
-=======
-export {sortElementsByDate};
 
 /*--------------------------
 
@@ -172,4 +171,3 @@ function fiveElements(bodyContainer) {
 document.addEventListener('DOMContentLoaded', fiveElements);
 
 export {fiveElements};
->>>>>>> Stashed changes
