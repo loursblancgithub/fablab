@@ -347,8 +347,12 @@ Responsive design
         padding: 1vh 2vw 1vh 2vw;
     }
 
+    #logoutButton {
+        font-size: 0.75rem;
+    }
+
     #formBulb {
-        width: 10vw;
+        width: 7vw;
     }
 
     .formTitle {
@@ -365,6 +369,10 @@ Responsive design
 
     #orderMaterial, #orderColor, #orderQuantity {
         min-width: 20vw;
+    }
+
+    #orderPrintSettings {
+        width: 80vw;
     }
 
     #orderQuestions {
