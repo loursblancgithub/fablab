@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     orderTool: sanitizeOutput(document.getElementById('orderTool').value),
                     orderQuantity: sanitizeOutput(document.getElementById('orderQuantity').value),
                     orderMaterial: sanitizeOutput(document.getElementById('orderMaterial').value),
+                    orderColor: sanitizeOutput(document.getElementById('orderColor').value),
                     orderQuestions: sanitizeOutput(document.getElementById('orderQuestions').value),
                     goodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
                     expertModeCheck: expertModeSwitch.checked,

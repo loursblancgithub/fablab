@@ -18,6 +18,8 @@ Generic elements
 body {
     background-color: #ffffff;
     font-family: LexendDeca, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 .pageMask {
@@ -93,7 +95,7 @@ select > option {
 
 /*--------------------------
 
-Header side
+Header right part
 
 --------------------------*/
 
@@ -306,21 +308,6 @@ Alert Popup
 
 /*--------------------------
 
-Close cross positioned outside an element at its top right
-
---------------------------*/
-
-.closeArrow {
-    position: absolute;
-    top: -50%;
-    right: 2vh;
-    z-index: 15;
-    font-size: 6vh;
-    cursor: pointer;
-}
-
-/*--------------------------
-
 Hover popup for text that is too long
 
 --------------------------*/
@@ -334,6 +321,96 @@ Hover popup for text that is too long
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     display: none;
     z-index: 1000;
+}
+
+/*--------------------------
+
+Hover popup for text that is too long
+
+--------------------------*/
+
+.fablabBlueGradient {
+    background: linear-gradient(219deg, #ffffff, #7287ca, #2e4798) !important;
+    background-size: 600% 600%;
+    -webkit-animation: fablabGradient 20s ease infinite;
+    -moz-animation: fablabGradient 20s ease infinite;
+    -o-animation: fablabGradient 20s ease infinite;
+    animation: fablabGradient 20s ease infinite;
+}
+
+.fire {
+    background: linear-gradient(219deg, #ffffff, #c13206, #98412e) !important;
+    background-size: 600% 600%;
+    -webkit-animation: fablabGradient 2s ease infinite;
+    -moz-animation: fablabGradient 2s ease infinite;
+    -o-animation: fablabGradient 2s ease infinite;
+    animation: fablabGradient 2s ease infinite;
+}
+
+.leaf {
+    background: linear-gradient(219deg, #ffffff, #35c106, #1b6e03) !important;
+    background-size: 600% 600%;
+    -webkit-animation: fablabGradient 8s ease infinite;
+    -moz-animation: fablabGradient 8s ease infinite;
+    -o-animation: fablabGradient 8s ease infinite;
+    animation: fablabGradient 8s ease infinite;
+}
+
+.earth {
+    background: linear-gradient(40deg, #ffffff, #9e7f32, #6e5903) !important;
+    background-size: 600% 600%;
+    -webkit-animation: fablabGradient 0s ease infinite;
+    -moz-animation: fablabGradient 0s ease infinite;
+    -o-animation: fablabGradient 0s ease infinite;
+    animation: fablabGradient 0s ease infinite;
+}
+
+@-webkit-keyframes fablabGradient {
+    0% {
+        background-position: 0 58%
+    }
+    50% {
+        background-position: 100% 43%
+    }
+    100% {
+        background-position: 0 58%
+    }
+}
+
+@-moz-keyframes fablabGradient {
+    0% {
+        background-position: 0 58%
+    }
+    50% {
+        background-position: 100% 43%
+    }
+    100% {
+        background-position: 0 58%
+    }
+}
+
+@-o-keyframes fablabGradient {
+    0% {
+        background-position: 0 58%
+    }
+    50% {
+        background-position: 100% 43%
+    }
+    100% {
+        background-position: 0 58%
+    }
+}
+
+@keyframes fablabGradient {
+    0% {
+        background-position: 0 58%
+    }
+    50% {
+        background-position: 100% 43%
+    }
+    100% {
+        background-position: 0 58%
+    }
 }
 
 /*--------------------------
@@ -390,7 +467,17 @@ Order element styling
     box-sizing: border-box;
 }
 
+<<<<<<< Updated upstream
 .orderElementSummaryTitle {
+=======
+.orderElementSummaryQuantityPrice {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.orderElementSummaryPrice {
+>>>>>>> Stashed changes
     font-size: 1.5em;
     margin-bottom: 1%;
     width: 100%;
