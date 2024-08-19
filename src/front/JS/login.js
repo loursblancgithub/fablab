@@ -1,4 +1,4 @@
-import {fiveElements} from "./utils";
+import {fiveElements} from "./utils.js";
 
 const bodyContainer = document.getElementById('bodyContainer');
 document.addEventListener('DOMContentLoaded', () => {
