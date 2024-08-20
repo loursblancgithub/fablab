@@ -143,6 +143,7 @@ function fiveElements(bodyContainer) {
     const fireSequence = 'fire';
     const leafSequence = 'leaf';
     const earthSequence = 'earth';
+    const waterSequence = 'water';
 
     if (bodyContainer.classList === null) {
         bodyContainer.className = '';
@@ -151,7 +152,6 @@ function fiveElements(bodyContainer) {
     document.addEventListener('keydown', (event) => {
         buffer += event.key.toLowerCase();
         if (buffer.includes(fireSequence)) {
-            console.log('Fire for you :D')
             bodyContainer.classList.add('fire');
             bodyContainer.classList.remove('leaf', 'earth', 'fablabBlueGradient');
             buffer = '';
@@ -162,6 +162,10 @@ function fiveElements(bodyContainer) {
         } else if (buffer.includes(earthSequence)) {
             bodyContainer.classList.add('earth');
             bodyContainer.classList.remove('fire', 'leaf', 'fablabBlueGradient');
+            buffer = '';
+        } else if (buffer.includes(waterSequence)) {
+            bodyContainer.classList.add('fablabBlueGradient');
+            bodyContainer.classList.remove('fire', 'leaf', 'earth');
             buffer = '';
         }
         if (buffer.length > Math.max(fireSequence.length, leafSequence.length, earthSequence.length)) {
