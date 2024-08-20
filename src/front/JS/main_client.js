@@ -146,7 +146,7 @@ const orderDataDummy = [{
         orderID: 151436,
         orderName: "Gulfstream G650",
         orderState: "printing",
-        userID: 62194,
+        userID: 'jema62194',
         orderMaterial: "PLA",
         orderColor: "red",
         orderTotalWeight: 300,
@@ -161,9 +161,48 @@ const orderDataDummy = [{
     }];
 
 const userDataDummy = {
-    userID: 62194,
+    userID: 'jema62194',
     userName: "Jean MANOURY"
 }
+
+const chatDataDummy = {
+    chatInfos: {
+        userID: 'jema62194',
+        orderID: 151436,
+    },
+    chatMessages: {
+        message1: {
+            msgID: '151436_1',
+            msgSender: 'jema62194',
+            msgContent: "Bonjour, je voulais savoir si vous pouviez imprimer un avion en 3D"
+        },
+        message2: {
+            msgID: '151436_2',
+            msgSender: 'admin',
+            msgContent: "Bonjour, oui nous pouvons imprimer des avions en 3D. Quel modèle souhaitez-vous imprimer ?"
+        },
+        message3: {
+            msgID: '151436_3',
+            msgSender: 'jema62194',
+            msgContent: "Je souhaiterais imprimer un Airbus A380"
+        },
+        message4: {
+            msgID: '151436_4',
+            msgSender: 'admin',
+            msgContent: "D'accord, nous pouvons imprimer un Airbus A380 en 3D. Quelle couleur souhaitez-vous ?"
+        },
+        message5: {
+            msgID: '151436_5',
+            msgSender: 'jema62194',
+            msgContent: "Je souhaiterais un Airbus A380 rouge"
+        },
+        message6: {
+            msgID: '151436_6',
+            msgSender: 'admin',
+            msgContent: "D'accord, nous allons imprimer un Airbus A380 rouge. Merci pour votre commande !"
+        },
+    }
+};
 
 const orderContainer = document.getElementById('orderContainer');
 const newOrder = document.getElementById('newOrder');
@@ -201,16 +240,16 @@ document.addEventListener('DOMContentLoaded', () => {
             currentOrderID = this.id;
 
             // By default, loading the files list when loading an order
-            showFilesOfActiveOrder(currentOrderID);
+            showContentsOfActiveOrder(orderDataDummy, currentOrderID, 'files');
 
             // When clicking on the files button, loading the files list
             document.getElementById('orderElementFilesButton').addEventListener('click', () => {
-                showFilesOfActiveOrder(currentOrderID);
+                showContentsOfActiveOrder(orderDataDummy, currentOrderID, 'files');
             });
 
             // When clicking on the chat button, loading the chat
             document.getElementById('orderElementMessageButton').addEventListener('click', () => {
-                displayMessages(currentOrderID);
+                showContentsOfActiveOrder(orderDataDummy, currentOrderID, 'chat');
             });
         });
     });
@@ -474,11 +513,13 @@ function displayFilesList(order) {
 }
 
 // Function to show files of the active order
-function showFilesOfActiveOrder(activeOrderId) {
+function showContentsOfActiveOrder(orderData, activeOrderId, dataType) {
     if (activeOrderId) {
-        const activeOrder = orderDataDummy.find(order => order.orderID === Number(activeOrderId));
-        if (activeOrder) {
+        const activeOrder = orderData.find(order => order.orderID === Number(activeOrderId));
+        if (dataType === 'files') {
             displayFilesList(activeOrder);
+        } else if (dataType === 'chat') {
+            displayMessages(activeOrder);
         }
     }
 }
@@ -486,6 +527,39 @@ function showFilesOfActiveOrder(activeOrderId) {
 // Show the chat for a specific order
 function displayMessages(order) {
     orderElementFilesMessageContent.innerHTML = '';
+
+    // With websocket active, fetch the chat from the server using the orderID
+
+    chatDataDummy.chatInfos.orderID = order.orderID;
+    chatDataDummy.chatInfos.userID = userDataDummy.userID;
+
+    const chatData = Object.values(chatDataDummy.chatMessages);
+    console.log(chatData);
+
+    const chatFeed = document.createElement('div');
+    chatFeed.classList.add('chatFeed');
+    orderElementFilesMessageContent.appendChild(chatFeed);
+
+    const chatInputs = document.createElement('div');
+    chatInputs.classList.add('chatInputs');
+    orderElementFilesMessageContent.appendChild(chatInputs);
+
+    chatData.forEach((message) => {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('messageElement');
+
+        const messageElementContent = document.createElement('div');
+        messageElementContent.classList.add('messageElementContent');
+        messageElementContent.textContent = message.msgContent;
+        messageElement.appendChild(messageElementContent);
+
+        const messageElementSender = document.createElement('div');
+        messageElementSender.classList.add('messageElementSender');
+        messageElementSender.textContent = message.msgSender;
+        messageElement.appendChild(messageElementSender);
+
+        chatFeed.appendChild(messageElement);
+    });
 }
 
 // Set color state for each order
@@ -499,5 +573,5 @@ function getColorForState(state) {
         finished: {background: '#0A53A8', font: '#ffffff', frText: "Terminée"},
     };
 
-    return stateColorMapping[state] || {background: '#bdbdbd', font: '#000000'}; // Default colors
+    return stateColorMapping[state] || {background: '#bdbdbd', font: '#000000'};
 }
