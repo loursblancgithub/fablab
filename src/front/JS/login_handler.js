@@ -1,8 +1,4 @@
-const fetch = require('node-fetch');
-
-const url = 'https://sso-portal.isep.fr';
-const user = 'situ62394';
-const password = encodeURIComponent('azerty');
+const url = 'https://sso-portal.isep.fr/';
 
 // Function to get the token
 async function getToken() {
@@ -13,10 +9,9 @@ async function getToken() {
     return token;
 }
 
-async function login() {
+async function login(user, password) {
     const token = await getToken();
     const data = `&token=${token}&user=${user}&password=${password}`;
-
     const headers = {
         'Host': 'sso-portal.isep.fr',
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -29,8 +24,7 @@ async function login() {
         body: data,
         redirect: 'manual'
     });
-
-    console.log(response.headers.get('set-cookie'));
+    console.log(response.headers.get('Set-Cookie'));
 }
 
-login().then(() => console.log('Successfully logged in')).catch(e => console.error(e));
+export {login}

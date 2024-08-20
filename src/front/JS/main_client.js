@@ -1,6 +1,6 @@
 import {applyHoverIfNecessary, setTimeoutWithRAF, sortElementsByDate} from "/src/front/JS/utils.js";
 /*
-import {socket} from './websocket_setup.js';
+import {socket} from './ws_client.js';
 
 // Use the `socket` object for sending messages, etc.
 socket.send("Message specific to admin_orders_fetcher functionality.");
