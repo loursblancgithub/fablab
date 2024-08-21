@@ -3,7 +3,7 @@ import {applyHoverIfNecessary, setTimeoutWithRAF, sortElementsByDate} from "/src
 import {socket} from './ws_client.js';
 
 // Use the `socket` object for sending messages, etc.
-socket.send("Message specific to admin_orders_fetcher functionality.");
+socket.send("Message specific to FabLab_orders_fetcher functionality.");
 */
 
 const orderDataDummy = [{
@@ -166,41 +166,87 @@ const userDataDummy = {
 }
 
 const chatDataDummy = {
-    chatInfos: {
+    151436: {
         userID: 'jema62194',
-        orderID: 151436,
+        chatMessages: {
+            message1: {
+                msgID: '151436_1',
+                msgSender: 'jema62194',
+                msgDate: '09/08/2024 10:12:29',
+                msgContent: "Bonjour, je voulais savoir si vous pouviez imprimer un avion en 3D"
+            },
+            message2: {
+                msgID: '151436_2',
+                msgSender: 'FabLab',
+                msgDate: '09/08/2024 10:12:45',
+                msgContent: "Bonjour, oui nous pouvons imprimer des avions en 3D. Quel modèle souhaitez-vous imprimer ?"
+            },
+            message3: {
+                msgID: '151436_3',
+                msgSender: 'jema62194',
+                msgDate: '09/08/2024 10:13:02',
+                msgContent: "Je souhaiterais imprimer un Airbus A380"
+            },
+            message4: {
+                msgID: '151436_4',
+                msgSender: 'FabLab',
+                msgDate: '09/08/2024 10:13:25',
+                msgContent: "D'accord, nous pouvons imprimer un Airbus A380 en 3D. Quelle couleur souhaitez-vous ?"
+            },
+            message5: {
+                msgID: '151436_5',
+                msgSender: 'jema62194',
+                msgDate: '09/08/2024 10:13:45',
+                msgContent: "Je souhaiterais un Airbus A380 rouge"
+            },
+            message6: {
+                msgID: '151436_6',
+                msgSender: 'FabLab',
+                msgDate: '09/08/2024 10:14:02',
+                msgContent: "D'accord, nous allons imprimer un Airbus A380 rouge. Merci pour votre commande !"
+            },
+        }
     },
-    chatMessages: {
-        message1: {
-            msgID: '151436_1',
-            msgSender: 'jema62194',
-            msgContent: "Bonjour, je voulais savoir si vous pouviez imprimer un avion en 3D"
-        },
-        message2: {
-            msgID: '151436_2',
-            msgSender: 'admin',
-            msgContent: "Bonjour, oui nous pouvons imprimer des avions en 3D. Quel modèle souhaitez-vous imprimer ?"
-        },
-        message3: {
-            msgID: '151436_3',
-            msgSender: 'jema62194',
-            msgContent: "Je souhaiterais imprimer un Airbus A380"
-        },
-        message4: {
-            msgID: '151436_4',
-            msgSender: 'admin',
-            msgContent: "D'accord, nous pouvons imprimer un Airbus A380 en 3D. Quelle couleur souhaitez-vous ?"
-        },
-        message5: {
-            msgID: '151436_5',
-            msgSender: 'jema62194',
-            msgContent: "Je souhaiterais un Airbus A380 rouge"
-        },
-        message6: {
-            msgID: '151436_6',
-            msgSender: 'admin',
-            msgContent: "D'accord, nous allons imprimer un Airbus A380 rouge. Merci pour votre commande !"
-        },
+    158736: {
+        userID: 'jema62194',
+        chatMessages: {
+            message1: {
+                msgID: '158736_1',
+                msgSender: 'jema62194',
+                msgDate: '08/08/2024 10:12:29',
+                msgContent: "Bonjour, je voulais savoir si vous pouviez imprimer un avion en 3D"
+            },
+            message2: {
+                msgID: '158736_2',
+                msgSender: 'FabLab',
+                msgDate: '08/08/2024 10:12:45',
+                msgContent: "Bonjour, oui nous pouvons imprimer des avions en 3D. Quel modèle souhaitez-vous imprimer ?"
+            },
+            message3: {
+                msgID: '158736_3',
+                msgSender: 'jema62194',
+                msgDate: '08/08/2024 10:13:02',
+                msgContent: "Je souhaiterais imprimer un Airbus A380"
+            },
+            message4: {
+                msgID: '158736_4',
+                msgSender: 'FabLab',
+                msgDate: '08/08/2024 10:13:25',
+                msgContent: "D'accord, nous pouvons imprimer un Airbus A380 en 3D. Quelle couleur souhaitez-vous ?"
+            },
+            message5: {
+                msgID: '158736_5',
+                msgSender: 'jema62194',
+                msgDate: '08/08/2024 10:13:45',
+                msgContent: "Je souhaiterais un Airbus A380 rouge"
+            },
+            message6: {
+                msgID: '158736_6',
+                msgSender: 'FabLab',
+                msgDate: '08/08/2024 10:14:02',
+                msgContent: "D'accord, nous allons imprimer un Airbus A380 rouge. Merci pour votre commande !"
+            },
+        }
     }
 };
 
@@ -465,6 +511,18 @@ function displayOrderContent(order) {
     }, 10);
 }
 
+// Function to show files of the active order
+function showContentsOfActiveOrder(orderData, activeOrderId, dataType) {
+    if (activeOrderId) {
+        const activeOrder = orderData.find(order => order.orderID === Number(activeOrderId));
+        if (dataType === 'files') {
+            displayFilesList(activeOrder);
+        } else if (dataType === 'chat') {
+            displayMessages(activeOrder);
+        }
+    }
+}
+
 // Show the files list for a specific order
 function displayFilesList(order) {
     orderElementFilesMessageContent.innerHTML = '';
@@ -512,51 +570,69 @@ function displayFilesList(order) {
     });
 }
 
-// Function to show files of the active order
-function showContentsOfActiveOrder(orderData, activeOrderId, dataType) {
-    if (activeOrderId) {
-        const activeOrder = orderData.find(order => order.orderID === Number(activeOrderId));
-        if (dataType === 'files') {
-            displayFilesList(activeOrder);
-        } else if (dataType === 'chat') {
-            displayMessages(activeOrder);
-        }
-    }
-}
-
 // Show the chat for a specific order
 function displayMessages(order) {
     orderElementFilesMessageContent.innerHTML = '';
-
-    // With websocket active, fetch the chat from the server using the orderID
-
-    chatDataDummy.chatInfos.orderID = order.orderID;
-    chatDataDummy.chatInfos.userID = userDataDummy.userID;
-
-    const chatData = Object.values(chatDataDummy.chatMessages);
-    console.log(chatData);
 
     const chatFeed = document.createElement('div');
     chatFeed.classList.add('chatFeed');
     orderElementFilesMessageContent.appendChild(chatFeed);
 
+    const targetedChat = chatDataDummy[order.orderID];
+    if (!targetedChat) {
+        chatFeed.textContent = 'No chat available for this order.';
+        return;
+    }
+
     const chatInputs = document.createElement('div');
     chatInputs.classList.add('chatInputs');
     orderElementFilesMessageContent.appendChild(chatInputs);
 
-    chatData.forEach((message) => {
+    const filesInput = document.createElement('div');
+    filesInput.classList.add('chatFilesInput');
+    chatInputs.appendChild(filesInput);
+
+    const messageInputContainer = document.createElement('div');
+    messageInputContainer.classList.add('chatMessageInputContainer');
+
+    const messageInput = document.createElement('textarea');
+    messageInput.classList.add('chatMessageInput');
+    messageInput.placeholder = 'Écrivez un message...';
+    chatInputs.appendChild(messageInput);
+
+    const chatMessages = Object.values(targetedChat.chatMessages);
+
+    chatMessages.forEach((message) => {
         const messageElement = document.createElement('div');
         messageElement.classList.add('messageElement');
 
-        const messageElementContent = document.createElement('div');
-        messageElementContent.classList.add('messageElementContent');
-        messageElementContent.textContent = message.msgContent;
-        messageElement.appendChild(messageElementContent);
+        const messageElementBody = document.createElement('div');
+        messageElementBody.classList.add('messageElementBody');
 
         const messageElementSender = document.createElement('div');
         messageElementSender.classList.add('messageElementSender');
         messageElementSender.textContent = message.msgSender;
-        messageElement.appendChild(messageElementSender);
+        messageElementBody.appendChild(messageElementSender);
+
+        const messageElementContent = document.createElement('div');
+        messageElementContent.classList.add('messageElementContent');
+        messageElementContent.textContent = message.msgContent;
+        messageElementBody.appendChild(messageElementContent);
+        messageElement.appendChild(messageElementBody);
+
+        const messageElementDateTime = document.createElement('div');
+        messageElementDateTime.classList.add('messageElementDateTime');
+        messageElementDateTime.textContent = message.msgDate;
+        messageElement.appendChild(messageElementDateTime);
+
+        if (message.msgSender === 'FabLab') {
+            messageElement.classList.add('leftColumn');
+            messageElementBody.classList.add('leftColumnBubble');
+            messageElementDateTime.style.alignSelf = 'flex-start';
+        } else {
+            messageElement.classList.add('rightColumn');
+            messageElementBody.classList.add('rightColumnBubble');
+        }
 
         chatFeed.appendChild(messageElement);
     });
