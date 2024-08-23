@@ -22,6 +22,10 @@ body {
     padding: 0;
 }
 
+textarea:focus, input:focus {
+    outline: none;
+}
+
 .pageMask {
     background-color: #ffffff;
     position: absolute;
@@ -36,8 +40,17 @@ body {
     width: 100vw;
 }
 
-textarea:focus, input:focus{
-    outline: none;
+.svgIcon {
+    fill: #000;
+    width: 24px;
+    height: 24px;
+}
+
+.svgIcon:hover {
+    fill: #ffffff;
+    background-color: var(--logoBlue);
+    cursor: pointer;
+    transition: background-color 0.25s ease;
 }
 
 /*------> Generic grey input with box shadow <------*/
@@ -57,7 +70,7 @@ textarea:focus, input:focus{
 
 /*------> Generic #2e4798 blue button <------*/
 .blueButton {
-    background-color: #2E4798;
+    background-color: var(--logoBlue);
     color: #ffffff;
     width: 15vw;
     min-width: fit-content;
@@ -74,9 +87,10 @@ textarea:focus, input:focus{
     user-select: none;
 }
 
-.blueButton:hover {
-    background-color: #1a2f66;
+.hoverButton:hover {
     cursor: pointer;
+    background-color: var(--backgroundLightBlue) !important;
+    color: #ffffff;
     transition: background-color 0.25s ease;
 }
 
@@ -348,7 +362,7 @@ Hover popup for text that is too long
 --------------------------*/
 
 .fablabBlueGradient {
-    background: linear-gradient(219deg, #ffffff, #7287ca, #2e4798) !important;
+    background: linear-gradient(219deg, #ffffff, #7287ca, var(--logoBlue)) !important;
     background-size: 600% 600%;
     -webkit-animation: fablabGradient 20s ease infinite;
     -moz-animation: fablabGradient 20s ease infinite;
@@ -550,6 +564,10 @@ Order element styling
     user-select: none;
 }
 
+.orderElementFilesMessageButton:hover {
+    background-color: var(--logoBlue) !important;
+}
+
 .orderElementFilesMessageContent {
     height: 100%;
     width: 100%;
@@ -569,7 +587,8 @@ Order element styling
     width: 100%;
     display: flex;
     justify-content: space-evenly;
-    align-items: baseline;
+    align-items: center;
+    align-content: baseline;
     padding: 1%;
     margin: 0.5vh 0;
     background-color: #ffffff;
@@ -595,20 +614,30 @@ Order element styling
 .fileElementSubPart {
     padding: 0 2.5% 0 2.5%;
     font-size: 0.9em;
+    align-content: center;
 }
 
 .fileElementDate {
     text-wrap: wrap;
 }
 
+.fileElementDownload {
+    padding: 1%;
+    border-radius: 5px;
+    background-color: var(--logoBlue);
+    fill: #ffffff;
+}
+
 .fileElementDownload:hover {
     cursor: pointer;
+    background-color: var(--backgroundLightBlue);
+    transition: background-color 0.25s ease;
 }
 
 /* Chat Styling */
 .chatFeed {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     width: 100%;
     height: 90%;
     box-sizing: border-box;
@@ -659,7 +688,7 @@ Order element styling
 }
 
 .messageElementDateTime {
-    font-size: 1vh;
+    font-size: 60%;
     font-weight: 325;
     align-self: flex-end;
     color: #ffffff;
@@ -678,21 +707,49 @@ Order element styling
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 10%;
-    height: 70%;
+    height: 80%;
+    width: 8%;
     border-radius: 5px;
     padding: 1%;
     box-sizing: border-box;
-    background-color: #2e4798;
+    background-color: #ffffff;
+    cursor: pointer;
 }
 
-.chatMessageInput {
+.chatMessageInputContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    width: 90%;
+    border-radius: 5px;
+    padding: 0.75% 0.5% 0.75% 0.5%;
+    box-sizing: border-box;
+    background-color: #ffffff;
+}
+
+.chatMessageTextarea {
     width: 90%;
     height: 50%;
     resize: none;
-    margin-left: 2%;
-    font-size: 150%;
+    font-size: 100%;
     font-family: LexendDeca, sans-serif;
+    border: none;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.chatMessageSendButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    padding: 1%;
+    box-sizing: border-box;
+    height: 100% !important;
+    width: 8% !important;
 }
 
 /* Responsive design */

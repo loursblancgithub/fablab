@@ -557,10 +557,8 @@ function displayFilesList(order) {
         fileElementSize.style.fontSize = '0.9em';
         fileElementRightPart.appendChild(fileElementSize);
 
-        const fileElementDownloadButton = document.createElement('img');
+        const fileElementDownloadButton = createSVGElement('download_icon', 'Télécharger');
         fileElementDownloadButton.classList.add('fileElementDownload');
-        fileElementDownloadButton.src = '/src/front/Assets/download_icon.svg';
-        fileElementDownloadButton.alt = 'Télécharger';
         fileElementDownloadButton.style.height = '20px';
         fileElementRightPart.appendChild(fileElementDownloadButton);
 
@@ -580,62 +578,69 @@ function displayMessages(order) {
 
     const targetedChat = chatDataDummy[order.orderID];
     if (!targetedChat) {
-        chatFeed.textContent = 'No chat available for this order.';
-        return;
+        chatFeed.textContent = 'Personne n\'a encore rien dit...';
+        chatFeed.style.textAlign = 'center';
+    } else {
+        const chatMessages = Object.values(targetedChat.chatMessages);
+        chatMessages.sort((a, b) => new Date(b.msgDate) - new Date(a.msgDate));
+        chatMessages.forEach((message) => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('messageElement');
+            const messageElementBody = document.createElement('div');
+            messageElementBody.classList.add('messageElementBody');
+            const messageElementSender = document.createElement('div');
+            messageElementSender.classList.add('messageElementSender');
+            if (message.msgSender === 'FabLab') {
+                messageElementSender.textContent = 'FabLab';
+            } else {
+                messageElementSender.textContent = '';
+            }
+            messageElementBody.appendChild(messageElementSender);
+
+            const messageElementContent = document.createElement('div');
+            messageElementContent.classList.add('messageElementContent');
+            messageElementContent.textContent = message.msgContent;
+            messageElementBody.appendChild(messageElementContent);
+            messageElement.appendChild(messageElementBody);
+
+            const messageElementDateTime = document.createElement('div');
+            messageElementDateTime.classList.add('messageElementDateTime');
+            messageElementDateTime.textContent = message.msgDate;
+            messageElement.appendChild(messageElementDateTime);
+
+            if (message.msgSender === 'FabLab') {
+                messageElement.classList.add('leftColumn');
+                messageElementBody.classList.add('leftColumnBubble');
+                messageElementDateTime.style.alignSelf = 'flex-start';
+            } else {
+                messageElement.classList.add('rightColumn');
+                messageElementBody.classList.add('rightColumnBubble');
+            }
+            chatFeed.appendChild(messageElement);
+        });
     }
 
     const chatInputs = document.createElement('div');
     chatInputs.classList.add('chatInputs');
     orderElementFilesMessageContent.appendChild(chatInputs);
 
-    const filesInput = document.createElement('div');
+    const filesInput = createSVGElement('files_icon', 'Ajouter un fichier');
     filesInput.classList.add('chatFilesInput');
     chatInputs.appendChild(filesInput);
 
-    const messageInputContainer = document.createElement('div');
-    messageInputContainer.classList.add('chatMessageInputContainer');
+    const chatMessageInputContainer = document.createElement('div');
+    chatMessageInputContainer.classList.add('chatMessageInputContainer');
 
-    const messageInput = document.createElement('textarea');
-    messageInput.classList.add('chatMessageInput');
-    messageInput.placeholder = 'Écrivez un message...';
-    chatInputs.appendChild(messageInput);
+    const chatMessageTextarea = document.createElement('textarea');
+    chatMessageTextarea.classList.add('chatMessageTextarea');
+    chatMessageTextarea.placeholder = 'Écris un message...';
+    chatMessageInputContainer.appendChild(chatMessageTextarea);
 
-    const chatMessages = Object.values(targetedChat.chatMessages);
+    const chatMessageSendButton = createSVGElement('send_icon', 'Envoyer');
+    chatMessageSendButton.classList.add('chatMessageSendButton');
+    chatMessageInputContainer.appendChild(chatMessageSendButton);
 
-    chatMessages.forEach((message) => {
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('messageElement');
-
-        const messageElementBody = document.createElement('div');
-        messageElementBody.classList.add('messageElementBody');
-
-        const messageElementSender = document.createElement('div');
-        messageElementSender.classList.add('messageElementSender');
-        messageElementSender.textContent = message.msgSender;
-        messageElementBody.appendChild(messageElementSender);
-
-        const messageElementContent = document.createElement('div');
-        messageElementContent.classList.add('messageElementContent');
-        messageElementContent.textContent = message.msgContent;
-        messageElementBody.appendChild(messageElementContent);
-        messageElement.appendChild(messageElementBody);
-
-        const messageElementDateTime = document.createElement('div');
-        messageElementDateTime.classList.add('messageElementDateTime');
-        messageElementDateTime.textContent = message.msgDate;
-        messageElement.appendChild(messageElementDateTime);
-
-        if (message.msgSender === 'FabLab') {
-            messageElement.classList.add('leftColumn');
-            messageElementBody.classList.add('leftColumnBubble');
-            messageElementDateTime.style.alignSelf = 'flex-start';
-        } else {
-            messageElement.classList.add('rightColumn');
-            messageElementBody.classList.add('rightColumnBubble');
-        }
-
-        chatFeed.appendChild(messageElement);
-    });
+    chatInputs.appendChild(chatMessageInputContainer);
 }
 
 // Set color state for each order
@@ -650,4 +655,15 @@ function getColorForState(state) {
     };
 
     return stateColorMapping[state] || {background: '#bdbdbd', font: '#000000'};
+}
+
+// Create the svg elements working with the sprite
+function createSVGElement(name, alt) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('svgIcon');
+    svg.alt = alt;
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `/src/front/Assets/sprite.svg#${name}`);
+    svg.appendChild(use);
+    return svg;
 }
