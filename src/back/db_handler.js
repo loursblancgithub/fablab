@@ -1,22 +1,40 @@
-const { Client } = require('pg');
+// src/back/db_handler.js
+const { Pool } = require('pg');
 
-const client = new Client({
-    user: 'yourusername',
+const pool = new Pool({
+    user: 'postgres',
     host: 'localhost',
-    database: 'mydatabase',
-    password: 'yourpassword',
+    database: '',
+    password: '',
     port: 5432,
 });
 
-client.connect();
+async function query(text, params) {
+    const client = await pool.connect();
+    try {
+        return await client.query(text, params);
+    } catch (err) {
+        console.error('Database query error:', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}
 
-async function userExists(userCode) {
-    const res = await client.query('SELECT * FROM users WHERE userCode = $1', [userCode]);
+async function userExists(studentcode) {
+    const res = await query('SELECT 1 FROM public."user" WHERE studentcode = $1', [studentcode]);
     return res.rows.length > 0;
 }
 
-async function addUser(userCode, userName) {
-    await client.query('INSERT INTO users (userCode, userName) VALUES ($1, $2)', [userCode, userName]);
+async function addUser(studentcode) {
+    await query(
+        'INSERT INTO public."user" (studentcode, privilegelevel, chat) VALUES ($1, $2, $3)',
+        [studentcode, 0, '{}']
+    );
 }
 
-module.exports = { userExists, addUser };
+module.exports = {
+    query,
+    userExists,
+    addUser,
+};

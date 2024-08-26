@@ -1,13 +1,6 @@
 import {showCustomAlert} from "/src/front/JS/utils.js";
 import {sanitizeOutput} from "/src/front/JS/utils.js";
-
-/*
-import {socket} from './ws_client.js';
-
-// Use the `socket` object for sending messages, etc.
-socket.send("Message specific to admin_orders_fetcher functionality.");
-*/
-
+import { sendMessage} from "/src/front/JS/ws_client.js";
 
 
 //-------------------------->
@@ -70,6 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const dateTimeString = now.toString();
 
                 const orderDetails = {
+                    orderUser: sanitizeOutput(document.getElementById('orderUser').value),
                     orderName: sanitizeOutput(document.getElementById('orderName').value),
                     orderTool: sanitizeOutput(document.getElementById('orderTool').value),
                     orderQuantity: sanitizeOutput(document.getElementById('orderQuantity').value),
@@ -82,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 };
 
                 console.log(orderDetails);
-                /*socket.send(JSON.stringify(orderDetails));*/
+                sendMessage({order: {orderDetails}});
             } else {
                 showCustomAlert('Merci de remplir tous les champs obligatoires !');
             }

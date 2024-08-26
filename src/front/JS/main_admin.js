@@ -1,4 +1,4 @@
-import {removeAllChildren, applyHoverIfNecessary} from "./utils.js";
+import {removeAllChildren, applyHoverIfNecessary} from "/src/front/JS/utils.js";
 
 /*
 import {socket} from './ws_client.js';
