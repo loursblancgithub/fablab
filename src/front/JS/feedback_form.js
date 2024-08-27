@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const formBulb = document.getElementById('formBulb');
     const pageMask = document.createElement('div');
-    pageMask.id = 'pageMask';
+    pageMask.classList.add('pageMask');
 
     let feedbackForm;
 
@@ -82,7 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
         feedbackSubmit.id = 'feedbackSubmit';
         feedbackSubmit.classList.add('feedbackSubmit');
         feedbackSubmit.classList.add('blueButton');
+        feedbackSubmit.classList.add('hoverButton');
         feedbackSubmit.textContent = 'Envoyer';
+        feedbackSubmit.style.width = 'fit-content';
+        feedbackSubmit.style.padding = '2% 3% 2% 3%'
         feedbackForm.appendChild(feedbackSubmit);
 
         document.body.appendChild(feedbackForm);
