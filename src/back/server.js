@@ -1,9 +1,8 @@
-// src/back/server.js
 const WebSocket = require('ws');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const { userExists, addUser } = require('./db_handler');
+const { userExists, addUser, createOrder } = require('./db_handler');
 const { mainLogin } = require('./login_handler');
 
 // Function to serve static files with correct MIME types
@@ -90,6 +89,17 @@ wss.on('connection', (ws) => {
         if (parsedMessage.login) {
             const { username, password } = parsedMessage.login;
             const response = await mainLogin(username, password);
+            if (response.success) {
+                if (await userExists(username)) {
+                    ws.send(JSON.stringify({ redirect: 'main_client.html' }));
+                } else {
+                    ws.send(JSON.stringify({ redirect: 'order.html' }));
+                }
+            } else {
+                ws.send(JSON.stringify(response));
+            }
+        } else if (parsedMessage.newOrder) {
+            const response = await createOrder(parsedMessage.newOrder);
             ws.send(JSON.stringify(response));
         } else {
             const { userCode, userName, userPassword } = parsedMessage;

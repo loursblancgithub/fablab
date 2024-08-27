@@ -1,6 +1,6 @@
 import {showCustomAlert} from "/src/front/JS/utils.js";
 import {sanitizeOutput} from "/src/front/JS/utils.js";
-import { sendMessage} from "/src/front/JS/ws_client.js";
+import {sendMessage, addMessageListener} from "/src/front/JS/ws_client.js";
 
 
 //-------------------------->
@@ -58,32 +58,41 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (allFieldsFilled) {
-
                 const now = new Date().toLocaleString().replace(',', '');
                 const dateTimeString = now.toString();
 
                 const orderDetails = {
-                    orderUser: sanitizeOutput(document.getElementById('orderUser').value),
+                    orderId: 125436,
                     orderName: sanitizeOutput(document.getElementById('orderName').value),
                     orderTool: sanitizeOutput(document.getElementById('orderTool').value),
                     orderQuantity: sanitizeOutput(document.getElementById('orderQuantity').value),
                     orderMaterial: sanitizeOutput(document.getElementById('orderMaterial').value),
-                    orderColor: sanitizeOutput(document.getElementById('orderColor').value),
                     orderQuestions: sanitizeOutput(document.getElementById('orderQuestions').value),
-                    goodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
-                    expertModeCheck: expertModeSwitch.checked,
-                    orderDateTime: dateTimeString
+                    orderDateTime: dateTimeString,
+                    orderClient: "jema62194",
+                    orderGoodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
+                    orderAdditionalParameters: {},
+                    orderColor: sanitizeOutput(document.getElementById('orderColor').value),
                 };
 
                 console.log(orderDetails);
-                sendMessage({order: {orderDetails}});
+                sendMessage({newOrder: {orderDetails}});
+
+                addMessageListener((response) => {
+                    if (response.success) {
+                        showCustomAlert('Commande envoyée avec succès !');
+                        window.location.replace("/src/front/HTML/main_client.html");
+                    } else {
+                        showCustomAlert('Erreur lors de l\'envoi de la commande, merci de réessayer plus tard');
+                    }
+                });
             } else {
                 showCustomAlert('Merci de remplir tous les champs obligatoires !');
             }
         } else {
             showCustomAlert('Il faut lire et accepter les points importants afin de pouvoir valider la commande !');
         }
-    })
+    });
 });
 
 /*--------------------------
@@ -97,7 +106,7 @@ async function fetchPrintParameters() {
     try {
         const response = await fetch('../JSON/print_parameters.json');
         if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.statusText}`);
+            console.error(`Network response was not ok: ${response.statusText}`)
         }
         return await response.json();
     } catch (error) {
