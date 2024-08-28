@@ -297,8 +297,6 @@ Alert Popup
     align-items: center;
     width: 20vw;
     height: fit-content;
-    background-color: #eaa5a5;
-    color: #931c1c;
     position: fixed;
     top: 40vh;
     left: 40vw;
