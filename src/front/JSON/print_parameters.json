@@ -68,7 +68,7 @@
         "Oui",
         "Non"
       ],
-      "dependsOn": "Enable Supports"
+      "depend sOn": "Enable Supports"
     },
     "Support Infill Density": {
       "defaultValue": 15,
