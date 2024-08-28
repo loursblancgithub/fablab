@@ -113,7 +113,7 @@ function showCustomAlert(message, level) {
     document.body.appendChild(alertPopup);
 
     // Auto close the alert after 2 seconds
-    setTimeoutWithRAF(() => {
+    setTimeout(() => {
         alertPopup.classList.remove('alertPopupPopIn');
         alertPopup.classList.add('alertPopupPopOut');
         alertPopup.addEventListener('animationend', () => {
@@ -123,28 +123,6 @@ function showCustomAlert(message, level) {
 }
 
 export {showCustomAlert};
-
-/*--------------------------
-
-Function preventing the use of setTimeout() for security purposes when needing a delay
-
---------------------------*/
-
-function setTimeoutWithRAF(callback, delay) {
-    const start = performance.now();
-
-    function frame(time) {
-        if (time - start >= delay) {
-            callback();
-        } else {
-            requestAnimationFrame(frame);
-        }
-    }
-
-    requestAnimationFrame(frame);
-}
-
-export {setTimeoutWithRAF};
 
 /*--------------------------
 

@@ -1,11 +1,5 @@
-import {applyHoverIfNecessary, setTimeoutWithRAF, sortElementsByDate, logout } from "/src/front/JS/utils.js";
-import {sendMessage} from "./ws_client";
-/*
-import {socket} from './ws_client.js';
-
-// Use the `socket` object for sending messages, etc.
-socket.send("Message specific to FabLab_orders_fetcher functionality.");
-*/
+import {applyHoverIfNecessary, sortElementsByDate, logout } from "/src/front/JS/utils.js";
+import {sendMessage} from "./ws_client.js";
 
 const orderDataDummy = [{
     orderID: 158486,
@@ -339,7 +333,7 @@ function displayLandingPage(user, orders) {
 
     /*orderContainer.appendChild(landingPageChatContainer);*/
 
-    setTimeoutWithRAF(() => {
+   setTimeout(() => {
         landingPageElement.classList.add('active');
     }, 10);
 }
@@ -511,7 +505,7 @@ function displayOrderContent(order) {
     orderElementDiv.appendChild(orderElementBody);
 
     orderContainer.appendChild(orderElementDiv);
-    setTimeoutWithRAF(() => {
+    setTimeout(() => {
         orderElementDiv.classList.add('active');
     }, 10);
 }
