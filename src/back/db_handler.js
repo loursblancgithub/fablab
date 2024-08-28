@@ -4,8 +4,8 @@ const { Pool } = require('pg');
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
-    database: '',
-    password: '',
+    database: 'plateforme_fablab',
+    password: '!Fablabisep2023',
     port: 5432,
 });
 
