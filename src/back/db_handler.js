@@ -1,4 +1,3 @@
-// src/back/db_handler.js
 const { Pool } = require('pg');
 
 const pool = new Pool({
@@ -21,11 +20,13 @@ async function query(text, params) {
     }
 }
 
+// Check if the user who logged in exists in the database
 async function userExists(studentCode) {
     const res = await query('SELECT 1 FROM public."user" WHERE studentcode = $1', [studentCode]);
     return res.rows.length > 0;
 }
 
+// Add a new user to the database
 async function addUser(studentCode, firstName, lastName, cookie) {
     await query(
         'INSERT INTO public."user" (studentcode, privilegelevel, chat, firstname, lastname, cookie) VALUES ($1, $2, $3, $4, $5, $6)',
@@ -33,6 +34,7 @@ async function addUser(studentCode, firstName, lastName, cookie) {
     );
 }
 
+// Add an order to the database
 async function createOrder(orderData){
     await query(
         'INSERT INTO public."order" (id, name, tool, quantity, material, questions, datetime, client, goodpracticescheck, chat, additionalparameters, color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
@@ -40,9 +42,16 @@ async function createOrder(orderData){
     );
 }
 
+// Get all orders of a specific user
 async function getOrders(client){
     const res = await query('SELECT * FROM public."order" WHERE client = $1', [client]);
     return res.rows;
+}
+
+// Get the user student code using the cookie from the client's browser
+async function getUserByCookie(cookie) {
+    const res = await query('SELECT studentcode FROM public."user" WHERE cookie = $1', [cookie]);
+    return res.rows[0];
 }
 
 module.exports = {
@@ -50,5 +59,6 @@ module.exports = {
     userExists,
     addUser,
     createOrder,
-    getOrders
+    getOrders,
+    getUserByCookie
 };

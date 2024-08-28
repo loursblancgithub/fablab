@@ -50,12 +50,12 @@ async function mainLogin(username, password) {
             if (userData.login === username) {
                 if (await userExists(username)) {
                     console.log('User authenticated successfully:', username);
-                    return { success: true };
+                    return { success: true, cookie: token };
                 } else {
                     console.log('User does not exist, creating new user:', username);
                     await addUser(username, userData.prenom, userData.nom, token);
                     console.log('New user created:', username);
-                    return { success: true, message: 'New user created' };
+                    return { success: true, message: 'New user created', cookie: token };
                 }
             } else {
                 console.log('Username mismatch:', username);

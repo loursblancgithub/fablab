@@ -2,8 +2,8 @@ const WebSocket = require('ws');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const {userExists, addUser, createOrder, getOrders} = require('./db_handler');
-const {mainLogin} = require('./login_handler');
+const { userExists, addUser, createOrder, getOrders, getUserByCookie } = require('./db_handler');
+const { mainLogin } = require('./login_handler');
 
 // Function to serve static files with correct MIME types
 function serveStaticFile(res, filePath) {
@@ -45,23 +45,54 @@ function serveStaticFile(res, filePath) {
             res.writeHead(404);
             res.end(`${contentType} file not found`);
         } else {
-            res.writeHead(200, {'Content-Type': contentType});
+            res.writeHead(200, { 'Content-Type': contentType });
             res.end(data);
         }
     });
 }
 
+// Function to check if the cookie is valid and if the user has orders
+async function checkUserOrders(cookie) {
+    const user = await getUserByCookie(cookie);
+    if (user) {
+        const orders = await getOrders(user.studentcode);
+        return { hasOrders: orders.length > 0, userCode: user.studentcode };
+    }
+    return { hasOrders: false, userCode: null };
+}
+
 // Create HTTP server
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
     if (req.method === 'GET') {
+        const cookies = req.headers.cookie;
+        const fablabCookie = cookies && cookies.split('; ').find(row => row.startsWith('fablabCookie='));
+        const cookieValue = fablabCookie && fablabCookie.split('=')[1];
+
         if (req.url === '/') {
-            // Serve the login page
-            serveStaticFile(res, path.join(__dirname, '../front/HTML/login.html'));
+            if (cookieValue) {
+                const { hasOrders, userCode } = await checkUserOrders(cookieValue);
+                if (hasOrders) {
+                    // Serve the main client page if the user has orders
+                    serveStaticFile(res, path.join(__dirname, '../front/HTML/main_client.html'));
+                } else if (userCode) {
+                    // Redirect to the order page if the user has no orders
+                    res.writeHead(302, { 'Location': '/src/front/HTML/order.html' });
+                    res.end();
+                } else {
+                    // Redirect to the login page if the cookie is invalid or missing
+                    res.writeHead(302, { 'Location': '/src/front/HTML/login.html' });
+                    res.end();
+                }
+            } else {
+                // Redirect to the login page if the cookie is invalid or missing
+                res.writeHead(302, { 'Location': '/src/front/HTML/login.html' });
+                res.end();
+            }
         } else if (req.url === '/src/front/HTML/order.html') {
             // Serve the order page
             serveStaticFile(res, path.join(__dirname, '../front/HTML/order.html'));
         } else if (req.url === '/src/front/HTML/main_client.html') {
-            // Serve the main_client page
+            // Serve the main client page
             serveStaticFile(res, path.join(__dirname, '../front/HTML/main_client.html'));
         } else if (req.url.startsWith('/src/front/CSS/')) {
             // Serve CSS files
@@ -83,42 +114,26 @@ const server = http.createServer((req, res) => {
 });
 
 // Create WebSocket server
-const wss = new WebSocket.Server({server});
+const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
     ws.on('message', async (message) => {
         const parsedMessage = JSON.parse(message);
 
         if (parsedMessage.login) {
-            const {username, password} = parsedMessage.login;
+            const { username, password } = parsedMessage.login;
             const response = await mainLogin(username, password);
             if (response.success === true) {
                 const userExistsResult = await userExists(username);
-                if (userExistsResult) {
-                    const userOrders = await getOrders(username);
-                    if (userOrders.length === 0) {
-                        ws.send(JSON.stringify({redirect: 'order.html'}));
-                    } else {
-                        ws.send(JSON.stringify({redirect: 'main_client.html'}));
-                    }
-                } else {
-                    ws.send(JSON.stringify({redirect: 'order.html'}));
-                }
+                const userOrders = await getOrders(username);
+                const redirectPage = userExistsResult && userOrders.length > 0 ? 'main_client.html' : 'order.html';
+                ws.send(JSON.stringify({ redirect: redirectPage, cookie: response.cookie }));
             } else {
                 ws.send(JSON.stringify(response));
             }
         } else if (parsedMessage.newOrder) {
             const response = await createOrder(parsedMessage.newOrder);
             ws.send(JSON.stringify(response));
-        } else {
-            const {userCode, userName, userPassword} = parsedMessage;
-
-            if (await userExists(userCode)) {
-                ws.send(JSON.stringify({page: 'existing_user.html'}));
-            } else {
-                await addUser(userCode, userName, userPassword);
-                ws.send(JSON.stringify({page: 'new_user.html'}));
-            }
         }
     });
 });
