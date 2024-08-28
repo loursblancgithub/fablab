@@ -38,7 +38,7 @@ async function getUserData(token) {
         redirect: 'manual'
     });
 
-    return await response.text();
+    return await response.json();
 }
 
 async function mainLogin(username, password) {
@@ -46,14 +46,20 @@ async function mainLogin(username, password) {
     try {
         const token = await login(username, password);
         if (token) {
-            if (await userExists(username)) {
-                console.log('User authenticated successfully:', username);
-                return { success: true };
+            const userData = await getUserData(token);
+            if (userData.login === username) {
+                if (await userExists(username)) {
+                    console.log('User authenticated successfully:', username);
+                    return { success: true };
+                } else {
+                    console.log('User does not exist, creating new user:', username);
+                    await addUser(username, userData.prenom, userData.nom, token);
+                    console.log('New user created:', username);
+                    return { success: true, message: 'New user created' };
+                }
             } else {
-                console.log('User does not exist, creating new user:', username);
-                await addUser(username);
-                console.log('New user created:', username);
-                return { success: true, message: 'New user created' };
+                console.log('Username mismatch:', username);
+                return { success: false, error: 'Username mismatch' };
             }
         } else {
             console.log('Invalid credentials for user:', username);

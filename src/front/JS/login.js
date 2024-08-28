@@ -1,4 +1,4 @@
-import {fiveElements} from '/src/front/JS/utils.js';
+import {fiveElements, showCustomAlert} from '/src/front/JS/utils.js';
 import {sendMessage, addMessageListener} from '/src/front/JS/ws_client.js';
 
 const bodyContainer = document.getElementById('bodyContainer');
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.redirect) {
                 window.location.replace(`/src/front/HTML/${response.redirect}`);
             } else {
-                showCustomAlert('Erreur lors de l\'envoi de la commande, merci de réessayer plus tard');
+                showCustomAlert('Erreur de connexion, merci de réessayer plus tard');
             }
         });
     });

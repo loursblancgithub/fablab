@@ -21,15 +21,15 @@ async function query(text, params) {
     }
 }
 
-async function userExists(studentcode) {
-    const res = await query('SELECT 1 FROM public."user" WHERE studentcode = $1', [studentcode]);
+async function userExists(studentCode) {
+    const res = await query('SELECT 1 FROM public."user" WHERE studentcode = $1', [studentCode]);
     return res.rows.length > 0;
 }
 
-async function addUser(studentcode) {
+async function addUser(studentCode, firstName, lastName, cookie) {
     await query(
-        'INSERT INTO public."user" (studentcode, privilegelevel, chat) VALUES ($1, $2, $3)',
-        [studentcode, 0, '{}']
+        'INSERT INTO public."user" (studentcode, privilegelevel, chat, firstname, lastname, cookie) VALUES ($1, $2, $3, $4, $5, $6)',
+        [studentCode, 0, '{}', firstName, lastName, cookie]
     );
 }
 
@@ -40,9 +40,15 @@ async function createOrder(orderData){
     );
 }
 
+async function getOrders(client){
+    const res = await query('SELECT * FROM public."order" WHERE client = $1', [client]);
+    return res.rows;
+}
+
 module.exports = {
     query,
     userExists,
     addUser,
-    createOrder
+    createOrder,
+    getOrders
 };

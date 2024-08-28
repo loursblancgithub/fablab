@@ -1,4 +1,5 @@
 import {applyHoverIfNecessary, setTimeoutWithRAF, sortElementsByDate} from "/src/front/JS/utils.js";
+import {sendMessage} from "./ws_client";
 /*
 import {socket} from './ws_client.js';
 
@@ -262,6 +263,9 @@ Main logic
 --------------------------*/
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    sendMessage({fetchOrders: {userID: userDataDummy.userID}});
+
     // By default, showing the landing page
     displayLandingPage(userDataDummy, orderDataDummy);
 
