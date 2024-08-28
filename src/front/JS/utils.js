@@ -87,11 +87,22 @@ Custom alert popup
 
 --------------------------*/
 
-function showCustomAlert(message) {
+function showCustomAlert(message, level) {
     // Create the alert popup
     const alertPopup = document.createElement('div');
     alertPopup.classList.add('alertPopup', 'alertPopupPopIn');
     alertPopup.style.zIndex = '15';
+
+    if (level === 'red') {
+        alertPopup.style.backgroundColor = '#eaa5a5';
+        alertPopup.style.color = '#931c1c';
+    } else if (level === 'orange') {
+        alertPopup.style.backgroundColor = '#eacca5';
+        alertPopup.style.color = '#93611c';
+    } else if (level === 'green') {
+        alertPopup.style.backgroundColor = '#a5eaa5';
+        alertPopup.style.color = '#1c931c';
+    }
 
     // Alert message
     const alertMessage = document.createElement('div');
