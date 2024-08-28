@@ -27,10 +27,18 @@ async function userExists(studentCode) {
 }
 
 // Add a new user to the database
-async function addUser(studentCode, firstName, lastName, cookie) {
+async function addUser(studentCode, firstName, lastName) {
     await query(
-        'INSERT INTO public."user" (studentcode, privilegelevel, chat, firstname, lastname, cookie) VALUES ($1, $2, $3, $4, $5, $6)',
-        [studentCode, 0, '{}', firstName, lastName, cookie]
+        'INSERT INTO public."user" (studentcode, privilegelevel, chat, firstname, lastname) VALUES ($1, $2, $3, $4, $5)',
+        [studentCode, 0, '{}', firstName, lastName]
+    );
+}
+
+// Add a new cookie to the database
+async function createCookie(cookie, studentCode) {
+    await query(
+        'INSERT INTO public."cookie" (cookie, client) VALUES ($1, $2)',
+        [cookie, studentCode]
     );
 }
 
@@ -50,7 +58,7 @@ async function getOrders(client){
 
 // Get the user student code using the cookie from the client's browser
 async function getUserByCookie(cookie) {
-    const res = await query('SELECT studentcode FROM public."user" WHERE cookie = $1', [cookie]);
+    const res = await query('SELECT client FROM public."cookie" WHERE cookie = $1', [cookie]);
     return res.rows[0];
 }
 
@@ -58,6 +66,7 @@ module.exports = {
     query,
     userExists,
     addUser,
+    createCookie,
     createOrder,
     getOrders,
     getUserByCookie

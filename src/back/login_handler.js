@@ -1,4 +1,4 @@
-const { userExists, addUser } = require('./db_handler');
+const { userExists, addUser, createCookie } = require('./db_handler');
 const tokenUrl = 'https://sso-portal.isep.fr';
 const infoUrl = 'https://sso-portal.isep.fr/session/my/global';
 
@@ -41,28 +41,30 @@ async function getUserData(token) {
     return await response.json();
 }
 
-async function mainLogin(username, password) {
-    console.log('Attempting to log in user:', username);
+async function mainLogin(userId, password) {
+    console.log('Attempting to log in user:', userId);
     try {
-        const token = await login(username, password);
+        const token = await login(userId, password);
         if (token) {
             const userData = await getUserData(token);
-            if (userData.login === username) {
-                if (await userExists(username)) {
-                    console.log('User authenticated successfully:', username);
+            if (userData.login === userId) {
+                if (await userExists(userId)) {
+                    console.log('User authenticated successfully:', userId);
+                    await createCookie(token, userId);
                     return { success: true, cookie: token };
                 } else {
-                    console.log('User does not exist, creating new user:', username);
-                    await addUser(username, userData.prenom, userData.nom, token);
-                    console.log('New user created:', username);
+                    console.log('User does not exist, creating new user:', userId);
+                    await addUser(userId, userData.prenom, userData.nom);
+                    await createCookie(token, userId);
+                    console.log('New user created:', userId);
                     return { success: true, message: 'New user created', cookie: token };
                 }
             } else {
-                console.log('Username mismatch:', username);
+                console.log('Username mismatch:', userId);
                 return { success: false, error: 'Username mismatch' };
             }
         } else {
-            console.log('Invalid credentials for user:', username);
+            console.log('Invalid credentials for user:', userId);
             return { success: false, error: 'Invalid credentials' };
         }
     } catch (err) {
