@@ -1,4 +1,4 @@
-const { Pool } = require('pg');
+const {Pool} = require('pg');
 
 const pool = new Pool({
     user: 'postgres',
@@ -43,7 +43,7 @@ async function createCookie(cookie, studentCode) {
 }
 
 // Add an order to the database
-async function createOrder(orderData){
+async function createOrder(orderData) {
     await query(
         'INSERT INTO public."order" (id, name, tool, quantity, material, questions, datetime, client, goodpracticescheck, chat, additionalparameters, color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
         [orderData.orderId, orderData.orderName, orderData.orderTool, orderData.orderQuantity, orderData.orderMaterial, orderData.orderQuestions, orderData.orderDateTime, orderData.orderClient, orderData.orderGoodPracticesCheck, {}, orderData.orderAdditionalParameters, orderData.orderColor]
@@ -51,7 +51,7 @@ async function createOrder(orderData){
 }
 
 // Get all orders of a specific user
-async function getOrders(client){
+async function getOrders(client) {
     const res = await query('SELECT * FROM public."order" WHERE client = $1', [client]);
     return res.rows;
 }
@@ -62,6 +62,11 @@ async function getUserByCookie(cookie) {
     return res.rows[0];
 }
 
+// Delete a cookie when the user logs out from a device
+async function deleteCookie(cookie) {
+    await query('DELETE FROM public."cookie" WHERE cookie = $1', [cookie]);
+}
+
 module.exports = {
     query,
     userExists,
@@ -69,5 +74,6 @@ module.exports = {
     createCookie,
     createOrder,
     getOrders,
-    getUserByCookie
+    getUserByCookie,
+    deleteCookie
 };

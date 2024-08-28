@@ -1,11 +1,5 @@
-import {removeAllChildren, applyHoverIfNecessary} from "/src/front/JS/utils.js";
-
-/*
-import {socket} from './ws_client.js';
-
-// Use the `socket` object for sending messages, etc.
-socket.send("Message specific to admin_orders_fetcher functionality.");
-*/
+import {removeAllChildren, applyHoverIfNecessary, fiveElements, logout} from "/src/front/JS/utils.js";
+import { addMessageListener, sendMessage} from "./ws_client";
 
 
 const stateOptions = {
@@ -182,14 +176,8 @@ const contentContainer = document.getElementById('contentContainer');
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    /*// Use the `socket` object for sending messages, etc.
-    socket.send("Requesting order data");
-
-    socket.addEventListener('message', (event) => {
-        // Assuming the server sends a JSON string with order data
-        const orderData = JSON.parse(event.data);
-    });*/
-
+    fiveElements(document.getElementById('bodyContainer'));
+    logout(document.getElementById('logoutButton'));
 
     document.querySelectorAll('.sidePanelStateButton').forEach(button => {
         button.addEventListener('click', function () {

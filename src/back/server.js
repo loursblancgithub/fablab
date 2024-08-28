@@ -2,7 +2,7 @@ const WebSocket = require('ws');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const {userExists, addUser, createOrder, getOrders, getUserByCookie, createCookie} = require('./db_handler');
+const {userExists, createOrder, getOrders, getUserByCookie, deleteCookie} = require('./db_handler');
 const {mainLogin} = require('./login_handler');
 
 // Function to serve static files with correct MIME types
@@ -133,6 +133,9 @@ wss.on('connection', (ws) => {
             } else {
                 ws.send(JSON.stringify(response));
             }
+        } else if (parsedMessage.logout) {
+            await deleteCookie(parsedMessage.cookie);
+            ws.send(JSON.stringify({redirect: 'login.html'}));
         } else if (parsedMessage.newOrder) {
             const response = await createOrder(parsedMessage.newOrder);
             ws.send(JSON.stringify(response));

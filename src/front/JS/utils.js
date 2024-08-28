@@ -1,4 +1,4 @@
-//fichier avec toutes les fonctions qui peuvent servir un peu partout
+import {addMessageListener, sendMessage} from "./ws_client.js";
 
 function removeAllChildren(element) {
     while (element.firstChild) {
@@ -24,6 +24,28 @@ function sanitizeOutput(toOutput) {
 }
 
 export {sanitizeOutput};
+
+/*--------------------------
+
+Sanitize inputs
+
+--------------------------*/
+
+function logout(logoutButton) {
+    logoutButton.addEventListener('click', () => {
+        const fablabCookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
+        sendMessage({logout: true, cookie: fablabCookie});
+
+        addMessageListener((response) => {
+            if (response.redirect) {
+                document.cookie = 'fablabCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                window.location.replace(`/src/front/HTML/${response.redirect}`);
+            }
+        });
+    });
+}
+
+export {logout};
 
 /*--------------------------
 
@@ -173,7 +195,5 @@ function fiveElements(bodyContainer) {
         }
     });
 }
-
-document.addEventListener('DOMContentLoaded', fiveElements);
 
 export {fiveElements};

@@ -1,5 +1,4 @@
-import {showCustomAlert} from "/src/front/JS/utils.js";
-import {sanitizeOutput} from "/src/front/JS/utils.js";
+import {logout, showCustomAlert, sanitizeOutput} from "/src/front/JS/utils.js";
 import {sendMessage, addMessageListener} from "/src/front/JS/ws_client.js";
 
 
@@ -22,6 +21,8 @@ const orderPrintSettingsTitle = document.getElementById('orderPrintSettingsTitle
 //-------------------------->
 
 document.addEventListener('DOMContentLoaded', async () => {
+
+    logout(document.getElementById('logoutButton'));
 
     //Initializing inputs
 
