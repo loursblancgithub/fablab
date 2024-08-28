@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 window.location.replace(`/src/front/HTML/${response.redirect}`);
             } else {
-                showCustomAlert('Erreur de connexion, merci de réessayer plus tard');
+                showCustomAlert('Erreur de connexion, merci de réessayer plus tard', "orange");
             }
         });
     });

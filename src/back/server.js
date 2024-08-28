@@ -138,7 +138,11 @@ wss.on('connection', (ws) => {
             ws.send(JSON.stringify({redirect: 'login.html'}));
         } else if (parsedMessage.newOrder) {
             const response = await createOrder(parsedMessage.newOrder);
-            ws.send(JSON.stringify(response));
+            if (response.success) {
+                ws.send(JSON.stringify({redirect: 'main_client.html'}));
+            } else {
+                ws.send(JSON.stringify(response));
+            }
         }
     });
 });
