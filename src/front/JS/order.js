@@ -59,8 +59,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (allFieldsFilled) {
-                const now = new Date().toLocaleString().replace(',', '');
-                const dateTimeString = now.toString();
+                const now = new Date();
+                const options = { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                const parisTimeString = now.toLocaleString('fr-FR', options).replace(',', '');
+                const dateTimeString = parisTimeString.toString();
 
                 sendMessage({
                     newOrder: {

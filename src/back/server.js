@@ -2,7 +2,7 @@ const WebSocket = require('ws');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const {userExists, createOrder, getOrders, getUserByCookie, deleteCookie} = require('./db_handler');
+const {userExists, createOrder, getOrders, getUserByCookie, deleteCookie, saveChatMessage} = require('./db_handler');
 const {mainLogin} = require('./login_handler');
 
 // Function to serve static files with correct MIME types
@@ -57,6 +57,26 @@ async function checkUserOrders(studentCode) {
     return orders.length > 0;
 }
 
+// Function to handle user redirection based on orders
+async function handleUserRedirection(res, cookieValue) {
+    const user = await getUserByCookie(cookieValue);
+    if (user) {
+        const hasOrders = await checkUserOrders(user.client);
+        if (hasOrders) {
+            // Serve the main client page if the user has orders
+            serveStaticFile(res, path.join(__dirname, '../front/HTML/main_client.html'));
+        } else {
+            // Redirect to the order page if the user has no orders
+            res.writeHead(302, {'Location': '/src/front/HTML/order.html'});
+            res.end();
+        }
+    } else {
+        // Redirect to the login page if the cookie is invalid or missing
+        res.writeHead(302, {'Location': '/src/front/HTML/login.html'});
+        res.end();
+    }
+}
+
 // Create HTTP server
 const server = http.createServer(async (req, res) => {
     if (req.method === 'GET') {
@@ -66,22 +86,15 @@ const server = http.createServer(async (req, res) => {
 
         if (req.url === '/') {
             if (cookieValue) {
-                const user = await getUserByCookie(cookieValue);
-                if (user) {
-                    const hasOrders = await checkUserOrders(user.client);
-                    if (hasOrders) {
-                        // Serve the main client page if the user has orders
-                        serveStaticFile(res, path.join(__dirname, '../front/HTML/main_client.html'));
-                    } else {
-                        // Redirect to the order page if the user has no orders
-                        res.writeHead(302, {'Location': '/src/front/HTML/order.html'});
-                        res.end();
-                    }
-                } else {
-                    // Redirect to the login page if the cookie is invalid or missing
-                    res.writeHead(302, {'Location': '/src/front/HTML/login.html'});
-                    res.end();
-                }
+                await handleUserRedirection(res, cookieValue);
+            } else {
+                // Redirect to the login page if the cookie is invalid or missing
+                res.writeHead(302, {'Location': '/src/front/HTML/login.html'});
+                res.end();
+            }
+        } else if (req.url === '/src/front/HTML/main_client.html') {
+            if (cookieValue) {
+                await handleUserRedirection(res, cookieValue);
             } else {
                 // Redirect to the login page if the cookie is invalid or missing
                 res.writeHead(302, {'Location': '/src/front/HTML/login.html'});
@@ -93,9 +106,6 @@ const server = http.createServer(async (req, res) => {
         } else if (req.url === '/src/front/HTML/login.html') {
             // Serve the login page
             serveStaticFile(res, path.join(__dirname, '../front/HTML/login.html'));
-        } else if (req.url === '/src/front/HTML/main_client.html') {
-            // Serve the main client page
-            serveStaticFile(res, path.join(__dirname, '../front/HTML/main_client.html'));
         } else if (req.url.startsWith('/src/front/CSS/')) {
             // Serve CSS files
             serveStaticFile(res, path.join(__dirname, '..', '..', req.url));
@@ -140,6 +150,22 @@ wss.on('connection', (ws) => {
             const response = await createOrder(parsedMessage.newOrder);
             if (response.success) {
                 ws.send(JSON.stringify({redirect: 'main_client.html'}));
+            } else {
+                ws.send(JSON.stringify(response));
+            }
+        } else if (parsedMessage.fetchOrders) {
+            const {cookie} = parsedMessage.fetchOrders;
+            const user = await getUserByCookie(cookie);
+            if (user) {
+                const orders = await getOrders(user.client);
+                ws.send(JSON.stringify({orders}));
+            } else {
+                ws.send(JSON.stringify({error: 'User not found'}));
+            }
+        } else if (parsedMessage.newChatMessage) {
+            const response = await saveChatMessage(parsedMessage.newChatMessage);
+            if (response.success) {
+                ws.send(JSON.stringify({success: true}));
             } else {
                 ws.send(JSON.stringify(response));
             }

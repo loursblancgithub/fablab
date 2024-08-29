@@ -45,10 +45,23 @@ async function createCookie(cookie, studentCode) {
 // Add an order to the database
 async function createOrder(orderData) {
     await query(
-        'INSERT INTO public."order" (name, tool, quantity, material, questions, datetime, client, goodpracticescheck, chat, additionalparameters, color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
-        [orderData.orderName, orderData.orderTool, orderData.orderQuantity, orderData.orderMaterial, orderData.orderQuestions, orderData.orderDateTime, orderData.orderClient, orderData.orderGoodPracticesCheck, '{}', orderData.orderAdditionalParameters, orderData.orderColor]
+        'INSERT INTO public."order" (name, tool, quantity, material, questions, datetime, client, goodpracticescheck, chat, additionalparameters, color, state) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
+        [
+            orderData.orderName,
+            orderData.orderTool,
+            orderData.orderQuantity,
+            orderData.orderMaterial,
+            orderData.orderQuestions,
+            orderData.orderDateTime,
+            orderData.orderClient,
+            orderData.orderGoodPracticesCheck,
+            JSON.stringify({}),
+            orderData.orderAdditionalParameters,
+            orderData.orderColor,
+            "pending"
+        ]
     );
-    return { success: true };
+    return {success: true};
 }
 
 // Get all orders of a specific user
@@ -68,6 +81,22 @@ async function deleteCookie(cookie) {
     await query('DELETE FROM public."cookie" WHERE cookie = $1', [cookie]);
 }
 
+// Save a chat message in the database
+async function saveChatMessage(message) {
+    const res = await query('SELECT chat FROM public."order" WHERE id = $1', [message.orderID]);
+    const currentChat = res.rows[0].chat || {};
+
+    currentChat.chatMessages = currentChat.chatMessages || {};
+    currentChat.chatMessages[message.msgID] = message;
+
+    await query(
+        'UPDATE public."order" SET chat = $1 WHERE id = $2',
+        [currentChat, message.orderID]
+    );
+
+    return {success: true};
+}
+
 module.exports = {
     query,
     userExists,
@@ -76,5 +105,6 @@ module.exports = {
     createOrder,
     getOrders,
     getUserByCookie,
-    deleteCookie
+    deleteCookie,
+    saveChatMessage
 };

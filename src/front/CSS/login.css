@@ -41,6 +41,11 @@
     width: fit-content;
     padding: 0.5rem 1rem 0.5rem 1rem;
 }
+#login:hover {
+    background-color: #f0f0f0;
+    color: #ffffff;
+    cursor: pointer;
+}
 
 #byGarage {
     font-size: 0.75rem;
