@@ -10,6 +10,7 @@ const orderContainer = document.getElementById('orderContainer');
 const newOrder = document.getElementById('newOrder');
 let orderElementFilesMessageContent;
 let currentOrderID;
+let orderData;
 
 /*--------------------------
 
@@ -23,12 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
     sendMessage({fetchOrders: {cookie}});
 
-    let orderData;
-
     addMessageListener(response => {
         if (response.orders) {
             orderData = Object.values(response.orders);
-            console.log(orderData);
+            console.log("orderData", orderData);
             displayLandingPage(userDataDummy, orderData);
             displayOrdersList(orderData);
         } else if (response.error) {
@@ -290,7 +289,6 @@ function displayOrderContent(order) {
 // Function to show files of the active order
 function showContentsOfActiveOrder(orderData, activeOrderId, dataType) {
     if (activeOrderId) {
-        console.log('showContentsOfActiveOrder', orderData, activeOrderId, dataType);
         const activeOrder = orderData.find(order => order.id === Number(activeOrderId));
         if (dataType === 'files') {
             displayFilesList(activeOrder);
@@ -459,6 +457,7 @@ function appendMessage(message) {
         messageElementBody.classList.add('rightColumnBubble');
     }
     chatFeed.appendChild(messageElement);
+    orderData.find(order => order.id === message.orderID).chat.chatMessages[message.msgID] = message;
 }
 
 // Set color state for each order
