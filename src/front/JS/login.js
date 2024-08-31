@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = usernameInput.value;
         const password = passwordInput.value;
 
+        if (!username || !password) {
+            showCustomAlert('Veuillez rentrer votre nom d\'utilisateur et votre mot de passe', 'red');
+            return;
+        }
+
         sendMessage({checkUser: {username}});
         addMessageListener((response) => {
             if (response.userExists) {
