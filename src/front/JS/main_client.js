@@ -1,4 +1,4 @@
-import {applyHoverIfNecessary, sortElementsByDate, logout, capitalizeFirstLetter} from "/src/front/JS/utils.js";
+import {applyHoverIfNecessary, sortElementsByDate, logout, capitalizeFirstLetter, formatDateTime} from "/src/front/JS/utils.js";
 import {addMessageListener, sendMessage} from "./ws_client.js";
 
 const userDataDummy = {
@@ -481,26 +481,4 @@ function createSVGElement(name, alt) {
     use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `/src/front/Assets/sprite.svg#${name}`);
     svg.appendChild(use);
     return svg;
-}
-
-// Create dates to be displayed
-function formatDateTime(isoDate, type) {
-    const date = new Date(isoDate);
-    const options = {
-        timeZone: 'Europe/Paris',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-    };
-    const parisTimeString = date.toLocaleString('fr-FR', options).replace(',', '');
-    const [datePart, timePart] = parisTimeString.split(' ');
-    const [day, month, year] = datePart.split('/');
-    if (type === 'file') {
-        return `Fichier envoyé le ${day}/${month}/${year} à ${timePart}`;
-    } else if (type === 'order') {
-        return `Commande passée le ${day}/${month}/${year} à ${timePart}`;
-    }
 }
