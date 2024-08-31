@@ -42,6 +42,18 @@
     padding: 0.5rem 1rem 0.5rem 1rem;
 }
 
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1001;
+    text-align: center;
+}
+
 #byGarage {
     font-size: 0.75rem;
 }
