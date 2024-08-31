@@ -2,7 +2,15 @@ const WebSocket = require('ws');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const {userExists, createOrder, getOrders, getUserByCookie, deleteCookie, saveChatMessage} = require('./db_handler');
+const {
+    userExists,
+    createOrder,
+    getOrders,
+    getUserByCookie,
+    deleteCookie,
+    saveChatMessage,
+    updateOrderFiles
+} = require('./db_handler');
 const {mainLogin} = require('./login_handler');
 
 // Function to serve static files with correct MIME types
@@ -63,15 +71,12 @@ async function handleUserRedirection(res, cookieValue) {
     if (user) {
         const hasOrders = await checkUserOrders(user.client);
         if (hasOrders) {
-            // Serve the main client page if the user has orders
             serveStaticFile(res, path.join(__dirname, '../front/HTML/main_client.html'));
         } else {
-            // Redirect to the order page if the user has no orders
             res.writeHead(302, {'Location': '/src/front/HTML/order.html'});
             res.end();
         }
     } else {
-        // Redirect to the login page if the cookie is invalid or missing
         res.writeHead(302, {'Location': '/src/front/HTML/login.html'});
         res.end();
     }
@@ -88,7 +93,6 @@ const server = http.createServer(async (req, res) => {
             if (cookieValue) {
                 await handleUserRedirection(res, cookieValue);
             } else {
-                // Redirect to the login page if the cookie is invalid or missing
                 res.writeHead(302, {'Location': '/src/front/HTML/login.html'});
                 res.end();
             }
@@ -96,24 +100,18 @@ const server = http.createServer(async (req, res) => {
             if (cookieValue) {
                 await handleUserRedirection(res, cookieValue);
             } else {
-                // Redirect to the login page if the cookie is invalid or missing
                 res.writeHead(302, {'Location': '/src/front/HTML/login.html'});
                 res.end();
             }
         } else if (req.url === '/src/front/HTML/order.html') {
-            // Serve the order page
             serveStaticFile(res, path.join(__dirname, '../front/HTML/order.html'));
         } else if (req.url === '/src/front/HTML/login.html') {
-            // Serve the login page
             serveStaticFile(res, path.join(__dirname, '../front/HTML/login.html'));
         } else if (req.url.startsWith('/src/front/CSS/')) {
-            // Serve CSS files
             serveStaticFile(res, path.join(__dirname, '..', '..', req.url));
         } else if (req.url.startsWith('/src/front/Assets/')) {
-            // Serve Assets files
             serveStaticFile(res, path.join(__dirname, '..', '..', req.url));
         } else if (req.url.startsWith('/src/front/JS/')) {
-            // Serve JavaScript files
             serveStaticFile(res, path.join(__dirname, '..', '..', req.url));
         } else {
             res.writeHead(404);
@@ -127,6 +125,15 @@ const server = http.createServer(async (req, res) => {
 
 // Create WebSocket server
 const wss = new WebSocket.Server({server});
+
+function generateRandomFileID(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+}
 
 wss.on('connection', (ws) => {
     ws.on('message', async (message) => {
@@ -150,13 +157,6 @@ wss.on('connection', (ws) => {
         } else if (parsedMessage.logout) {
             await deleteCookie(parsedMessage.cookie);
             ws.send(JSON.stringify({redirect: 'login.html'}));
-        } else if (parsedMessage.newOrder) {
-            const response = await createOrder(parsedMessage.newOrder);
-            if (response.success) {
-                ws.send(JSON.stringify({redirect: 'main_client.html'}));
-            } else {
-                ws.send(JSON.stringify(response));
-            }
         } else if (parsedMessage.fetchOrders) {
             const {cookie} = parsedMessage.fetchOrders;
             const user = await getUserByCookie(cookie);
@@ -172,6 +172,43 @@ wss.on('connection', (ws) => {
                 ws.send(JSON.stringify({success: true}));
             } else {
                 ws.send(JSON.stringify(response));
+            }
+        } else if (parsedMessage.newOrder && parsedMessage.file) {
+            console.log('New order received:', parsedMessage);
+            const {newOrder} = parsedMessage;
+            const {fileName, fileExtension, fileData, fileDateTime, fileWeight} = parsedMessage.file;
+
+            if (!fileData) {
+                ws.send(JSON.stringify({error: 'File data is missing'}));
+                return;
+            }
+
+            const buffer = Buffer.from(fileData);
+
+            const orderResponse = await createOrder(newOrder);
+            if (orderResponse.success) {
+                const orderID = orderResponse.orderID;
+                const fileID = generateRandomFileID(30);
+
+                const filePath = path.join('C:\\Users\\Duarn\\Downloads', `${fileName}`);
+                console.log('Sending file:', filePath);
+                fs.writeFile(filePath, buffer, async (err) => {
+                    if (err) {
+                        ws.send(JSON.stringify({error: 'File could not be saved'}));
+                    } else {
+                        const fileInfo = {
+                            fileID: fileID,
+                            fileName: fileName,
+                            fileExtension: fileExtension,
+                            fileDateTime: fileDateTime,
+                            fileWeight: fileWeight
+                        };
+                        await updateOrderFiles(orderID, fileInfo);
+                        ws.send(JSON.stringify({success: true, redirect: 'main_client.html'}));
+                    }
+                });
+            } else {
+                ws.send(JSON.stringify({error: 'Order could not be saved'}));
             }
         }
     });

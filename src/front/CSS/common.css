@@ -87,6 +87,12 @@ textarea:focus, input:focus {
     user-select: none;
 }
 
+.blueButton:hover {
+    background-color: #0b248a;
+    color: #ffffff;
+    cursor: pointer;
+}
+
 .hoverButton:hover {
     cursor: pointer;
     background-color: var(--backgroundLightBlue) !important;

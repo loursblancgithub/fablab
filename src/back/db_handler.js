@@ -42,25 +42,28 @@ async function createCookie(cookie, studentCode) {
     );
 }
 
-// Add an order to the database
-async function createOrder(orderData) {
-    await query(
-        'INSERT INTO public."order" (name, tool, quantity, material, questions, datetime, client, goodpracticescheck, chat, additionalparameters, color, state) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
-        [
-            orderData.orderName,
-            orderData.orderTool,
-            orderData.orderQuantity,
-            orderData.orderMaterial,
-            orderData.orderQuestions,
-            orderData.orderDateTime,
-            orderData.orderClient,
-            orderData.orderGoodPracticesCheck,
-            JSON.stringify({}),
-            orderData.orderAdditionalParameters,
-            orderData.orderColor,
-            "pending"
-        ]
+// Save order information in the database
+async function createOrder(order) {
+    const res = await query(
+        'INSERT INTO public."order" (name, tool, material, color, quantity, questions, datetime, client, state, goodpracticescheck, additionalparameters) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id',
+        [order.orderName, order.orderTool, order.orderMaterial, order.orderColor, order.orderQuantity, order.orderQuestions, order.orderDateTime, order.orderClient, "pending", order.orderGoodPracticesCheck, order.orderAdditionalParameters]
     );
+    return {success: true, orderID: res.rows[0].id};
+}
+
+// Update the order with the new file information
+async function updateOrderFiles(orderID, fileInfo) {
+    const res = await query('SELECT files FROM public."order" WHERE id = $1', [orderID]);
+    const currentFiles = res.rows[0].files || {};
+
+    const fileID = `file${Object.keys(currentFiles).length + 1}`;
+    currentFiles[fileID] = fileInfo;
+
+    await query(
+        'UPDATE public."order" SET files = $1 WHERE id = $2',
+        [currentFiles, orderID]
+    );
+
     return {success: true};
 }
 
@@ -103,6 +106,7 @@ module.exports = {
     addUser,
     createCookie,
     createOrder,
+    updateOrderFiles,
     getOrders,
     getUserByCookie,
     deleteCookie,

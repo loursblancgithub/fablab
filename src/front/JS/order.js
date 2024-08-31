@@ -1,31 +1,18 @@
 import {logout, showCustomAlert, sanitizeOutput} from "/src/front/JS/utils.js";
-import {sendMessage, addMessageListener} from "/src/front/JS/ws_client.js";
+import {sendMessage, addMessageListener, sendOrder} from "/src/front/JS/ws_client.js";
 
-
-//-------------------------->
-
-//Variables declaration
-
-//-------------------------->
-
+// Variables declaration
 const wipeInputs = document.querySelectorAll('input[type="text"], input[type="password"],input[type="quantity"], input[type="checkbox"], input[type="select"], textarea');
 let printParameters;
 const expertModeSwitch = document.getElementById('expertModeSwitch');
 const orderPrintSettings = document.getElementById('orderPrintSettings');
 const orderPrintSettingsTitle = document.getElementById('orderPrintSettingsTitle');
 
-//-------------------------->
-
-//Main logic
-
-//-------------------------->
-
+// Main logic
 document.addEventListener('DOMContentLoaded', async () => {
-
     logout(document.getElementById('logoutButton'));
 
-    //Initializing inputs
-
+    // Initializing inputs
     wipeInputs.forEach(input => {
         input.value = '';
         input.state = false;
@@ -33,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('goodPracticesCheck').checked = false;
 
-    //Initializing the expert mode switch
+    // Initializing the expert mode switch
     initializeSlider();
 
     printParameters = await fetchPrintParameters();
@@ -50,6 +37,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Retrieving, formatting and sending the order informations
     document.getElementById('submit').addEventListener('click', function () {
+        console.log('Submit button clicked'); // Debug log
+
         if (document.getElementById('goodPracticesCheck').checked) {
             const requiredFields = ['orderName', 'orderTool', 'orderQuantity', 'orderMaterial'];
 
@@ -64,8 +53,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const parisTimeString = now.toLocaleString('fr-FR', options).replace(',', '');
                 const dateTimeString = parisTimeString.toString();
 
-                sendMessage({
-                    newOrder: {
+                const file = document.getElementById('orderFile').files[0];
+                if (file) {
+                    console.log('File selected:', file.name); // Debug log
+                    sendOrder({
                         orderName: sanitizeOutput(document.getElementById('orderName').value),
                         orderTool: sanitizeOutput(document.getElementById('orderTool').value),
                         orderMaterial: sanitizeOutput(document.getElementById('orderMaterial').value),
@@ -76,19 +67,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                         orderClient: "jema62194",
                         orderGoodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
                         orderAdditionalParameters: {}
-                    }
-                });
+                    }, file);
 
-                addMessageListener((response) => {
-                    if (response.redirect) {
-                        showCustomAlert('Commande envoyée avec succès !', "green");
-                        setTimeout(() => {
-                            window.location.replace(`/src/front/HTML/${response.redirect}`);
-                        }, 2000);
-                    } else {
-                        showCustomAlert('Erreur lors de l\'envoi de la commande, merci de réessayer plus tard', "red");
-                    }
-                });
+                    addMessageListener((response) => {
+                        if (response.redirect) {
+                            showCustomAlert('Commande envoyée avec succès !', "green");
+                            setTimeout(() => {
+                                window.location.replace(`/src/front/HTML/${response.redirect}`);
+                            }, 2000);
+                        } else if (response.error) {
+                            showCustomAlert('Erreur lors de l\'envoi du fichier, merci de réessayer plus tard', "red");
+                        } else {
+                            showCustomAlert('Erreur lors de l\'envoi de la commande, merci de réessayer plus tard', "red");
+                        }
+                    });
+                } else {
+                    showCustomAlert('Merci de joindre un fichier à votre commande !', "red");
+                }
             } else {
                 showCustomAlert('Merci de remplir tous les champs obligatoires !', "red");
             }
@@ -98,13 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-/*--------------------------
-
-Functions
-
---------------------------*/
-
-// Function to retrieve print parameters from print_parameters.json
+// Functions
 async function fetchPrintParameters() {
     try {
         const response = await fetch('../JSON/print_parameters.json');
@@ -118,29 +107,23 @@ async function fetchPrintParameters() {
     }
 }
 
-// Function to initialize the slider
 function initializeSlider() {
     const expertModeSwitch = document.getElementById('expertModeSwitch');
     const slider = document.querySelector('.slider');
 
-    // Function to update slider style based on switch state
     function updateSliderStyle() {
         if (expertModeSwitch.checked) {
-            slider.style.backgroundColor = '#2E4798'; // Expert mode on
+            slider.style.backgroundColor = '#2E4798';
         } else {
-            slider.style.backgroundColor = '#ccc'; // Expert mode off
+            slider.style.backgroundColor = '#ccc';
         }
     }
 
-    // Set default state and style
     expertModeSwitch.checked = false;
     updateSliderStyle();
-
-    // Add event listener to toggle style on change
     expertModeSwitch.addEventListener('change', updateSliderStyle);
 }
 
-// Function to generate HTML for the parameters
 function generateParametersHTML(parameters, parentElement, depth = 0) {
     Object.entries(parameters).forEach(([key, value]) => {
         if (typeof value === "object" && value.defaultValue !== undefined) {
