@@ -132,7 +132,11 @@ wss.on('connection', (ws) => {
     ws.on('message', async (message) => {
         const parsedMessage = JSON.parse(message);
 
-        if (parsedMessage.login) {
+        if (parsedMessage.checkUser) {
+            const {username} = parsedMessage.checkUser;
+            const userExistsResult = await userExists(username);
+            ws.send(JSON.stringify({userExists: userExistsResult}));
+        } else if (parsedMessage.login) {
             const {username, password} = parsedMessage.login;
             const response = await mainLogin(username, password);
             if (response.success === true) {

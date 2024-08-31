@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('ordersList').addEventListener('click', function (event) {
         const element = event.target.closest('.ordersListElement');
         if (element) {
-            console.log('HEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEY');
             document.querySelectorAll('.ordersListElement').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
             currentOrderID = element.id;
