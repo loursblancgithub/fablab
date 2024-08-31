@@ -1,0 +1,37 @@
+body {
+    font-family: LexendDeca, sans-serif;
+}
+
+strong {
+    margin-top: 2vh;
+    color: #2e4798;
+}
+
+#bodyContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+#textContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 40vw;
+    margin-top: 2vh;
+}
+
+#mainTitle {
+    align-self: center;
+    font-size: 1.5rem;
+}
+
+#fablabLogo {
+    width: 7.5vw;
+    max-width: 120px;
+    margin: 1vh 0 1vh 0;
+}
