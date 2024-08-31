@@ -175,7 +175,7 @@ function displayOrderContent(order) {
 
     const orderElementDate = document.createElement('div');
     orderElementDate.classList.add('orderElementDate');
-    orderElementDate.textContent = `${formatDateTime(order.datetime)}`;
+    orderElementDate.textContent = `${formatDateTime(order.datetime, 'order')}`;
     orderElementSummary.appendChild(orderElementDate);
 
     const orderElementOverviewTitle = document.createElement('div');
@@ -318,14 +318,13 @@ function displayFilesList(order) {
 
         const fileElementDate = document.createElement('div');
         fileElementDate.classList.add('fileElementDate', 'fileElementSubPart');
-        const [date, time] = file.fileDateTime.split(' ');
-        fileElementDate.textContent = `Déposé le ${date} à ${time}`;
+        fileElementDate.textContent = `${formatDateTime(file.fileDateTime, 'file')}`;
         fileElementRightPart.appendChild(fileElementDate);
 
         const fileElementSize = document.createElement('div');
         fileElementSize.classList.add('fileElementSubPart');
         if (file.fileWeight >= 1000) {
-            fileElementSize.textContent = `${(file.fileWeight / 1000).toFixed(2)}MB`;
+            fileElementSize.textContent = `${(file.fileWeight / 1000).toFixed(2)}ko`;
         } else {
             fileElementSize.textContent = `${file.fileWeight}KB`;
         }
@@ -485,7 +484,7 @@ function createSVGElement(name, alt) {
 }
 
 // Create dates to be displayed
-function formatDateTime(isoDate) {
+function formatDateTime(isoDate, type) {
     const date = new Date(isoDate);
     const options = {
         timeZone: 'Europe/Paris',
@@ -499,5 +498,9 @@ function formatDateTime(isoDate) {
     const parisTimeString = date.toLocaleString('fr-FR', options).replace(',', '');
     const [datePart, timePart] = parisTimeString.split(' ');
     const [day, month, year] = datePart.split('/');
-    return `Commande passée le ${day}/${month}/${year} à ${timePart}`;
+    if (type === 'file') {
+        return `Fichier envoyé le ${day}/${month}/${year} à ${timePart}`;
+    } else if (type === 'order') {
+        return `Commande passée le ${day}/${month}/${year} à ${timePart}`;
+    }
 }
