@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <title>FabLab - Gestion</title>
 
-    <link rel="apple-touch-icon" sizes="180x180" href="../Assets/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../Assets/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../Assets/favicon/favicon-16x16.png">
-    <link rel="manifest" href="../Assets/favicon/site.webmanifest">
+    <link rel="apple-touch-icon" sizes="180x180" href="/src/front/Assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/front/Assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/front/Assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/src/front/Assets/favicon/site.webmanifest">
 
-    <link rel="stylesheet" href="../CSS/main_admin.css">
-    <link rel="stylesheet" href="../CSS/common.css">
+    <link rel="stylesheet" href="/src/front/CSS/main_admin.css">
+    <link rel="stylesheet" href="/src/front/CSS/common.css">
 </head>
 <body>
 <div id="bodyContainer">
     <div id="sidePanel">
-        <img src="../Assets/logo_fablab.svg" alt="logo" id="fablabLogo">
+        <img src="/src/front/Assets/logo_fablab.svg" alt="logo" id="fablabLogo">
         <div id="sidePanelStateButtonsContainer">
             <div class="sidePanelStateButton" id="sidePanelStateButtonAll">Tout</div>
             <div class="sidePanelStateButton" id="sidePanelStateButtonToDo">Non traité</div>
@@ -35,8 +35,12 @@
                     10:25:32
                 </div>
                 <div class="orderElementSummaryTitle">Vue d'ensemble</div>
-                <div class="orderElementDetails" style="display: flex; flex-direction: column; place-content: center space-between; width: 100%;">
-                    <div id="orderMaterial" style="width: fit-content;"></div>
+                <div class="orderElementDetails"
+                     style="display: flex; flex-direction: column; place-content: center space-between; width: 100%;">
+                    <div class="orderElementSummaryMaterialColor">
+                        <div id="orderMaterial"></div>
+                        <div id="orderColor"></div>
+                    </div>
                     <div id="orderTotalWeight" style="width: fit-content;"></div>
                     <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: baseline;">
                         <div id="orderQuantity" style="width: fit-content; color: var(--logoBlue);"></div>
@@ -59,6 +63,6 @@
 
     <div id="contentContainer"></div>
 </div>
-<script type="module" src="../JS/main_admin.js"></script>
+<script type="module" src="/src/front/JS/main_admin.js"></script>
 </body>
 </html>

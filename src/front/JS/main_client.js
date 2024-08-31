@@ -1,259 +1,16 @@
-import {applyHoverIfNecessary, setTimeoutWithRAF, sortElementsByDate} from "/src/front/JS/utils.js";
-/*
-import {socket} from './ws_client.js';
-
-// Use the `socket` object for sending messages, etc.
-socket.send("Message specific to FabLab_orders_fetcher functionality.");
-*/
-
-const orderDataDummy = [{
-    orderID: 158486,
-    orderName: "Cirrus Vision Jet",
-    orderState: "pending",
-    userID: 62194,
-    orderMaterial: "PETG",
-    orderColor: "red",
-    orderTotalWeight: 5000,
-    orderQuantity: 100,
-    orderPrice: 2000,
-    orderQuestion: "Beautiful but underpowered lul",
-    orderFiles: {
-        file1: {fileID: 1, fileName: "fuselage.3mf", fileDateTime: "31/07/2024 10:25:32", fileWeight: 3000},
-        file2: {fileID: 2, fileName: "aileron.3mf", fileDateTime: "02/08/2024 10:12:29", fileWeight: 500}
-    },
-    orderDateTime: "31/07/2024 10:25:32"
-},
-    {
-        orderID: 158486,
-        orderName: "Airbus A220",
-        orderState: "finished",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 300,
-        orderQuantity: 1,
-        orderPrice: 8,
-        orderQuestion: "Bombardier on vous aime",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "02/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "05/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "02/08/2024 10:12:29"
-    },
-    {
-        orderID: 154436,
-        orderName: "Boeing 787",
-        orderState: "sliced",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 3000,
-        orderQuantity: 1,
-        orderPrice: 15,
-        orderQuestion: "Belle machine faite par des sagouins",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "03/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "07/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "03/08/2024 10:12:29"
-    },
-    {
-        orderID: 168436,
-        orderName: "Embraer E190",
-        orderState: "printing",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 500,
-        orderQuantity: 1,
-        orderPrice: 4,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "04/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "05/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "04/08/2024 10:12:29"
-    },
-    {
-        orderID: 158431,
-        orderName: "Lockheed Martin F-35",
-        orderState: "printing",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 1500,
-        orderQuantity: 1,
-        orderPrice: 12,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "05/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "10/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "05/08/2024 10:12:29"
-    },
-    {
-        orderID: 156436,
-        orderName: "Cessna 172",
-        orderState: "printing",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 300,
-        orderQuantity: 1,
-        orderPrice: 8,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "06/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "06/08/2024 10:12:29"
-    },
-    {
-        orderID: 158426,
-        orderName: "Piper PA-28",
-        orderState: "printing",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 300,
-        orderQuantity: 1,
-        orderPrice: 8,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "07/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "09/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "07/08/2024 10:12:29"
-    },
-    {
-        orderID: 158736,
-        orderName: "Beechcraft Bonanza",
-        orderState: "printing",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 300,
-        orderQuantity: 1,
-        orderPrice: 10,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "08/08/2024 10:12:29"
-    },
-    {
-        orderID: 151436,
-        orderName: "Gulfstream G650",
-        orderState: "printing",
-        userID: 'jema62194',
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 300,
-        orderQuantity: 1,
-        orderPrice: 8,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "09/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "21/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "09/08/2024 10:12:29"
-    }];
+import {applyHoverIfNecessary, sortElementsByDate, logout, capitalizeFirstLetter} from "/src/front/JS/utils.js";
+import {addMessageListener, sendMessage} from "./ws_client.js";
 
 const userDataDummy = {
     userID: 'jema62194',
     userName: "Jean MANOURY"
 }
 
-const chatDataDummy = {
-    151436: {
-        userID: 'jema62194',
-        chatMessages: {
-            message1: {
-                msgID: '151436_1',
-                msgSender: 'jema62194',
-                msgDate: '09/08/2024 10:12:29',
-                msgContent: "Bonjour, je voulais savoir si vous pouviez imprimer un avion en 3D"
-            },
-            message2: {
-                msgID: '151436_2',
-                msgSender: 'FabLab',
-                msgDate: '09/08/2024 10:12:45',
-                msgContent: "Bonjour, oui nous pouvons imprimer des avions en 3D. Quel modèle souhaitez-vous imprimer ?"
-            },
-            message3: {
-                msgID: '151436_3',
-                msgSender: 'jema62194',
-                msgDate: '09/08/2024 10:13:02',
-                msgContent: "Je souhaiterais imprimer un Airbus A380"
-            },
-            message4: {
-                msgID: '151436_4',
-                msgSender: 'FabLab',
-                msgDate: '09/08/2024 10:13:25',
-                msgContent: "D'accord, nous pouvons imprimer un Airbus A380 en 3D. Quelle couleur souhaitez-vous ?"
-            },
-            message5: {
-                msgID: '151436_5',
-                msgSender: 'jema62194',
-                msgDate: '09/08/2024 10:13:45',
-                msgContent: "Je souhaiterais un Airbus A380 rouge"
-            },
-            message6: {
-                msgID: '151436_6',
-                msgSender: 'FabLab',
-                msgDate: '09/08/2024 10:14:02',
-                msgContent: "D'accord, nous allons imprimer un Airbus A380 rouge. Merci pour votre commande !"
-            },
-        }
-    },
-    158736: {
-        userID: 'jema62194',
-        chatMessages: {
-            message1: {
-                msgID: '158736_1',
-                msgSender: 'jema62194',
-                msgDate: '08/08/2024 10:12:29',
-                msgContent: "Bonjour, je voulais savoir si vous pouviez imprimer un avion en 3D"
-            },
-            message2: {
-                msgID: '158736_2',
-                msgSender: 'FabLab',
-                msgDate: '08/08/2024 10:12:45',
-                msgContent: "Bonjour, oui nous pouvons imprimer des avions en 3D. Quel modèle souhaitez-vous imprimer ?"
-            },
-            message3: {
-                msgID: '158736_3',
-                msgSender: 'jema62194',
-                msgDate: '08/08/2024 10:13:02',
-                msgContent: "Je souhaiterais imprimer un Airbus A380"
-            },
-            message4: {
-                msgID: '158736_4',
-                msgSender: 'FabLab',
-                msgDate: '08/08/2024 10:13:25',
-                msgContent: "D'accord, nous pouvons imprimer un Airbus A380 en 3D. Quelle couleur souhaitez-vous ?"
-            },
-            message5: {
-                msgID: '158736_5',
-                msgSender: 'jema62194',
-                msgDate: '08/08/2024 10:13:45',
-                msgContent: "Je souhaiterais un Airbus A380 rouge"
-            },
-            message6: {
-                msgID: '158736_6',
-                msgSender: 'FabLab',
-                msgDate: '08/08/2024 10:14:02',
-                msgContent: "D'accord, nous allons imprimer un Airbus A380 rouge. Merci pour votre commande !"
-            },
-        }
-    }
-};
-
 const orderContainer = document.getElementById('orderContainer');
 const newOrder = document.getElementById('newOrder');
 let orderElementFilesMessageContent;
 let currentOrderID;
+let orderData;
 
 /*--------------------------
 
@@ -261,43 +18,46 @@ Main logic
 
 --------------------------*/
 
+// src/front/JS/main_client.js
 document.addEventListener('DOMContentLoaded', () => {
-    // By default, showing the landing page
-    displayLandingPage(userDataDummy, orderDataDummy);
+    logout(document.getElementById('logoutButton'));
+    const cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
+    sendMessage({fetchOrders: {cookie}});
 
-    // Filling the order list
-    displayOrdersList(orderDataDummy);
+    addMessageListener(response => {
+        if (response.orders) {
+            orderData = Object.values(response.orders);
+            console.log("orderData", orderData);
+            displayLandingPage(userDataDummy, orderData);
+            displayOrdersList(orderData);
+        } else if (response.error) {
+            console.error(response.error);
+        }
+    });
 
-    // If clicking #newOrder, redirect to the order page
     newOrder.addEventListener('click', function () {
-        window.location.href = "../HTML/order.html";
+        window.location.href = "/src/front/HTML/order.html";
     });
 
     document.getElementById('ordersListHome').addEventListener('click', () => {
-        displayLandingPage(userDataDummy, orderDataDummy);
-    })
+        displayLandingPage(userDataDummy, orderData);
+    });
 
-    document.querySelectorAll('.ordersListElement').forEach(element => {
-        element.addEventListener('click', function () {
-
-            // When clicking on any element with the class .ordersListElement, add the class .active to change its background color
+    document.getElementById('ordersList').addEventListener('click', function (event) {
+        const element = event.target.closest('.ordersListElement');
+        if (element) {
+            console.log('HEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEYHEY');
             document.querySelectorAll('.ordersListElement').forEach(el => el.classList.remove('active'));
-            this.classList.add('active');
-            currentOrderID = this.id;
-
-            // By default, loading the files list when loading an order
-            showContentsOfActiveOrder(orderDataDummy, currentOrderID, 'files');
-
-            // When clicking on the files button, loading the files list
+            element.classList.add('active');
+            currentOrderID = element.id;
+            showContentsOfActiveOrder(orderData, currentOrderID, 'files');
             document.getElementById('orderElementFilesButton').addEventListener('click', () => {
-                showContentsOfActiveOrder(orderDataDummy, currentOrderID, 'files');
+                showContentsOfActiveOrder(orderData, currentOrderID, 'files');
             });
-
-            // When clicking on the chat button, loading the chat
             document.getElementById('orderElementMessageButton').addEventListener('click', () => {
-                showContentsOfActiveOrder(orderDataDummy, currentOrderID, 'chat');
+                showContentsOfActiveOrder(orderData, currentOrderID, 'chat');
             });
-        });
+        }
     });
 });
 
@@ -334,7 +94,7 @@ function displayLandingPage(user, orders) {
 
     /*orderContainer.appendChild(landingPageChatContainer);*/
 
-    setTimeoutWithRAF(() => {
+    setTimeout(() => {
         landingPageElement.classList.add('active');
     }, 10);
 }
@@ -358,18 +118,18 @@ function displayOrdersList(orders) {
         const ordersListElement = document.createElement('div');
         ordersListElement.classList.add('ordersListElement');
         ordersListElement.classList.add('hoverButton');
-        ordersListElement.id = orderElement.orderID;
+        ordersListElement.id = orderElement.id;
 
         const ordersListElementName = document.createElement('div');
         ordersListElementName.classList.add('ordersListElementName');
-        ordersListElementName.textContent = orderElement.orderName;
-        applyHoverIfNecessary(ordersListElementName, orderElement.orderName);
+        ordersListElementName.textContent = orderElement.name;
+        applyHoverIfNecessary(ordersListElementName, orderElement.name);
 
         const ordersListElementState = document.createElement('div');
         ordersListElementState.classList.add('ordersListElementState');
-        ordersListElementState.style.backgroundColor = getColorForState(orderElement.orderState).background;
-        ordersListElementState.style.color = getColorForState(orderElement.orderState).font;
-        ordersListElementState.textContent = getColorForState(orderElement.orderState).frText;
+        ordersListElementState.style.backgroundColor = getColorForState(orderElement.state).background;
+        ordersListElementState.style.color = getColorForState(orderElement.state).font;
+        ordersListElementState.textContent = getColorForState(orderElement.state).frText;
 
         ordersListElement.appendChild(ordersListElementName);
         ordersListElement.appendChild(ordersListElementState);
@@ -404,20 +164,19 @@ function displayOrderContent(order) {
 
     const orderElementName = document.createElement('div');
     orderElementName.classList.add('orderElementName');
-    orderElementName.textContent = `${order.orderName}`;
+    orderElementName.textContent = `${order.name}`;
     orderElementSummary.appendChild(orderElementName);
 
     const orderElementState = document.createElement('div');
     orderElementState.classList.add('orderElementState');
-    orderElementState.textContent = `${order.orderState}`;
-    orderElementState.style.color = getColorForState(order.orderState).background;
-    orderElementState.textContent = getColorForState(order.orderState).frText;
+    orderElementState.textContent = `${order.state}`;
+    orderElementState.style.color = getColorForState(order.state).background;
+    orderElementState.textContent = getColorForState(order.state).frText;
     orderElementSummary.appendChild(orderElementState);
 
     const orderElementDate = document.createElement('div');
     orderElementDate.classList.add('orderElementDate');
-    const [date, time] = order.orderDateTime.split(' ');
-    orderElementDate.textContent = `Commande passée le ${date} à ${time}`;
+    orderElementDate.textContent = `${formatDateTime(order.datetime)}`;
     orderElementSummary.appendChild(orderElementDate);
 
     const orderElementOverviewTitle = document.createElement('div');
@@ -429,21 +188,33 @@ function displayOrderContent(order) {
     orderElementDetails.classList.add('orderElementDetails');
 
     // Order Details
+    const orderElementSummaryMaterialColor = document.createElement('div');
+    orderElementSummaryMaterialColor.classList.add('orderElementSummaryMaterialColor');
 
     const orderElementSummaryMaterial = document.createElement('div');
-    if (order.orderMaterial === 'PLA' || order.orderMaterial === 'PETG' || order.orderMaterial === 'ABS') {
-        orderElementSummaryMaterial.textContent = `${order.orderMaterial} (Plastique)`;
-    } else if (order.orderMaterial === 'Résine') {
-        orderElementSummaryMaterial.textContent = `${order.orderMaterial}`;
+    if (order.material === 'pla' || order.material === 'petg' || order.material === 'abs') {
+        orderElementSummaryMaterial.textContent = `${order.material.toUpperCase()} (Plastique)`;
+    } else if (order.material === 'Résine') {
+        orderElementSummaryMaterial.textContent = `${order.material}`;
     }
     orderElementSummaryMaterial.style.width = 'fit-content';
-    orderElementDetails.appendChild(orderElementSummaryMaterial);
+    orderElementSummaryMaterialColor.appendChild(orderElementSummaryMaterial);
+
+    const orderElementSummaryColor = document.createElement('div');
+    orderElementSummaryColor.textContent = `${capitalizeFirstLetter(order.color)}`;
+    orderElementSummaryColor.style.width = 'fit-content';
+    orderElementSummaryMaterialColor.appendChild(orderElementSummaryColor);
+
+    orderElementDetails.appendChild(orderElementSummaryMaterialColor);
 
     const orderElementSummaryTotalWeight = document.createElement('div');
-    if (order.orderTotalWeight > 1000) {
-        orderElementSummaryTotalWeight.textContent = `Poids total: ${order.orderTotalWeight / 1000}kg`;
+
+    if (order.totalweight <= 0) {
+        orderElementSummaryTotalWeight.textContent = 'Poids total: ⌛';
+    } else if (order.totalweight > 1000) {
+        orderElementSummaryTotalWeight.textContent = `Poids total: ${order.totalweight / 1000}kg`;
     } else {
-        orderElementSummaryTotalWeight.textContent = `Poids total: ${order.orderTotalWeight}g`;
+        orderElementSummaryTotalWeight.textContent = `Poids total: ${order.totalweight}g`;
     }
     orderElementSummaryTotalWeight.style.width = 'fit-content';
     orderElementDetails.appendChild(orderElementSummaryTotalWeight);
@@ -452,10 +223,10 @@ function displayOrderContent(order) {
     orderElementSummaryQuantityPrice.classList.add('orderElementSummaryQuantityPrice');
 
     const orderElementSummaryQuantity = document.createElement('div');
-    if (order.orderQuantity > 1) {
-        orderElementSummaryQuantity.textContent = `${order.orderQuantity} pièces`;
+    if (order.quantity > 1) {
+        orderElementSummaryQuantity.textContent = `${order.quantity} pièces`;
     } else {
-        orderElementSummaryQuantity.textContent = `${order.orderQuantity} pièce`;
+        orderElementSummaryQuantity.textContent = `${order.quantity} pièce`;
     }
     orderElementSummaryQuantity.style.width = 'fit-content';
     orderElementSummaryQuantity.style.color = 'var(--logoBlue)';
@@ -463,7 +234,11 @@ function displayOrderContent(order) {
 
     const orderElementSummaryPrice = document.createElement('div');
     orderElementSummaryPrice.classList.add('orderElementSummaryPrice');
-    orderElementSummaryPrice.textContent = `${order.orderPrice}€`;
+    if (order.price > 0) {
+        orderElementSummaryPrice.textContent = `${order.price}€`;
+    } else {
+        orderElementSummaryPrice.textContent = '⌛';
+    }
     orderElementSummaryQuantityPrice.appendChild(orderElementSummaryPrice);
 
     orderElementDetails.appendChild(orderElementSummaryQuantityPrice);
@@ -483,9 +258,9 @@ function displayOrderContent(order) {
 
     const orderElementFilesButton = document.createElement('div');
     orderElementFilesButton.textContent = 'Fichiers';
-    orderElementFilesButton.id = 'orderElementFilesButton';
     orderElementFilesButton.classList.add('orderElementFilesMessageButton');
     orderElementFilesButton.classList.add('hoverButton');
+    orderElementFilesButton.id = 'orderElementFilesButton';
     orderElementFilesMessageHeader.appendChild(orderElementFilesButton);
 
     const orderElementMessageButton = document.createElement('div');
@@ -506,7 +281,7 @@ function displayOrderContent(order) {
     orderElementDiv.appendChild(orderElementBody);
 
     orderContainer.appendChild(orderElementDiv);
-    setTimeoutWithRAF(() => {
+    setTimeout(() => {
         orderElementDiv.classList.add('active');
     }, 10);
 }
@@ -514,7 +289,7 @@ function displayOrderContent(order) {
 // Function to show files of the active order
 function showContentsOfActiveOrder(orderData, activeOrderId, dataType) {
     if (activeOrderId) {
-        const activeOrder = orderData.find(order => order.orderID === Number(activeOrderId));
+        const activeOrder = orderData.find(order => order.id === Number(activeOrderId));
         if (dataType === 'files') {
             displayFilesList(activeOrder);
         } else if (dataType === 'chat') {
@@ -527,7 +302,8 @@ function showContentsOfActiveOrder(orderData, activeOrderId, dataType) {
 function displayFilesList(order) {
     orderElementFilesMessageContent.innerHTML = '';
 
-    const sortedFiles = sortElementsByDate(Object.values(order.orderFiles));
+    const files = order.files ? Object.values(order.files) : [];
+    const sortedFiles = sortElementsByDate(files);
 
     sortedFiles.forEach((file) => {
         const fileElement = document.createElement('div');
@@ -576,47 +352,15 @@ function displayMessages(order) {
     chatFeed.classList.add('chatFeed');
     orderElementFilesMessageContent.appendChild(chatFeed);
 
-    const targetedChat = chatDataDummy[order.orderID];
-    if (!targetedChat) {
+    const chatContent = order.chat;
+    if (!chatContent || Object.keys(chatContent).length === 0) {
         chatFeed.textContent = 'Personne n\'a encore rien dit...';
         chatFeed.style.textAlign = 'center';
     } else {
-        const chatMessages = Object.values(targetedChat.chatMessages);
-        chatMessages.sort((a, b) => new Date(b.msgDate) - new Date(a.msgDate));
+        const chatMessages = Object.values(chatContent.chatMessages);
+        chatMessages.sort((a, b) => new Date(a.msgDate) - new Date(b.msgDate)); // Sort in ascending order
         chatMessages.forEach((message) => {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('messageElement');
-            const messageElementBody = document.createElement('div');
-            messageElementBody.classList.add('messageElementBody');
-            const messageElementSender = document.createElement('div');
-            messageElementSender.classList.add('messageElementSender');
-            if (message.msgSender === 'FabLab') {
-                messageElementSender.textContent = 'FabLab';
-            } else {
-                messageElementSender.textContent = '';
-            }
-            messageElementBody.appendChild(messageElementSender);
-
-            const messageElementContent = document.createElement('div');
-            messageElementContent.classList.add('messageElementContent');
-            messageElementContent.textContent = message.msgContent;
-            messageElementBody.appendChild(messageElementContent);
-            messageElement.appendChild(messageElementBody);
-
-            const messageElementDateTime = document.createElement('div');
-            messageElementDateTime.classList.add('messageElementDateTime');
-            messageElementDateTime.textContent = message.msgDate;
-            messageElement.appendChild(messageElementDateTime);
-
-            if (message.msgSender === 'FabLab') {
-                messageElement.classList.add('leftColumn');
-                messageElementBody.classList.add('leftColumnBubble');
-                messageElementDateTime.style.alignSelf = 'flex-start';
-            } else {
-                messageElement.classList.add('rightColumn');
-                messageElementBody.classList.add('rightColumnBubble');
-            }
-            chatFeed.appendChild(messageElement);
+            appendMessage(message);
         });
     }
 
@@ -638,9 +382,82 @@ function displayMessages(order) {
 
     const chatMessageSendButton = createSVGElement('send_icon', 'Envoyer');
     chatMessageSendButton.classList.add('chatMessageSendButton');
+    chatMessageSendButton.id = 'chatMessageSendButton';
     chatMessageInputContainer.appendChild(chatMessageSendButton);
 
     chatInputs.appendChild(chatMessageInputContainer);
+
+    document.getElementById('chatMessageSendButton').addEventListener('click', () => {
+        const chatMessageTextarea = document.querySelector('.chatMessageTextarea');
+        const messageContent = chatMessageTextarea.value.trim();
+
+        if (messageContent) {
+            const message = {
+                orderID: order.id,
+                msgID: `msg_${Date.now()}`,
+                msgSender: userDataDummy.userID,
+                msgDate: new Date().toLocaleString('fr-FR', {timeZone: 'Europe/Paris'}),
+                msgContent: messageContent
+            };
+            sendMessage({newChatMessage: message});
+            addMessageListener((response) => {
+                if (response.success) {
+                    chatMessageTextarea.value = '';
+                    appendMessage(message);
+                }
+            });
+        }
+    });
+}
+
+// Function to append a new message to the chat feed
+function appendMessage(message) {
+    const chatFeed = document.querySelector('.chatFeed');
+
+    if (chatFeed.textContent === 'Personne n\'a encore rien dit...') {
+        chatFeed.textContent = '';
+        chatFeed.style.textAlign = 'left';
+    }
+
+    if (document.getElementById(message.msgID)) {
+        return;
+    }
+
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('messageElement');
+    messageElement.id = message.msgID; // Set the ID of the message element to the msgID
+    const messageElementBody = document.createElement('div');
+    messageElementBody.classList.add('messageElementBody');
+    const messageElementSender = document.createElement('div');
+    messageElementSender.classList.add('messageElementSender');
+    if (message.msgSender === 'FabLab') {
+        messageElementSender.textContent = 'FabLab';
+    } else {
+        messageElementSender.textContent = '';
+    }
+    messageElementBody.appendChild(messageElementSender);
+
+    const messageElementContent = document.createElement('div');
+    messageElementContent.classList.add('messageElementContent');
+    messageElementContent.textContent = message.msgContent;
+    messageElementBody.appendChild(messageElementContent);
+    messageElement.appendChild(messageElementBody);
+
+    const messageElementDateTime = document.createElement('div');
+    messageElementDateTime.classList.add('messageElementDateTime');
+    messageElementDateTime.textContent = message.msgDate;
+    messageElement.appendChild(messageElementDateTime);
+
+    if (message.msgSender === 'FabLab') {
+        messageElement.classList.add('leftColumn');
+        messageElementBody.classList.add('leftColumnBubble');
+        messageElementDateTime.style.alignSelf = 'flex-start';
+    } else {
+        messageElement.classList.add('rightColumn');
+        messageElementBody.classList.add('rightColumnBubble');
+    }
+    chatFeed.appendChild(messageElement);
+    orderData.find(order => order.id === message.orderID).chat.chatMessages[message.msgID] = message;
 }
 
 // Set color state for each order
@@ -666,4 +483,22 @@ function createSVGElement(name, alt) {
     use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `/src/front/Assets/sprite.svg#${name}`);
     svg.appendChild(use);
     return svg;
+}
+
+// Create dates to be displayed
+function formatDateTime(isoDate) {
+    const date = new Date(isoDate);
+    const options = {
+        timeZone: 'Europe/Paris',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    };
+    const parisTimeString = date.toLocaleString('fr-FR', options).replace(',', '');
+    const [datePart, timePart] = parisTimeString.split(' ');
+    const [day, month, year] = datePart.split('/');
+    return `Commande passée le ${day}/${month}/${year} à ${timePart}`;
 }

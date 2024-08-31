@@ -1,4 +1,4 @@
-//fichier avec toutes les fonctions qui peuvent servir un peu partout
+import {addMessageListener, sendMessage} from "./ws_client.js";
 
 function removeAllChildren(element) {
     while (element.firstChild) {
@@ -24,6 +24,28 @@ function sanitizeOutput(toOutput) {
 }
 
 export {sanitizeOutput};
+
+/*--------------------------
+
+Sanitize inputs
+
+--------------------------*/
+
+function logout(logoutButton) {
+    logoutButton.addEventListener('click', () => {
+        const fablabCookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
+        sendMessage({logout: true, cookie: fablabCookie});
+
+        addMessageListener((response) => {
+            if (response.redirect) {
+                document.cookie = 'fablabCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                window.location.replace(`/src/front/HTML/${response.redirect}`);
+            }
+        });
+    });
+}
+
+export {logout};
 
 /*--------------------------
 
@@ -65,11 +87,22 @@ Custom alert popup
 
 --------------------------*/
 
-function showCustomAlert(message) {
+function showCustomAlert(message, level) {
     // Create the alert popup
     const alertPopup = document.createElement('div');
     alertPopup.classList.add('alertPopup', 'alertPopupPopIn');
     alertPopup.style.zIndex = '15';
+
+    if (level === 'red') {
+        alertPopup.style.backgroundColor = '#eaa5a5';
+        alertPopup.style.color = '#931c1c';
+    } else if (level === 'orange') {
+        alertPopup.style.backgroundColor = '#eacca5';
+        alertPopup.style.color = '#93611c';
+    } else if (level === 'green') {
+        alertPopup.style.backgroundColor = '#a5eaa5';
+        alertPopup.style.color = '#1c931c';
+    }
 
     // Alert message
     const alertMessage = document.createElement('div');
@@ -80,7 +113,7 @@ function showCustomAlert(message) {
     document.body.appendChild(alertPopup);
 
     // Auto close the alert after 2 seconds
-    setTimeoutWithRAF(() => {
+    setTimeout(() => {
         alertPopup.classList.remove('alertPopupPopIn');
         alertPopup.classList.add('alertPopupPopOut');
         alertPopup.addEventListener('animationend', () => {
@@ -90,28 +123,6 @@ function showCustomAlert(message) {
 }
 
 export {showCustomAlert};
-
-/*--------------------------
-
-Function preventing the use of setTimeout() for security purposes when needing a delay
-
---------------------------*/
-
-function setTimeoutWithRAF(callback, delay) {
-    const start = performance.now();
-
-    function frame(time) {
-        if (time - start >= delay) {
-            callback();
-        } else {
-            requestAnimationFrame(frame);
-        }
-    }
-
-    requestAnimationFrame(frame);
-}
-
-export {setTimeoutWithRAF};
 
 /*--------------------------
 
@@ -174,6 +185,16 @@ function fiveElements(bodyContainer) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', fiveElements);
-
 export {fiveElements};
+
+/*--------------------------
+
+Congratulations on finding this, on behalf of all the team
+
+--------------------------*/
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export {capitalizeFirstLetter};

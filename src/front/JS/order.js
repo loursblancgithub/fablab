@@ -1,5 +1,4 @@
-import {showCustomAlert} from "/src/front/JS/utils.js";
-import {sanitizeOutput} from "/src/front/JS/utils.js";
+import {logout, showCustomAlert, sanitizeOutput} from "/src/front/JS/utils.js";
 import {sendMessage, addMessageListener} from "/src/front/JS/ws_client.js";
 
 
@@ -22,6 +21,8 @@ const orderPrintSettingsTitle = document.getElementById('orderPrintSettingsTitle
 //-------------------------->
 
 document.addEventListener('DOMContentLoaded', async () => {
+
+    logout(document.getElementById('logoutButton'));
 
     //Initializing inputs
 
@@ -58,39 +59,41 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (allFieldsFilled) {
-                const now = new Date().toLocaleString().replace(',', '');
-                const dateTimeString = now.toString();
+                const now = new Date();
+                const options = { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                const parisTimeString = now.toLocaleString('fr-FR', options).replace(',', '');
+                const dateTimeString = parisTimeString.toString();
 
-                const orderDetails = {
-                    orderId: 125436,
-                    orderName: sanitizeOutput(document.getElementById('orderName').value),
-                    orderTool: sanitizeOutput(document.getElementById('orderTool').value),
-                    orderQuantity: sanitizeOutput(document.getElementById('orderQuantity').value),
-                    orderMaterial: sanitizeOutput(document.getElementById('orderMaterial').value),
-                    orderQuestions: sanitizeOutput(document.getElementById('orderQuestions').value),
-                    orderDateTime: dateTimeString,
-                    orderClient: "jema62194",
-                    orderGoodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
-                    orderAdditionalParameters: {},
-                    orderColor: sanitizeOutput(document.getElementById('orderColor').value),
-                };
-
-                console.log(orderDetails);
-                sendMessage({newOrder: {orderDetails}});
+                sendMessage({
+                    newOrder: {
+                        orderName: sanitizeOutput(document.getElementById('orderName').value),
+                        orderTool: sanitizeOutput(document.getElementById('orderTool').value),
+                        orderMaterial: sanitizeOutput(document.getElementById('orderMaterial').value),
+                        orderColor: sanitizeOutput(document.getElementById('orderColor').value),
+                        orderQuantity: parseInt(document.getElementById('orderQuantity').value),
+                        orderQuestions: sanitizeOutput(document.getElementById('orderQuestions').value),
+                        orderDateTime: dateTimeString,
+                        orderClient: "jema62194",
+                        orderGoodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
+                        orderAdditionalParameters: {}
+                    }
+                });
 
                 addMessageListener((response) => {
-                    if (response.success) {
-                        showCustomAlert('Commande envoyée avec succès !');
-                        window.location.replace("/src/front/HTML/main_client.html");
+                    if (response.redirect) {
+                        showCustomAlert('Commande envoyée avec succès !', "green");
+                        setTimeout(() => {
+                            window.location.replace(`/src/front/HTML/${response.redirect}`);
+                        }, 2000);
                     } else {
-                        showCustomAlert('Erreur lors de l\'envoi de la commande, merci de réessayer plus tard');
+                        showCustomAlert('Erreur lors de l\'envoi de la commande, merci de réessayer plus tard', "red");
                     }
                 });
             } else {
-                showCustomAlert('Merci de remplir tous les champs obligatoires !');
+                showCustomAlert('Merci de remplir tous les champs obligatoires !', "red");
             }
         } else {
-            showCustomAlert('Il faut lire et accepter les points importants afin de pouvoir valider la commande !');
+            showCustomAlert('Il faut lire et accepter les points importants afin de pouvoir valider la commande !', "red");
         }
     });
 });

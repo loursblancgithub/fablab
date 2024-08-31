@@ -1,5 +1,4 @@
-// src/back/db_handler.js
-const { Pool } = require('pg');
+const {Pool} = require('pg');
 
 const pool = new Pool({
     user: 'postgres',
@@ -21,28 +20,91 @@ async function query(text, params) {
     }
 }
 
-async function userExists(studentcode) {
-    const res = await query('SELECT 1 FROM public."user" WHERE studentcode = $1', [studentcode]);
+// Check if the user who logged in exists in the database
+async function userExists(studentCode) {
+    const res = await query('SELECT 1 FROM public."user" WHERE studentcode = $1', [studentCode]);
     return res.rows.length > 0;
 }
 
-async function addUser(studentcode) {
+// Add a new user to the database
+async function addUser(studentCode, firstName, lastName) {
     await query(
-        'INSERT INTO public."user" (studentcode, privilegelevel, chat) VALUES ($1, $2, $3)',
-        [studentcode, 0, '{}']
+        'INSERT INTO public."user" (studentcode, privilegelevel, chat, firstname, lastname) VALUES ($1, $2, $3, $4, $5)',
+        [studentCode, 0, '{}', firstName, lastName]
     );
 }
 
-async function createOrder(orderData){
+// Add a new cookie to the database
+async function createCookie(cookie, studentCode) {
     await query(
-        'INSERT INTO public."order" (id, name, tool, quantity, material, questions, datetime, client, goodpracticescheck, chat, additionalparameters, color) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
-        [orderData.orderId, orderData.orderName, orderData.orderTool, orderData.orderQuantity, orderData.orderMaterial, orderData.orderQuestions, orderData.orderDateTime, orderData.orderClient, orderData.orderGoodPracticesCheck, {}, orderData.orderAdditionalParameters, orderData.orderColor]
+        'INSERT INTO public."cookie" (cookie, client) VALUES ($1, $2)',
+        [cookie, studentCode]
     );
+}
+
+// Add an order to the database
+async function createOrder(orderData) {
+    await query(
+        'INSERT INTO public."order" (name, tool, quantity, material, questions, datetime, client, goodpracticescheck, chat, additionalparameters, color, state) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
+        [
+            orderData.orderName,
+            orderData.orderTool,
+            orderData.orderQuantity,
+            orderData.orderMaterial,
+            orderData.orderQuestions,
+            orderData.orderDateTime,
+            orderData.orderClient,
+            orderData.orderGoodPracticesCheck,
+            JSON.stringify({}),
+            orderData.orderAdditionalParameters,
+            orderData.orderColor,
+            "pending"
+        ]
+    );
+    return {success: true};
+}
+
+// Get all orders of a specific user
+async function getOrders(client) {
+    const res = await query('SELECT * FROM public."order" WHERE client = $1', [client]);
+    return res.rows;
+}
+
+// Get the user student code using the cookie from the client's browser
+async function getUserByCookie(cookie) {
+    const res = await query('SELECT client FROM public."cookie" WHERE cookie = $1', [cookie]);
+    return res.rows[0];
+}
+
+// Delete a cookie when the user logs out from a device
+async function deleteCookie(cookie) {
+    await query('DELETE FROM public."cookie" WHERE cookie = $1', [cookie]);
+}
+
+// Save a chat message in the database
+async function saveChatMessage(message) {
+    const res = await query('SELECT chat FROM public."order" WHERE id = $1', [message.orderID]);
+    const currentChat = res.rows[0].chat || {};
+
+    currentChat.chatMessages = currentChat.chatMessages || {};
+    currentChat.chatMessages[message.msgID] = message;
+
+    await query(
+        'UPDATE public."order" SET chat = $1 WHERE id = $2',
+        [currentChat, message.orderID]
+    );
+
+    return {success: true};
 }
 
 module.exports = {
     query,
     userExists,
     addUser,
-    createOrder
+    createCookie,
+    createOrder,
+    getOrders,
+    getUserByCookie,
+    deleteCookie,
+    saveChatMessage
 };
