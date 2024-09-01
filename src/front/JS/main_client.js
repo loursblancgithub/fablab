@@ -29,12 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (response.orders) {
             orderData = Object.values(response.orders);
             userData = response.user;
-            console.log('Orders data:', orderData);
-            console.log('User data:', userData);
             if (response.user) {
                 displayLandingPage(response.user, orderData);
             } else {
-                console.error('User data not found in response');
+                console.error('User data unavailable');
             }
             displayOrdersList(orderData);
         } else if (response.error) {

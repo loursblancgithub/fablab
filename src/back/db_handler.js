@@ -100,6 +100,7 @@ async function saveChatMessage(message) {
     return {success: true};
 }
 
+// Get user information using the student code
 async function getUserInfos(studentCode) {
     const res = await query('SELECT * FROM public."user" WHERE studentcode = $1', [studentCode]);
     return res.rows[0];

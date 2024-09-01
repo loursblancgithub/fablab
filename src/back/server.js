@@ -161,12 +161,9 @@ wss.on('connection', (ws) => {
         } else if (parsedMessage.fetchOrders) {
             const {cookie} = parsedMessage.fetchOrders;
             const userID = await getUserByCookie(cookie);
-            console.log('userID:', userID);
             const user = await getUserInfos(userID.client);
-            console.log('user:', user);
             if (user) {
                 const orders = await getOrders(user.studentcode);
-                console.log('Orders:', orders);
                 ws.send(JSON.stringify({
                     orders,
                     user: {userName: user.username, firstName: user.firstname, lastName: user.lastname, studentCode: user.studentcode}
