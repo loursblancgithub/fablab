@@ -100,6 +100,11 @@ async function saveChatMessage(message) {
     return {success: true};
 }
 
+async function getUserInfos(studentCode) {
+    const res = await query('SELECT * FROM public."user" WHERE studentcode = $1', [studentCode]);
+    return res.rows[0];
+}
+
 module.exports = {
     query,
     userExists,
@@ -110,5 +115,6 @@ module.exports = {
     getOrders,
     getUserByCookie,
     deleteCookie,
-    saveChatMessage
+    saveChatMessage,
+    getUserInfos
 };

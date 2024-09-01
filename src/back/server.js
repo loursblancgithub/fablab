@@ -9,7 +9,8 @@ const {
     getUserByCookie,
     deleteCookie,
     saveChatMessage,
-    updateOrderFiles
+    updateOrderFiles,
+    getUserInfos
 } = require('./db_handler');
 const {mainLogin} = require('./login_handler');
 
@@ -159,10 +160,25 @@ wss.on('connection', (ws) => {
             ws.send(JSON.stringify({redirect: 'login.html'}));
         } else if (parsedMessage.fetchOrders) {
             const {cookie} = parsedMessage.fetchOrders;
+            const userID = await getUserByCookie(cookie);
+            console.log('userID:', userID);
+            const user = await getUserInfos(userID.client);
+            console.log('user:', user);
+            if (user) {
+                const orders = await getOrders(user.studentcode);
+                console.log('Orders:', orders);
+                ws.send(JSON.stringify({
+                    orders,
+                    user: {userName: user.username, firstName: user.firstname, lastName: user.lastname, studentCode: user.studentcode}
+                }));
+            } else {
+                ws.send(JSON.stringify({error: 'Authentication failed'}));
+            }
+        } else if (parsedMessage.getUser) {
+            const {cookie} = parsedMessage.getUser;
             const user = await getUserByCookie(cookie);
             if (user) {
-                const orders = await getOrders(user.client);
-                ws.send(JSON.stringify({orders}));
+                ws.send(JSON.stringify({user}));
             } else {
                 ws.send(JSON.stringify({error: 'User not found'}));
             }

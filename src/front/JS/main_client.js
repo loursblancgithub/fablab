@@ -1,16 +1,18 @@
-import {applyHoverIfNecessary, sortElementsByDate, logout, capitalizeFirstLetter, formatDateTime} from "/src/front/JS/utils.js";
+import {
+    applyHoverIfNecessary,
+    sortElementsByDate,
+    logout,
+    capitalizeFirstLetter,
+    formatDateTime
+} from "/src/front/JS/utils.js";
 import {addMessageListener, sendMessage} from "./ws_client.js";
-
-const userDataDummy = {
-    userID: 'jema62194',
-    userName: "Jean MANOURY"
-}
 
 const orderContainer = document.getElementById('orderContainer');
 const newOrder = document.getElementById('newOrder');
 let orderElementFilesMessageContent;
 let currentOrderID;
 let orderData;
+let userData;
 
 /*--------------------------
 
@@ -18,7 +20,6 @@ Main logic
 
 --------------------------*/
 
-// src/front/JS/main_client.js
 document.addEventListener('DOMContentLoaded', () => {
     logout(document.getElementById('logoutButton'));
     const cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
@@ -27,8 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
     addMessageListener(response => {
         if (response.orders) {
             orderData = Object.values(response.orders);
-            console.log("orderData", orderData);
-            displayLandingPage(userDataDummy, orderData);
+            userData = response.user;
+            console.log('Orders data:', orderData);
+            console.log('User data:', userData);
+            if (response.user) {
+                displayLandingPage(response.user, orderData);
+            } else {
+                console.error('User data not found in response');
+            }
             displayOrdersList(orderData);
         } else if (response.error) {
             console.error(response.error);
@@ -40,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('ordersListHome').addEventListener('click', () => {
-        displayLandingPage(userDataDummy, orderData);
+        displayLandingPage(userData, orderData);
     });
 
     document.getElementById('ordersList').addEventListener('click', function (event) {
@@ -82,9 +89,15 @@ function displayLandingPage(user, orders) {
     landingPageWelcome.id = 'landingPageWelcome';
 
     const landingPageWelcomeText = document.createElement('div');
-    landingPageWelcomeText.textContent = `Bienvenue ${user.userName} !
+    if (orders.length > 1) {
+        landingPageWelcomeText.textContent = `Bienvenue ${user.firstName} !
     Tu as passé ${orders.length} commandes auprès du FabLab. Merci pour ta confiance !
     Si tu as une suggestion, une remarque ou besoin d'aide, n'hésite pas à nous contacter en cliquant sur l'ampoule visible en haut à droite.`;
+    } else {
+        landingPageWelcomeText.textContent = `Bienvenue ${user.firstName} !
+    Tu as passé ta première commande auprès du FabLab. Merci pour ta confiance !
+    Si tu as une suggestion, une remarque ou besoin d'aide, n'hésite pas à nous contacter en cliquant sur l'ampoule visible en haut à droite.`;
+    }
     landingPageLeftColumn.appendChild(landingPageWelcome);
     landingPageLeftColumn.appendChild(landingPageWelcomeText);
 
