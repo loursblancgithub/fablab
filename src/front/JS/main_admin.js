@@ -1,5 +1,5 @@
-import {removeAllChildren, applyHoverIfNecessary, fiveElements, logout} from "/src/front/JS/utils.js";
-import { addMessageListener, sendMessage} from "./ws_client";
+import {removeAllChildren, applyHoverIfNecessary, fiveElements, logout, capitalizeFirstLetter} from "/src/front/JS/utils.js";
+import {addMessageListener, sendMessage} from "./ws_client.js";
 
 
 const stateOptions = {
@@ -11,173 +11,26 @@ const stateOptions = {
     finished: 'Terminé'
 }
 
-const orderDataDummy = [{
-    orderID: 158486,
-    orderName: "Cirrus Vision Jet",
-    orderState: "pending",
-    userID: 62194,
-    orderMaterial: "PETG",
-    orderColor: "red",
-    orderTotalWeight: 5000,
-    orderQuantity: 100,
-    orderPrice: 2000,
-    orderQuestion: "Beautiful but underpowered lul",
-    orderFiles: {
-        file1: {fileID: 1, fileName: "fuselage.3mf", fileDateTime: "31/07/2024 10:25:32", fileWeight: 3000},
-        file2: {fileID: 2, fileName: "aileron.3mf", fileDateTime: "02/08/2024 10:12:29", fileWeight: 500}
-    },
-    orderDateTime: "31/07/2024 10:25:32"
-},
-    {
-        orderID: 158486,
-        orderName: "Airbus A220",
-        orderState: "finished",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 300,
-        orderQuantity: 1,
-        orderPrice: 8,
-        orderQuestion: "Bombardier on vous aime",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "02/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "05/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "02/08/2024 10:12:29"
-    },
-    {
-        orderID: 154436,
-        orderName: "Boeing 787",
-        orderState: "sliced",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 3000,
-        orderQuantity: 1,
-        orderPrice: 15,
-        orderQuestion: "Belle machine faite par des sagouins",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "03/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "07/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "03/08/2024 10:12:29"
-    },
-    {
-        orderID: 168436,
-        orderName: "Embraer E190",
-        orderState: "printing",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 500,
-        orderQuantity: 1,
-        orderPrice: 4,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "04/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "05/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "04/08/2024 10:12:29"
-    },
-    {
-        orderID: 158431,
-        orderName: "Lockheed Martin F-35",
-        orderState: "printing",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 1500,
-        orderQuantity: 1,
-        orderPrice: 12,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "05/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "10/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "05/08/2024 10:12:29"
-    },
-    {
-        orderID: 156436,
-        orderName: "Cessna 172",
-        orderState: "printing",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 300,
-        orderQuantity: 1,
-        orderPrice: 8,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "06/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "06/08/2024 10:12:29"
-    },
-    {
-        orderID: 158426,
-        orderName: "Piper PA-28",
-        orderState: "printing",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 300,
-        orderQuantity: 1,
-        orderPrice: 8,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "07/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "09/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "07/08/2024 10:12:29"
-    },
-    {
-        orderID: 158736,
-        orderName: "Beechcraft Bonanza",
-        orderState: "printing",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 300,
-        orderQuantity: 1,
-        orderPrice: 10,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "08/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "15/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "08/08/2024 10:12:29"
-    },
-    {
-        orderID: 151436,
-        orderName: "Gulfstream G650",
-        orderState: "printing",
-        userID: 62194,
-        orderMaterial: "PLA",
-        orderColor: "red",
-        orderTotalWeight: 300,
-        orderQuantity: 1,
-        orderPrice: 8,
-        orderQuestion: "Faites attention les winglets sont fragiles",
-        orderFiles: {
-            file1: {fileID: 1, fileName: "Fuselage", fileDateTime: "09/08/2024 10:12:29", fileWeight: 3000},
-            file2: {fileID: 2, fileName: "Aileron", fileDateTime: "21/08/2024 10:12:29", fileWeight: 3000}
-        },
-        orderDateTime: "09/08/2024 10:12:29"
-    }];
-
-const userDataDummy = [
-    {
-        userID: 62194,
-        userName: "Jean Michel"
-    }
-];
-
 const contentContainer = document.getElementById('contentContainer');
+let orderData;
+let userData;
 
 document.addEventListener('DOMContentLoaded', () => {
-
     fiveElements(document.getElementById('bodyContainer'));
     logout(document.getElementById('logoutButton'));
+    const cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
+    sendMessage({adminOrdersRequest: {}, cookie});
+
+    addMessageListener((response) => {
+        if (response.adminOrders) {
+            orderData = response.adminOrders;
+            userData = response.adminUsers;
+            console.log("orderData", orderData);
+            console.log("userData", userData);
+
+            createOrderMosaicElements(orderData, userData);
+        }
+    });
 
     document.querySelectorAll('.sidePanelStateButton').forEach(button => {
         button.addEventListener('click', function () {
@@ -191,29 +44,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-
-    //afficher toutes les commandes par défaut
-    document.getElementById('sidePanelStateButtonAll').classList.add('active');
-    createOrderMosaicElements(orderDataDummy, userDataDummy);
-
     document.getElementById('sidePanelStateButtonAll').addEventListener('click', () => {
         contentContainer.innerHTML = '';
-        createOrderMosaicElements(orderDataDummy, userDataDummy);
+        createOrderMosaicElements(orderData, userData);
     });
 
     document.getElementById('sidePanelStateButtonToDo').addEventListener('click', () => {
         contentContainer.innerHTML = '';
-        createOrderMosaicElements(orderDataDummy.filter(order => order.orderState === "pending"), userDataDummy);
+        createOrderMosaicElements(orderData.filter(order => order.state === "pending"), userData);
     });
 
     document.getElementById('sidePanelStateButtonOngoing').addEventListener('click', () => {
         contentContainer.innerHTML = '';
-        createOrderMosaicElements(orderDataDummy.filter(order => order.orderState !== "pending" && order.orderState !== "finished"), userDataDummy);
+        createOrderMosaicElements(orderData.filter(order => order.state !== "pending" && order.state !== "finished"), userData);
     });
 
     document.getElementById('sidePanelStateButtonFinished').addEventListener('click', () => {
         contentContainer.innerHTML = '';
-        createOrderMosaicElements(orderDataDummy.filter(order => order.orderState === "finished"), userDataDummy);
+        createOrderMosaicElements(orderData.filter(order => order.state === "finished"), userData);
     });
 });
 
@@ -235,10 +83,10 @@ function createOrderMosaicElements(orderData, userData) {
     columns.forEach(column => column.classList.add('column'));
 
     orderData.sort((a, b) => {
-        if (a.orderState === 'pending') return -1;
-        if (b.orderState === 'pending') return 1;
-        if (a.orderState === 'finished') return 1;
-        if (b.orderState === 'finished') return -1;
+        if (a.state === 'pending') return -1;
+        if (b.state === 'pending') return 1;
+        if (a.state === 'finished') return 1;
+        if (b.state === 'finished') return -1;
         return 0;
     });
 
@@ -250,10 +98,11 @@ function createOrderMosaicElements(orderData, userData) {
         orderElementHeader.classList.add('orderMosaicElementHeader');
 
         const orderNameElement = document.createElement('div');
-        orderNameElement.textContent = `${orderElement.orderName}`;
+        orderNameElement.textContent = `${orderElement.name}`;
+        orderNameElement.classList.add('orderMosaicElementTitle');
         orderNameElement.classList.add('orderMosaicElementTitle');
         orderNameElement.classList.add('orderMosaicElementText');
-        applyHoverIfNecessary(orderNameElement, `${orderElement.orderName}`);
+        applyHoverIfNecessary(orderNameElement, `${orderElement.name}`);
         orderElementHeader.appendChild(orderNameElement);
 
         const orderElementHeaderClientState = document.createElement('div');
@@ -265,9 +114,9 @@ function createOrderMosaicElements(orderData, userData) {
         applyHoverIfNecessary(orderClientElement, `${orderClientElement.textContent}`);
         orderElementHeaderClientState.appendChild(orderClientElement);
 
-        const orderStateDropdown = createStateDropdown(orderElement.orderState);
+        const orderStateDropdown = createStateDropdown(orderElement.state);
         orderStateDropdown.style.margin = '1vh 0 1vh 0';
-        applyHoverIfNecessary(orderStateDropdown, stateOptions[orderElement.orderState]);
+        applyHoverIfNecessary(orderStateDropdown, stateOptions[orderElement.state]);
         orderElementHeaderClientState.appendChild(orderStateDropdown);
 
         orderElementHeader.appendChild(orderElementHeaderClientState);
@@ -295,32 +144,44 @@ function createOrderMosaicElements(orderData, userData) {
         });
 
         if (orderElement.details) {
+            const orderMaterialColorElement = document.createElement('div');
+            orderMaterialColorElement.classList.add('orderMosaicElementMaterialColor');
+
             const orderMaterialElement = document.createElement('div');
-            if (orderElement.orderMaterial === 'PLA' || orderElement.orderMaterial === 'PETG' || orderElement.orderMaterial === 'ABS') {
-                orderMaterialElement.textContent = `${orderElement.orderMaterial} (Plastique)`;
-            } else if (orderElement.orderMaterial === 'Résine') {
-                orderMaterialElement.textContent = `${orderElement.orderMaterial}`;
+            if (orderElement.material === 'pla' || orderElement.material === 'petg' || orderElement.material === 'abs') {
+                orderMaterialElement.textContent = `${orderElement.material.toUpperCase()} (Plastique)`;
+            } else if (orderElement.material === 'Résine') {
+                orderMaterialElement.textContent = `${orderElement.material}`;
             }
             orderMaterialElement.classList.add('orderMosaicElementText');
-            orderMosaicElementDiv.appendChild(orderMaterialElement);
+            orderMaterialColorElement.appendChild(orderMaterialElement);
+
+            const orderColorElement = document.createElement('div');
+            orderColorElement.textContent = `${capitalizeFirstLetter(orderElement.color)}`;
+            orderColorElement.classList.add('orderMosaicElementText');
+            orderMaterialColorElement.appendChild(orderColorElement);
+
+            orderMosaicElementDiv.appendChild(orderMaterialColorElement);
 
             const weightQuantityDiv = document.createElement('div');
             weightQuantityDiv.classList.add('orderMosaicElementWeightQuantity');
 
             const orderTotalWeightElement = document.createElement('div');
             if (orderElement.orderTotalWeight > 1000) {
-                orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight / 1000}kg`;
+                orderTotalWeightElement.textContent = `Poids total: ${orderElement.totalweight / 1000}kg`;
+            } else if (orderElement.totalweight === 0 || orderElement.totalweight === null) {
+                orderTotalWeightElement.textContent = `Poids total: ⌛`;
             } else {
-                orderTotalWeightElement.textContent = `Poids total: ${orderElement.orderTotalWeight}g`;
+                orderTotalWeightElement.textContent = `Poids total: ${orderElement.totalweight}g`;
             }
             orderTotalWeightElement.classList.add('orderMosaicElementText');
             weightQuantityDiv.appendChild(orderTotalWeightElement);
 
             const orderQuantityElement = document.createElement('div');
-            if (orderElement.orderQuantity > 1) {
-                orderQuantityElement.textContent = `${orderElement.orderQuantity} pièces`;
+            if (orderElement.quantity > 1) {
+                orderQuantityElement.textContent = `${orderElement.quantity} pièces`;
             } else {
-                orderQuantityElement.textContent = `${orderElement.orderQuantity} pièce`;
+                orderQuantityElement.textContent = `${orderElement.quantity} pièce`;
             }
             orderQuantityElement.classList.add('orderQuantityElementText');
             orderQuantityElement.classList.add('orderMosaicElementText');
@@ -329,7 +190,11 @@ function createOrderMosaicElements(orderData, userData) {
             orderMosaicElementDiv.appendChild(weightQuantityDiv);
 
             const orderPriceElement = document.createElement('div');
-            orderPriceElement.textContent = `${orderElement.orderPrice}€`;
+            if (orderElement.price === 0 || orderElement.price === null) {
+                orderPriceElement.textContent = `⌛€`;
+            } else {
+                orderPriceElement.textContent = `${orderElement.price}€`;
+            }
             orderPriceElement.classList.add('orderMosaicElementText');
             orderMosaicElementDiv.appendChild(orderPriceElement);
         }
@@ -343,7 +208,8 @@ function createOrderMosaicElements(orderData, userData) {
         });
 
         document.getElementById('hideOrderDetails').addEventListener('click', () => {
-            hideOrderDetails();
+            document.getElementById('orderElement').style.display = 'none';
+            document.querySelector('.pageMask').style.display = 'none';
         });
     });
 
@@ -357,43 +223,38 @@ function showOrderDetails(orderElement) {
     document.querySelector('.pageMask').style.display = 'block';
 
     // Order name
-    document.getElementById('orderName').textContent = orderElement.orderName;
+    document.getElementById('orderName').textContent = orderElement.name;
 
     // State
-    document.getElementById('orderState').textContent = stateOptions[orderElement.orderState];
+    document.getElementById('orderState').textContent = stateOptions[orderElement.state];
 
     // Date
     const [date, time] = orderElement.orderDateTime.split(' ');
     document.getElementById('orderDateTime').textContent = `Commande passée le ${date} à ${time}`;
 
     // Material
-    if (orderElement.orderMaterial === 'PLA' || orderElement.orderMaterial === 'PETG' || orderElement.orderMaterial === 'ABS') {
-        document.getElementById('orderMaterial').textContent = `${orderElement.orderMaterial} (Plastique)`;
-    } else if (orderElement.orderMaterial === 'Résine') {
-        document.getElementById('orderMaterial').textContent = `${orderElement.orderMaterial}`;
+    if (orderElement.material === 'PLA' || orderElement.material === 'PETG' || orderElement.material === 'ABS') {
+        document.getElementById('orderMaterial').textContent = `${orderElement.material} (Plastique)`;
+    } else if (orderElement.material === 'Résine') {
+        document.getElementById('orderMaterial').textContent = `${orderElement.material}`;
     }
 
     // Weight
-    if (orderElement.orderTotalWeight > 1000) {
-        document.getElementById('orderTotalWeight').textContent = `Poids total: ${orderElement.orderTotalWeight / 1000}kg`;
+    if (orderElement.totalweight > 1000) {
+        document.getElementById('orderTotalWeight').textContent = `Poids total: ${orderElement.totalweight / 1000}kg`;
     } else {
-        document.getElementById('orderTotalWeight').textContent = `Poids total: ${orderElement.orderTotalWeight}g`;
+        document.getElementById('orderTotalWeight').textContent = `Poids total: ${orderElement.totalweight}g`;
     }
 
     // Quantity
-    if (orderElement.orderQuantity > 1) {
-        document.getElementById('orderQuantity').textContent = `${orderElement.orderQuantity} pièces`;
+    if (orderElement.quantity > 1) {
+        document.getElementById('orderQuantity').textContent = `${orderElement.quantity} pièces`;
     } else {
-        document.getElementById('orderQuantity').textContent = `${orderElement.orderQuantity} pièce`;
+        document.getElementById('orderQuantity').textContent = `${orderElement.quantity} pièce`;
     }
 
-    document.getElementById('orderPrice').textContent = `${orderElement.orderPrice}€`;
-    document.getElementById('orderQuestion').textContent = `Questions: ${orderElement.orderQuestion}`;
-}
-
-function hideOrderDetails() {
-    document.getElementById('orderElement').style.display = 'none';
-    document.querySelector('.pageMask').style.display = 'none';
+    document.getElementById('orderPrice').textContent = `${orderElement.price}€`;
+    document.getElementById('orderQuestion').textContent = `Questions: ${orderElement.question}`;
 }
 
 // Function to create the order state dropdown

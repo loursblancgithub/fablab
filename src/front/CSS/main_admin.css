@@ -208,6 +208,12 @@ option {
     white-space: nowrap;
 }
 
+.orderMosaicElementMaterialColor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .orderMosaicElementWeightQuantity {
     display: flex;
     justify-content: space-between;

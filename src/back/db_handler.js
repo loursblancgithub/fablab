@@ -30,7 +30,7 @@ async function userExists(studentCode) {
 async function addUser(studentCode, firstName, lastName) {
     await query(
         'INSERT INTO public."user" (studentcode, privilegelevel, chat, firstname, lastname) VALUES ($1, $2, $3, $4, $5)',
-        [studentCode, 0, '{}', firstName, lastName]
+        [studentCode, 1, '{}', firstName, lastName]
     );
 }
 
@@ -106,6 +106,26 @@ async function getUserInfos(studentCode) {
     return res.rows[0];
 }
 
+// Get the user privilege level of an user with the student code
+async function getUserPrivilegeLevel(studentCode) {
+    const query = 'SELECT privilegelevel FROM public.user WHERE studentcode = $1';
+    const values = [studentCode];
+    const res = await pool.query(query, values);
+    return res.rows[0] ? res.rows[0].privilegelevel : null;
+}
+
+// For admin use, retrieve all orders from the database
+async function adminGetOrders() {
+    const res = await query('SELECT * FROM public."order"');
+    return res.rows;
+}
+
+// For admin use, retrieve all users from the database (only the first name, last name and student code)
+async function adminGetUsers() {
+    const res = await query('SELECT studentcode, firstname, lastname FROM public."user"');
+    return res.rows;
+}
+
 module.exports = {
     query,
     userExists,
@@ -117,5 +137,8 @@ module.exports = {
     getUserByCookie,
     deleteCookie,
     saveChatMessage,
-    getUserInfos
+    getUserInfos,
+    getUserPrivilegeLevel,
+    adminGetOrders,
+    adminGetUsers
 };

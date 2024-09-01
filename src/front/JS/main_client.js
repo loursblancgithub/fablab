@@ -303,7 +303,7 @@ function showContentsOfActiveOrder(orderData, activeOrderId, dataType) {
         if (dataType === 'files') {
             displayFilesList(activeOrder);
         } else if (dataType === 'chat') {
-            displayMessages(activeOrder);
+            displayMessages(activeOrder, userData);
         }
     }
 }
@@ -354,7 +354,7 @@ function displayFilesList(order) {
 }
 
 // Show the chat for a specific order
-function displayMessages(order) {
+function displayMessages(order, userData) {
     orderElementFilesMessageContent.innerHTML = '';
 
     const chatFeed = document.createElement('div');
@@ -404,7 +404,7 @@ function displayMessages(order) {
             const message = {
                 orderID: order.id,
                 msgID: `msg_${Date.now()}`,
-                msgSender: userDataDummy.userID,
+                msgSender: userData.studentCode,
                 msgDate: new Date().toLocaleString('fr-FR', {timeZone: 'Europe/Paris'}),
                 msgContent: messageContent
             };

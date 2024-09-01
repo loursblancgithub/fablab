@@ -10,7 +10,9 @@ const {
     deleteCookie,
     saveChatMessage,
     updateOrderFiles,
-    getUserInfos
+    getUserInfos,
+    getUserPrivilegeLevel,
+    adminGetOrders, adminGetUsers
 } = require('./db_handler');
 const {mainLogin} = require('./login_handler');
 
@@ -70,12 +72,17 @@ async function checkUserOrders(studentCode) {
 async function handleUserRedirection(res, cookieValue) {
     const user = await getUserByCookie(cookieValue);
     if (user) {
-        const hasOrders = await checkUserOrders(user.client);
-        if (hasOrders) {
-            serveStaticFile(res, path.join(__dirname, '../front/HTML/main_client.html'));
+        const privilegeLevel = await getUserPrivilegeLevel(user.client);
+        if (privilegeLevel >= 2) {
+            serveStaticFile(res, path.join(__dirname, '../front/HTML/main_admin.html'));
         } else {
-            res.writeHead(302, {'Location': '/src/front/HTML/order.html'});
-            res.end();
+            const hasOrders = await checkUserOrders(user.client);
+            if (hasOrders) {
+                serveStaticFile(res, path.join(__dirname, '../front/HTML/main_client.html'));
+            } else {
+                res.writeHead(302, {'Location': '/src/front/HTML/order.html'});
+                res.end();
+            }
         }
     } else {
         res.writeHead(302, {'Location': '/src/front/HTML/login.html'});
@@ -97,7 +104,7 @@ const server = http.createServer(async (req, res) => {
                 res.writeHead(302, {'Location': '/src/front/HTML/login.html'});
                 res.end();
             }
-        } else if (req.url === '/src/front/HTML/main_client.html') {
+        } else if (req.url === '/src/front/HTML/main_client.html' || req.url === '/src/front/HTML/main_admin.html') {
             if (cookieValue) {
                 await handleUserRedirection(res, cookieValue);
             } else {
@@ -166,7 +173,12 @@ wss.on('connection', (ws) => {
                 const orders = await getOrders(user.studentcode);
                 ws.send(JSON.stringify({
                     orders,
-                    user: {userName: user.username, firstName: user.firstname, lastName: user.lastname, studentCode: user.studentcode}
+                    user: {
+                        userName: user.username,
+                        firstName: user.firstname,
+                        lastName: user.lastname,
+                        studentCode: user.studentcode
+                    }
                 }));
             } else {
                 ws.send(JSON.stringify({error: 'Authentication failed'}));
@@ -222,6 +234,20 @@ wss.on('connection', (ws) => {
                 });
             } else {
                 ws.send(JSON.stringify({error: 'Order could not be saved'}));
+            }
+        } else if (parsedMessage.adminOrdersRequest) {
+            const user = await getUserByCookie(parsedMessage.cookie);
+            if (user) {
+                const privilegeLevel = await getUserPrivilegeLevel(user.client);
+                if (privilegeLevel >= 2) {
+                    const adminOrders = await adminGetOrders();
+                    const adminUsers = await adminGetUsers();
+                    ws.send(JSON.stringify({adminOrders, adminUsers}));
+                } else {
+                    ws.send(JSON.stringify({error: 'Insufficient privileges'}));
+                }
+            } else {
+                ws.send(JSON.stringify({error: 'Authentication failed'}));
             }
         }
     });
