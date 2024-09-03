@@ -161,6 +161,11 @@ option {
     white-space: nowrap;
 }
 
+.orderMosaicElementDateTime {
+    font-size: 1.5vh;
+    margin: 0.8vh 0 0.8vh 0;
+}
+
 .orderMosaicElementHeaderColumn > .orderMosaicElementText {
     max-width: 10vw;
 }

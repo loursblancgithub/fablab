@@ -1,4 +1,11 @@
-import {removeAllChildren, applyHoverIfNecessary, fiveElements, logout, capitalizeFirstLetter} from "/src/front/JS/utils.js";
+import {
+    removeAllChildren,
+    applyHoverIfNecessary,
+    fiveElements,
+    logout,
+    capitalizeFirstLetter,
+    formatDateTime
+} from "/src/front/JS/utils.js";
 import {addMessageListener, sendMessage} from "./ws_client.js";
 
 
@@ -72,6 +79,64 @@ document.addEventListener('DOMContentLoaded', () => {
 //-------------------------->
 
 // Function to populate the order elements mosaic
+function toggleTextToTextarea(element, orderElement, property) {
+    element.addEventListener('click', function () {
+        if (element.tagName === 'DIV') {
+            const originalValue = orderElement[property];
+            const container = document.createElement('div');
+            container.classList.add('orderMosaicElementText');
+
+            const prefixSpan = document.createElement('span');
+            const suffixSpan = document.createElement('span');
+            const textarea = document.createElement('textarea');
+
+            if (property === 'totalweight') {
+                prefixSpan.textContent = 'Poids total: ';
+                suffixSpan.textContent = 'g';
+            } else if (property === 'price') {
+                suffixSpan.textContent = '€';
+            }
+
+            textarea.value = originalValue;
+            textarea.classList.add('orderMosaicElementText');
+            textarea.setAttribute('cols', 7);
+            textarea.setAttribute('rows', 1);
+            textarea.style.resize = 'none';
+
+            container.appendChild(prefixSpan);
+            container.appendChild(textarea);
+            container.appendChild(suffixSpan);
+            element.replaceWith(container);
+            textarea.focus();
+
+            textarea.addEventListener('blur', function () {
+                const newValue = textarea.value.trim();
+                if (newValue === '' || isNaN(newValue)) {
+                    orderElement[property] = originalValue;
+                } else {
+                    orderElement[property] = newValue;
+                }
+                const div = document.createElement('div');
+                if (property === 'totalweight') {
+                    if (orderElement.totalweight > 1000) {
+                        div.textContent = `Poids total: ${orderElement.totalweight / 1000}kg`;
+                    } else {
+                        div.textContent = `Poids total: ${orderElement.totalweight}g`;
+                    }
+                } else if (property === 'price') {
+                    div.textContent = `${orderElement.price}€`;
+                } else {
+                    div.textContent = orderElement[property];
+                }
+                div.classList.add('orderMosaicElementText');
+                container.replaceWith(div);
+                toggleTextToTextarea(div, orderElement, property);
+            });
+        }
+    });
+}
+
+// Modify the createOrderMosaicElements function
 function createOrderMosaicElements(orderData, userData) {
     const contentContainer = document.getElementById('contentContainer');
     if (!contentContainer) {
@@ -100,7 +165,6 @@ function createOrderMosaicElements(orderData, userData) {
         const orderNameElement = document.createElement('div');
         orderNameElement.textContent = `${orderElement.name}`;
         orderNameElement.classList.add('orderMosaicElementTitle');
-        orderNameElement.classList.add('orderMosaicElementTitle');
         orderNameElement.classList.add('orderMosaicElementText');
         applyHoverIfNecessary(orderNameElement, `${orderElement.name}`);
         orderElementHeader.appendChild(orderNameElement);
@@ -120,6 +184,11 @@ function createOrderMosaicElements(orderData, userData) {
         orderElementHeaderClientState.appendChild(orderStateDropdown);
 
         orderElementHeader.appendChild(orderElementHeaderClientState);
+
+        const orderElementDateTime = document.createElement('div');
+        orderElementDateTime.textContent = formatDateTime(orderElement.datetime, 'order');
+        orderElementDateTime.classList.add('orderMosaicElementDateTime');
+        orderElementHeader.appendChild(orderElementDateTime);
 
         orderMosaicElementDiv.appendChild(orderElementHeader);
 
@@ -167,15 +236,16 @@ function createOrderMosaicElements(orderData, userData) {
             weightQuantityDiv.classList.add('orderMosaicElementWeightQuantity');
 
             const orderTotalWeightElement = document.createElement('div');
-            if (orderElement.orderTotalWeight > 1000) {
+            if (orderElement.totalweight > 1000) {
                 orderTotalWeightElement.textContent = `Poids total: ${orderElement.totalweight / 1000}kg`;
             } else if (orderElement.totalweight === 0 || orderElement.totalweight === null) {
-                orderTotalWeightElement.textContent = `Poids total: ⌛`;
+                orderTotalWeightElement.textContent = `Poids total: ⌛g`;
             } else {
                 orderTotalWeightElement.textContent = `Poids total: ${orderElement.totalweight}g`;
             }
             orderTotalWeightElement.classList.add('orderMosaicElementText');
             weightQuantityDiv.appendChild(orderTotalWeightElement);
+            toggleTextToTextarea(orderTotalWeightElement, orderElement, 'totalweight');
 
             const orderQuantityElement = document.createElement('div');
             if (orderElement.quantity > 1) {
@@ -197,6 +267,7 @@ function createOrderMosaicElements(orderData, userData) {
             }
             orderPriceElement.classList.add('orderMosaicElementText');
             orderMosaicElementDiv.appendChild(orderPriceElement);
+            toggleTextToTextarea(orderPriceElement, orderElement, 'price');
         }
 
         orderMosaicElementDiv.appendChild(orderDetailsElement);
