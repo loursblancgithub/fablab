@@ -9,27 +9,27 @@ const pool = new Pool({
 });
 
 async function query(text, params) {
-    const client = await pool.connect();
+    const dbClient = await pool.connect();
     try {
-        return await client.query(text, params);
+        return await dbClient.query(text, params);
     } catch (err) {
         console.error('Database query error:', err);
         throw err;
     } finally {
-        client.release();
+        dbClient.release();
     }
 }
 
 // Check if the user who logged in exists in the database
 async function userExists(studentCode) {
-    const res = await query('SELECT 1 FROM public."user" WHERE studentcode = $1', [studentCode]);
+    const res = await query('SELECT 1 FROM public."userdata" WHERE studentcode = $1', [studentCode]);
     return res.rows.length > 0;
 }
 
 // Add a new user to the database
 async function addUser(studentCode, firstName, lastName) {
     await query(
-        'INSERT INTO public."user" (studentcode, privilegelevel, chat, firstname, lastname) VALUES ($1, $2, $3, $4, $5)',
+        'INSERT INTO public."userdata" (studentcode, privilegelevel, chat, firstname, lastname) VALUES ($1, $2, $3, $4, $5)',
         [studentCode, 1, '{}', firstName, lastName]
     );
 }
@@ -37,7 +37,7 @@ async function addUser(studentCode, firstName, lastName) {
 // Add a new cookie to the database
 async function createCookie(cookie, studentCode) {
     await query(
-        'INSERT INTO public."cookie" (cookie, client) VALUES ($1, $2)',
+        'INSERT INTO public."cookie" (cookie, fablabuser) VALUES ($1, $2)',
         [cookie, studentCode]
     );
 }
@@ -45,7 +45,7 @@ async function createCookie(cookie, studentCode) {
 // Save order information in the database
 async function createOrder(order) {
     const res = await query(
-        'INSERT INTO public."order" (name, tool, material, color, quantity, questions, datetime, client, state, goodpracticescheck, additionalparameters) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id',
+        'INSERT INTO public."order" (name, tool, material, color, quantity, questions, datetime, fablabuser, state, goodpracticescheck, additionalparameters) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id',
         [order.orderName, order.orderTool, order.orderMaterial, order.orderColor, order.orderQuantity, order.orderQuestions, order.orderDateTime, order.orderClient, "pending", order.orderGoodPracticesCheck, order.orderAdditionalParameters]
     );
     return {success: true, orderID: res.rows[0].id};
@@ -68,14 +68,14 @@ async function updateOrderFiles(orderID, fileInfo) {
 }
 
 // Get all orders of a specific user
-async function getOrders(client) {
-    const res = await query('SELECT * FROM public."order" WHERE client = $1', [client]);
+async function getOrders(user) {
+    const res = await query('SELECT * FROM public."order" WHERE fablabuser = $1', [user]);
     return res.rows;
 }
 
 // Get the user student code using the cookie from the client's browser
 async function getUserByCookie(cookie) {
-    const res = await query('SELECT client FROM public."cookie" WHERE cookie = $1', [cookie]);
+    const res = await query('SELECT fablabuser FROM public."cookie" WHERE cookie = $1', [cookie]);
     return res.rows[0];
 }
 
@@ -102,13 +102,13 @@ async function saveChatMessage(message) {
 
 // Get user information using the student code
 async function getUserInfos(studentCode) {
-    const res = await query('SELECT * FROM public."user" WHERE studentcode = $1', [studentCode]);
+    const res = await query('SELECT * FROM public."userdata" WHERE studentcode = $1', [studentCode]);
     return res.rows[0];
 }
 
-// Get the user privilege level of an user with the student code
+// Get the user privilege level of a user with the student code
 async function getUserPrivilegeLevel(studentCode) {
-    const query = 'SELECT privilegelevel FROM public.user WHERE studentcode = $1';
+    const query = 'SELECT privilegelevel FROM public."userdata" WHERE studentcode = $1';
     const values = [studentCode];
     const res = await pool.query(query, values);
     return res.rows[0] ? res.rows[0].privilegelevel : null;
@@ -122,8 +122,17 @@ async function adminGetOrders() {
 
 // For admin use, retrieve all users from the database (only the first name, last name and student code)
 async function adminGetUsers() {
-    const res = await query('SELECT studentcode, firstname, lastname FROM public."user"');
+    const res = await query('SELECT studentcode, firstname, lastname FROM public."userdata"');
     return res.rows;
+}
+
+// For admin use, update a specific field of a specific order in the database
+async function adminUpdateOrder(data) {
+    await query(
+        `UPDATE public."order" SET ${data.field} = $1 WHERE id = $2`,
+        [data.newValue, data.orderID]
+    );
+    return {success: true, fieldToUpdate: data.field};
 }
 
 module.exports = {
@@ -140,5 +149,6 @@ module.exports = {
     getUserInfos,
     getUserPrivilegeLevel,
     adminGetOrders,
-    adminGetUsers
+    adminGetUsers,
+    adminUpdateOrder
 };

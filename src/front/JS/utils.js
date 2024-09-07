@@ -199,7 +199,6 @@ function capitalizeFirstLetter(string) {
 
 export {capitalizeFirstLetter};
 
-
 /*--------------------------
 
 Create a date to be displayed
@@ -228,3 +227,24 @@ function formatDateTime(isoDate, type) {
 }
 
 export {formatDateTime};
+
+/*--------------------------
+
+Select the right color for each order state
+
+--------------------------*/
+
+function getColorForState(state) {
+    const stateColorMapping = {
+        pending: {background: '#215a6c', font: '#ffffff', frText: "En attente", value: "pending"},
+        billed: {background: '#5A3286', font: '#ffffff', frText: "Facturé", value: "billed"},
+        printed: {background: '#5A3286', font: '#ffffff', frText: "Imprimé", value: "printed"},
+        sliced: {background: '#5A3286', font: '#ffffff', frText: "Slicé", value: "sliced"},
+        printing: {background: '#5A3286', font: '#ffffff', frText: "En cours d'impression", value: "printing"},
+        finished: {background: '#0A53A8', font: '#ffffff', frText: "Terminé", value: "finished"},
+    };
+
+    return stateColorMapping[state] || {background: '#bdbdbd', font: '#000000'}; // Default colors
+}
+
+export {getColorForState};

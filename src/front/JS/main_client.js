@@ -3,7 +3,8 @@ import {
     sortElementsByDate,
     logout,
     capitalizeFirstLetter,
-    formatDateTime
+    formatDateTime,
+    getColorForState
 } from "/src/front/JS/utils.js";
 import {addMessageListener, sendMessage} from "./ws_client.js";
 
@@ -12,7 +13,7 @@ const newOrder = document.getElementById('newOrder');
 let orderElementFilesMessageContent;
 let currentOrderID;
 let orderData;
-let userData;
+let clientUserData;
 
 /*--------------------------
 
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addMessageListener(response => {
         if (response.orders) {
             orderData = Object.values(response.orders);
-            userData = response.user;
+            clientUserData = response.user;
             if (response.user) {
                 displayLandingPage(response.user, orderData);
             } else {
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('ordersListHome').addEventListener('click', () => {
-        displayLandingPage(userData, orderData);
+        displayLandingPage(clientUserData, orderData);
     });
 
     document.getElementById('ordersList').addEventListener('click', function (event) {
@@ -303,7 +304,7 @@ function showContentsOfActiveOrder(orderData, activeOrderId, dataType) {
         if (dataType === 'files') {
             displayFilesList(activeOrder);
         } else if (dataType === 'chat') {
-            displayMessages(activeOrder, userData);
+            displayMessages(activeOrder, clientUserData);
         }
     }
 }
@@ -467,20 +468,6 @@ function appendMessage(message) {
     }
     chatFeed.appendChild(messageElement);
     orderData.find(order => order.id === message.orderID).chat.chatMessages[message.msgID] = message;
-}
-
-// Set color state for each order
-function getColorForState(state) {
-    const stateColorMapping = {
-        pending: {background: '#215a6c', font: '#ffffff', frText: "En attente"},
-        billed: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        printed: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        sliced: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        printing: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        finished: {background: '#0A53A8', font: '#ffffff', frText: "Terminée"},
-    };
-
-    return stateColorMapping[state] || {background: '#bdbdbd', font: '#000000'};
 }
 
 // Create the svg elements working with the sprite

@@ -4,10 +4,10 @@ import {
     fiveElements,
     logout,
     capitalizeFirstLetter,
-    formatDateTime
+    formatDateTime,
+    getColorForState
 } from "/src/front/JS/utils.js";
 import {addMessageListener, sendMessage} from "./ws_client.js";
-
 
 const stateOptions = {
     pending: 'En attente',
@@ -19,23 +19,28 @@ const stateOptions = {
 }
 
 const contentContainer = document.getElementById('contentContainer');
-let orderData;
-let userData;
+let allOrdersData;
+let allUsersData;
+let clientUserData;
+let cookie;
 
 document.addEventListener('DOMContentLoaded', () => {
     fiveElements(document.getElementById('bodyContainer'));
     logout(document.getElementById('logoutButton'));
-    const cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
-    sendMessage({adminOrdersRequest: {}, cookie});
+    cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
+    sendMessage({adminOrdersRequest: {}, cookie, getClientUserData: {}});
 
     addMessageListener((response) => {
-        if (response.adminOrders) {
-            orderData = response.adminOrders;
-            userData = response.adminUsers;
-            console.log("orderData", orderData);
-            console.log("userData", userData);
+        if (response.clientUserData) {
+            clientUserData = response.clientUserData;
+            console.log("clientUserData", clientUserData);
+        } else if (response.adminOrders) {
+            allOrdersData = response.adminOrders;
+            allUsersData = response.adminUsers;
+            console.log("orderData", allOrdersData);
+            console.log("userData", allUsersData);
 
-            createOrderMosaicElements(orderData, userData);
+            createOrderMosaicElements(allOrdersData, allUsersData);
         }
     });
 
@@ -53,22 +58,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('sidePanelStateButtonAll').addEventListener('click', () => {
         contentContainer.innerHTML = '';
-        createOrderMosaicElements(orderData, userData);
+        createOrderMosaicElements(allOrdersData, allUsersData);
     });
 
     document.getElementById('sidePanelStateButtonToDo').addEventListener('click', () => {
         contentContainer.innerHTML = '';
-        createOrderMosaicElements(orderData.filter(order => order.state === "pending"), userData);
+        createOrderMosaicElements(allOrdersData.filter(order => order.state === "pending"), allUsersData);
     });
 
     document.getElementById('sidePanelStateButtonOngoing').addEventListener('click', () => {
         contentContainer.innerHTML = '';
-        createOrderMosaicElements(orderData.filter(order => order.state !== "pending" && order.state !== "finished"), userData);
+        createOrderMosaicElements(allOrdersData.filter(order => order.state !== "pending" && order.state !== "finished"), allUsersData);
     });
 
     document.getElementById('sidePanelStateButtonFinished').addEventListener('click', () => {
         contentContainer.innerHTML = '';
-        createOrderMosaicElements(orderData.filter(order => order.state === "finished"), userData);
+        createOrderMosaicElements(allOrdersData.filter(order => order.state === "finished"), allUsersData);
     });
 });
 
@@ -77,64 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
 //Functions
 
 //-------------------------->
-
-// Function to populate the order elements mosaic
-function toggleTextToTextarea(element, orderElement, property) {
-    element.addEventListener('click', function () {
-        if (element.tagName === 'DIV') {
-            const originalValue = orderElement[property];
-            const container = document.createElement('div');
-            container.classList.add('orderMosaicElementText');
-
-            const prefixSpan = document.createElement('span');
-            const suffixSpan = document.createElement('span');
-            const textarea = document.createElement('textarea');
-
-            if (property === 'totalweight') {
-                prefixSpan.textContent = 'Poids total: ';
-                suffixSpan.textContent = 'g';
-            } else if (property === 'price') {
-                suffixSpan.textContent = '€';
-            }
-
-            textarea.value = originalValue;
-            textarea.classList.add('orderMosaicElementText');
-            textarea.setAttribute('cols', 7);
-            textarea.setAttribute('rows', 1);
-            textarea.style.resize = 'none';
-
-            container.appendChild(prefixSpan);
-            container.appendChild(textarea);
-            container.appendChild(suffixSpan);
-            element.replaceWith(container);
-            textarea.focus();
-
-            textarea.addEventListener('blur', function () {
-                const newValue = textarea.value.trim();
-                if (newValue === '' || isNaN(newValue)) {
-                    orderElement[property] = originalValue;
-                } else {
-                    orderElement[property] = newValue;
-                }
-                const div = document.createElement('div');
-                if (property === 'totalweight') {
-                    if (orderElement.totalweight > 1000) {
-                        div.textContent = `Poids total: ${orderElement.totalweight / 1000}kg`;
-                    } else {
-                        div.textContent = `Poids total: ${orderElement.totalweight}g`;
-                    }
-                } else if (property === 'price') {
-                    div.textContent = `${orderElement.price}€`;
-                } else {
-                    div.textContent = orderElement[property];
-                }
-                div.classList.add('orderMosaicElementText');
-                container.replaceWith(div);
-                toggleTextToTextarea(div, orderElement, property);
-            });
-        }
-    });
-}
 
 // Modify the createOrderMosaicElements function
 function createOrderMosaicElements(orderData, userData) {
@@ -173,14 +120,23 @@ function createOrderMosaicElements(orderData, userData) {
         orderElementHeaderClientState.classList.add('orderElementHeaderClientState');
 
         const orderClientElement = document.createElement('div');
-        orderClientElement.textContent = getUserNameById(orderElement.userID, userData);
+        orderClientElement.textContent = getUserNameById(orderElement.fablabuser, userData);
         orderClientElement.classList.add('orderMosaicElementText');
         applyHoverIfNecessary(orderClientElement, `${orderClientElement.textContent}`);
         orderElementHeaderClientState.appendChild(orderClientElement);
 
-        const orderStateDropdown = createStateDropdown(orderElement.state);
+        const orderStateDropdown = createStateDropdown(orderElement.state, orderElement.id);
         orderStateDropdown.style.margin = '1vh 0 1vh 0';
         applyHoverIfNecessary(orderStateDropdown, stateOptions[orderElement.state]);
+        orderStateDropdown.addEventListener('change', function () {
+            const previousValue = orderStateDropdown.value;
+            const successfulUpdate = certifyOrderUpdate(this.value, 'state', orderElement.id, cookie);
+            if (successfulUpdate) {
+                orderElement.state = this.value;
+            } else {
+                orderElement.state = previousValue;
+            }
+        });
         orderElementHeaderClientState.appendChild(orderStateDropdown);
 
         orderElementHeader.appendChild(orderElementHeaderClientState);
@@ -245,7 +201,7 @@ function createOrderMosaicElements(orderData, userData) {
             }
             orderTotalWeightElement.classList.add('orderMosaicElementText');
             weightQuantityDiv.appendChild(orderTotalWeightElement);
-            toggleTextToTextarea(orderTotalWeightElement, orderElement, 'totalweight');
+            toggleTextToTextarea(orderTotalWeightElement, orderElement, 'totalweight', userData);
 
             const orderQuantityElement = document.createElement('div');
             if (orderElement.quantity > 1) {
@@ -267,7 +223,7 @@ function createOrderMosaicElements(orderData, userData) {
             }
             orderPriceElement.classList.add('orderMosaicElementText');
             orderMosaicElementDiv.appendChild(orderPriceElement);
-            toggleTextToTextarea(orderPriceElement, orderElement, 'price');
+            toggleTextToTextarea(orderPriceElement, orderElement, 'price', userData);
         }
 
         orderMosaicElementDiv.appendChild(orderDetailsElement);
@@ -286,6 +242,75 @@ function createOrderMosaicElements(orderData, userData) {
 
     contentContainer.innerHTML = '';
     columns.forEach(column => contentContainer.appendChild(column));
+}
+
+// Function to populate the order elements mosaic
+function toggleTextToTextarea(element, orderElement, property, userData) {
+    element.addEventListener('click', function () {
+        if (element.tagName === 'DIV') {
+            const originalValue = orderElement[property];
+            const container = document.createElement('div');
+            container.classList.add('orderMosaicElementText');
+
+            const prefixSpan = document.createElement('span');
+            const suffixSpan = document.createElement('span');
+            const textarea = document.createElement('textarea');
+
+            if (property === 'totalweight') {
+                prefixSpan.textContent = 'Poids total: ';
+                suffixSpan.textContent = 'g';
+            } else if (property === 'price') {
+                suffixSpan.textContent = '€';
+            }
+
+            textarea.value = originalValue;
+            textarea.classList.add('orderMosaicElementText');
+            textarea.setAttribute('cols', 4);
+            textarea.setAttribute('rows', 1);
+            textarea.style.resize = 'none';
+
+            container.appendChild(prefixSpan);
+            container.appendChild(textarea);
+            container.appendChild(suffixSpan);
+            element.replaceWith(container);
+            textarea.focus();
+
+            textarea.addEventListener('blur', function () {
+                const newValue = textarea.value.trim();
+                if (newValue === '' || isNaN(newValue)) {
+                    orderElement[property] = originalValue;
+                } else {
+                    orderElement[property] = newValue;
+                }
+                const div = document.createElement('div');
+                if (property === 'totalweight') {
+                    if (orderElement.totalweight > 1000) {
+                        div.textContent = `Poids total: ${orderElement.totalweight / 1000}kg`;
+                    } else {
+                        div.textContent = `Poids total: ${orderElement.totalweight}g`;
+                    }
+
+                    const successfullUpdate = certifyOrderUpdate(newValue, 'totalweight', orderElement.id, cookie);
+                    if (successfullUpdate) {
+                        div.classList.add('orderMosaicElementText');
+                        container.replaceWith(div);
+                        toggleTextToTextarea(div, orderElement, property, userData);
+                    }
+                } else if (property === 'price') {
+                    div.textContent = `${orderElement.price}€`;
+
+                    const successfullUpdate = certifyOrderUpdate(newValue, 'price', orderElement.id, cookie);
+                    if (successfullUpdate) {
+                        div.classList.add('orderMosaicElementText');
+                        container.replaceWith(div);
+                        toggleTextToTextarea(div, orderElement, property, userData);
+                    }
+                } else {
+                    div.textContent = orderElement[property];
+                }
+            });
+        }
+    });
 }
 
 // Function to show the detailed order with the files list and the chat
@@ -329,52 +354,61 @@ function showOrderDetails(orderElement) {
 }
 
 // Function to create the order state dropdown
-function createStateDropdown(currentState) {
+function createStateDropdown(currentState, orderElement) {
     const dropdown = document.createElement('select');
     dropdown.classList.add('orderStateDropdown');
 
-    Object.entries(stateOptions).forEach(([value, text]) => {
+    Object.entries(stateOptions).forEach(([value, frText]) => {
         const option = document.createElement('option');
         option.value = value;
-        option.textContent = text;
+        option.textContent = frText;
         option.selected = value === currentState;
-        option.style.fontFamily = 'Lexend Deca, sans-serif';
+
+        const {background, font} = getColorForState(value);
+        option.style.backgroundColor = background;
+        option.style.color = font;
+
         dropdown.appendChild(option);
     });
 
-    // Set initial background and font color based on the current state
-    dropdown.style.backgroundColor = getColorForState(currentState);
-    dropdown.style.color = getColorForState(currentState, true);
+    const {background, font} = getColorForState(currentState);
+    dropdown.style.backgroundColor = background;
+    dropdown.style.color = font;
 
-    // Event listener for changing the dropdown value and colors
     dropdown.addEventListener('change', function () {
-        this.style.backgroundColor = getColorForState(this.value);
-        this.style.color = getColorForState(this.value, true);
+        const previousValue = currentState;
+        const newValue = this.value;
+        const successfulUpdate = certifyOrderUpdate(newValue, 'state', orderElement.id, cookie);
+        if (successfulUpdate) {
+            const {background, font} = getColorForState(newValue);
+            this.style.backgroundColor = background;
+            this.style.color = font;
+        } else {
+            this.value = previousValue;
+        }
     });
 
     return dropdown;
 }
 
 // Function to get username by user ID
-function getUserNameById(userId, users) {
-    const user = users.find(user => user.userID === userId);
-    return user ? user.userName : 'Unknown User';
+function getUserNameById(userID, usersData) {
+    for (let i = 0; i < usersData.length; i++) {
+        if (usersData[i].studentcode === userID) {
+            return usersData[i].firstname + ' ' + usersData[i].lastname;
+        }
+    }
+    return 'Unknown User';
 }
 
-// Apply colors to the dropdown
-function getColorForState(state, fontColor = false) {
-    const stateColorMapping = {
-        pending: {background: '#215a6c', font: '#ffffff', frText: "En attente"},
-        billed: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        printed: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        sliced: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        printing: {background: '#5A3286', font: '#ffffff', frText: "En cours"},
-        finished: {background: '#0A53A8', font: '#ffffff', frText: "Terminée"},
-    };
-
-    if (fontColor) {
-        return stateColorMapping[state] ? stateColorMapping[state].font : '#000000'; // Default font color
-    } else {
-        return stateColorMapping[state] ? stateColorMapping[state].background : '#bdbdbd'; // Default background color
-    }
+// Certify the data has been correctly received before changing the field content
+async function certifyOrderUpdate(updatedData, field, orderID, cookie) {
+    sendMessage({adminOrderUpdate: {newData: {newValue: updatedData, field: field, orderID: orderID}, cookie: cookie}});
+    addMessageListener((response) => {
+        if (response.success === true) {
+            return response.fieldToUpdate === field;
+        } else {
+            console.error(response.error);
+        }
+    });
 }

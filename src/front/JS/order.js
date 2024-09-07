@@ -7,10 +7,18 @@ let printParameters;
 const expertModeSwitch = document.getElementById('expertModeSwitch');
 const orderPrintSettings = document.getElementById('orderPrintSettings');
 const orderPrintSettingsTitle = document.getElementById('orderPrintSettingsTitle');
+let clientUserData;
 
 // Main logic
 document.addEventListener('DOMContentLoaded', async () => {
     logout(document.getElementById('logoutButton'));
+    const cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
+    sendMessage({cookie, getClientUserData: {}});
+    addMessageListener(response => {
+        if (response.clientUserData) {
+            clientUserData = response.clientUserData;
+        }
+    });
 
     // Initializing inputs
     wipeInputs.forEach(input => {
@@ -51,47 +59,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (allFieldsFilled) {
             if (file) {
                 const now = new Date();
-                const options = { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                const options = {
+                    timeZone: 'Europe/Paris',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                };
                 const parisTimeString = now.toLocaleString('fr-FR', options).replace(',', '');
                 const dateTimeString = parisTimeString.toString();
 
                 if (document.getElementById('goodPracticesCheck').checked) {
-                    // Retrieve client information using cookie
-                    const cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
-                    sendMessage({getUser: {cookie}});
+                    sendOrder({
+                        orderName: sanitizeOutput(document.getElementById('orderName').value),
+                        orderTool: sanitizeOutput(document.getElementById('orderTool').value),
+                        orderMaterial: sanitizeOutput(document.getElementById('orderMaterial').value),
+                        orderColor: sanitizeOutput(document.getElementById('orderColor').value),
+                        orderQuantity: parseInt(document.getElementById('orderQuantity').value),
+                        orderQuestions: sanitizeOutput(document.getElementById('orderQuestions').value),
+                        orderDateTime: dateTimeString,
+                        orderClient: clientUserData.studentCode,
+                        orderGoodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
+                        orderAdditionalParameters: {}
+                    }, file);
 
-                    addMessageListener(response => {
-                        let user;
-                        if (response.user) {
-                            user = response.user;
+                    addMessageListener((response) => {
+                        if (response.redirect) {
+                            console.log('Redirecting to:', response.redirect);
+                            showCustomAlert('Commande envoyée avec succès !', "green");
+                            setTimeout(() => {
+                                window.location.href = `/src/front/HTML/${response.redirect}`;
+                            }, 2000);
+                        } else if (response.error) {
+                            showCustomAlert('Erreur lors de l\'envoi du fichier, merci de réessayer plus tard', "red");
+                        } else {
+                            showCustomAlert('Erreur lors de l\'envoi de la commande, merci de réessayer plus tard', "red");
                         }
-
-                        sendOrder({
-                            orderName: sanitizeOutput(document.getElementById('orderName').value),
-                            orderTool: sanitizeOutput(document.getElementById('orderTool').value),
-                            orderMaterial: sanitizeOutput(document.getElementById('orderMaterial').value),
-                            orderColor: sanitizeOutput(document.getElementById('orderColor').value),
-                            orderQuantity: parseInt(document.getElementById('orderQuantity').value),
-                            orderQuestions: sanitizeOutput(document.getElementById('orderQuestions').value),
-                            orderDateTime: dateTimeString,
-                            orderClient: user.client,
-                            orderGoodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
-                            orderAdditionalParameters: {}
-                        }, file);
-
-                        addMessageListener((response) => {
-                            if (response.redirect) {
-                                showCustomAlert('Commande envoyée avec succès !', "green");
-                                setTimeout(() => {
-                                    window.location.replace(`/src/front/HTML/${response.redirect}`);
-                                }, 2000);
-                            } else if (response.error) {
-                                showCustomAlert('Erreur lors de l\'envoi du fichier, merci de réessayer plus tard', "red");
-                            } else {
-                                showCustomAlert('Erreur lors de l\'envoi de la commande, merci de réessayer plus tard', "red");
-                            }
-                        });
-
                     });
                 } else {
                     showCustomAlert('Il faut lire et accepter les points importants afin de pouvoir valider la commande !', "red");

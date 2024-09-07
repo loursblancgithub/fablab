@@ -12,7 +12,9 @@ const {
     updateOrderFiles,
     getUserInfos,
     getUserPrivilegeLevel,
-    adminGetOrders, adminGetUsers
+    adminGetOrders,
+    adminGetUsers,
+    adminUpdateOrder
 } = require('./db_handler');
 const {mainLogin} = require('./login_handler');
 
@@ -72,11 +74,11 @@ async function checkUserOrders(studentCode) {
 async function handleUserRedirection(res, cookieValue) {
     const user = await getUserByCookie(cookieValue);
     if (user) {
-        const privilegeLevel = await getUserPrivilegeLevel(user.client);
+        const privilegeLevel = await getUserPrivilegeLevel(user.fablabuser);
         if (privilegeLevel >= 2) {
             serveStaticFile(res, path.join(__dirname, '../front/HTML/main_admin.html'));
         } else {
-            const hasOrders = await checkUserOrders(user.client);
+            const hasOrders = await checkUserOrders(user.fablabuser);
             if (hasOrders) {
                 serveStaticFile(res, path.join(__dirname, '../front/HTML/main_client.html'));
             } else {
@@ -147,107 +149,140 @@ wss.on('connection', (ws) => {
     ws.on('message', async (message) => {
         const parsedMessage = JSON.parse(message);
 
-        if (parsedMessage.checkUser) {
-            const {username} = parsedMessage.checkUser;
-            const userExistsResult = await userExists(username);
-            ws.send(JSON.stringify({userExists: userExistsResult}));
-        } else if (parsedMessage.login) {
-            const {username, password} = parsedMessage.login;
-            const response = await mainLogin(username, password);
-            if (response.success === true) {
-                const userExistsResult = await userExists(username);
-                const userOrders = await getOrders(username);
-                const redirectPage = userExistsResult && userOrders.length > 0 ? 'main_client.html' : 'order.html';
-                ws.send(JSON.stringify({redirect: redirectPage, cookie: response.cookie}));
-            } else {
-                ws.send(JSON.stringify(response));
-            }
-        } else if (parsedMessage.logout) {
-            await deleteCookie(parsedMessage.cookie);
-            ws.send(JSON.stringify({redirect: 'login.html'}));
-        } else if (parsedMessage.fetchOrders) {
-            const {cookie} = parsedMessage.fetchOrders;
-            const userID = await getUserByCookie(cookie);
-            const user = await getUserInfos(userID.client);
-            if (user) {
-                const orders = await getOrders(user.studentcode);
-                ws.send(JSON.stringify({
-                    orders,
-                    user: {
-                        userName: user.username,
-                        firstName: user.firstname,
-                        lastName: user.lastname,
-                        studentCode: user.studentcode
-                    }
-                }));
-            } else {
-                ws.send(JSON.stringify({error: 'Authentication failed'}));
-            }
-        } else if (parsedMessage.getUser) {
-            const {cookie} = parsedMessage.getUser;
-            const user = await getUserByCookie(cookie);
-            if (user) {
-                ws.send(JSON.stringify({user}));
-            } else {
-                ws.send(JSON.stringify({error: 'User not found'}));
-            }
-        } else if (parsedMessage.newChatMessage) {
-            const response = await saveChatMessage(parsedMessage.newChatMessage);
-            if (response.success) {
-                ws.send(JSON.stringify({success: true}));
-            } else {
-                ws.send(JSON.stringify(response));
-            }
-        } else if (parsedMessage.newOrder && parsedMessage.file) {
-            console.log('New order received:', parsedMessage);
-            const {newOrder} = parsedMessage;
-            const {fileName, fileExtension, fileData, fileDateTime, fileWeight} = parsedMessage.file;
-
-            if (!fileData) {
-                ws.send(JSON.stringify({error: 'File data is missing'}));
-                return;
-            }
-
-            const buffer = Buffer.from(fileData);
-
-            const orderResponse = await createOrder(newOrder);
-            if (orderResponse.success) {
-                const orderID = orderResponse.orderID;
-                const fileID = generateRandomFileID(30);
-
-                const filePath = path.join('C:\\Users\\Duarn\\Downloads', `${fileName}`);
-                console.log('Sending file:', filePath);
-                fs.writeFile(filePath, buffer, async (err) => {
-                    if (err) {
-                        ws.send(JSON.stringify({error: 'File could not be saved'}));
+        for (const key in parsedMessage) {
+            if (parsedMessage.hasOwnProperty(key)) {
+                if (key === 'checkUser') {
+                    const {username} = parsedMessage.checkUser;
+                    const userExistsResult = await userExists(username);
+                    ws.send(JSON.stringify({userExists: userExistsResult}));
+                } else if (key === 'getClientUserData') {
+                    const user = await getUserByCookie(parsedMessage.cookie);
+                    if (user) {
+                        const untrimmedClientUserData = await getUserInfos(user.fablabuser);
+                        ws.send(JSON.stringify({
+                            clientUserData: {
+                                firstName: untrimmedClientUserData.firstname,
+                                lastName: untrimmedClientUserData.lastname,
+                                studentCode: untrimmedClientUserData.studentcode,
+                                chat: untrimmedClientUserData.chat
+                            }
+                        }));
                     } else {
-                        const fileInfo = {
-                            fileID: fileID,
-                            fileName: fileName,
-                            fileExtension: fileExtension,
-                            fileDateTime: fileDateTime,
-                            fileWeight: fileWeight
-                        };
-                        await updateOrderFiles(orderID, fileInfo);
-                        ws.send(JSON.stringify({success: true, redirect: 'main_client.html'}));
+                        ws.send(JSON.stringify({error: 'Could not get client infos'}));
                     }
-                });
-            } else {
-                ws.send(JSON.stringify({error: 'Order could not be saved'}));
-            }
-        } else if (parsedMessage.adminOrdersRequest) {
-            const user = await getUserByCookie(parsedMessage.cookie);
-            if (user) {
-                const privilegeLevel = await getUserPrivilegeLevel(user.client);
-                if (privilegeLevel >= 2) {
-                    const adminOrders = await adminGetOrders();
-                    const adminUsers = await adminGetUsers();
-                    ws.send(JSON.stringify({adminOrders, adminUsers}));
-                } else {
-                    ws.send(JSON.stringify({error: 'Insufficient privileges'}));
+                } else if (key === 'adminOrdersRequest') {
+                    const user = await getUserByCookie(parsedMessage.cookie);
+                    if (user) {
+                        const privilegeLevel = await getUserPrivilegeLevel(user.fablabuser);
+                        if (privilegeLevel >= 2) {
+                            const adminOrders = await adminGetOrders();
+                            const adminUsers = await adminGetUsers();
+                            ws.send(JSON.stringify({adminOrders, adminUsers}));
+                        } else {
+                            ws.send(JSON.stringify({error: 'Insufficient privileges'}));
+                        }
+                    } else {
+                        ws.send(JSON.stringify({error: 'Authentication failed'}));
+                    }
+                } else if (key === 'login') {
+                    const {username, password} = parsedMessage.login;
+                    const response = await mainLogin(username, password);
+                    if (response.success === true) {
+                        const userExistsResult = await userExists(username);
+                        const userOrders = await getOrders(username);
+                        const redirectPage = userExistsResult && userOrders.length > 0 ? 'main_client.html' : 'order.html';
+                        ws.send(JSON.stringify({redirect: redirectPage, cookie: response.cookie}));
+                    } else {
+                        ws.send(JSON.stringify(response));
+                    }
+                } else if (key === 'logout') {
+                    await deleteCookie(parsedMessage.cookie);
+                    ws.send(JSON.stringify({redirect: 'login.html'}));
+                } else if (key === 'fetchOrders') {
+                    const {cookie} = parsedMessage.fetchOrders;
+                    const userID = await getUserByCookie(cookie);
+                    const user = await getUserInfos(userID.fablabuser);
+                    if (user) {
+                        const orders = await getOrders(user.studentcode);
+                        ws.send(JSON.stringify({
+                            orders,
+                            user: {
+                                firstName: user.firstname,
+                                lastName: user.lastname,
+                                studentCode: user.studentcode
+                            }
+                        }));
+                    } else {
+                        ws.send(JSON.stringify({error: 'Authentication failed'}));
+                    }
+                } else if (key === 'newChatMessage') {
+                    const response = await saveChatMessage(parsedMessage.newChatMessage);
+                    if (response.success) {
+                        ws.send(JSON.stringify({success: true}));
+                    } else {
+                        ws.send(JSON.stringify(response));
+                    }
+                } else if (key === 'newOrder' && parsedMessage.file) {
+                    const {newOrder} = parsedMessage;
+                    const {fileName, fileExtension, fileData, fileDateTime, fileWeight} = parsedMessage.file;
+
+                    if (!fileData) {
+                        ws.send(JSON.stringify({error: 'File data is missing'}));
+                        return;
+                    }
+
+                    const buffer = Buffer.from(fileData);
+
+                    const orderResponse = await createOrder(newOrder);
+                    if (orderResponse.success) {
+                        const orderID = orderResponse.orderID;
+                        const fileID = generateRandomFileID(30);
+
+                        const filePath = path.join('C:\\Users\\Duarn\\Downloads', `${fileName}`);
+                        fs.writeFile(filePath, buffer, async (err) => {
+                            if (err) {
+                                ws.send(JSON.stringify({error: 'File could not be saved'}));
+                            } else {
+                                const fileInfo = {
+                                    fileID: fileID,
+                                    fileName: fileName,
+                                    fileExtension: fileExtension,
+                                    fileDateTime: fileDateTime,
+                                    fileWeight: fileWeight
+                                };
+                                await updateOrderFiles(orderID, fileInfo);
+                                ws.send(JSON.stringify({success: true, redirect: 'main_client.html'}));
+                            }
+                        });
+                    } else {
+                        ws.send(JSON.stringify({error: 'Erreur lors de l\'envoi de la commande'}));
+                    }
+                } else if (key === 'adminOrderUpdate') {
+                    try {
+                        const user = await getUserByCookie(parsedMessage.adminOrderUpdate.cookie);
+                        if (user) {
+                            const privilegeLevel = await getUserPrivilegeLevel(user.fablabuser);
+                            if (privilegeLevel >= 2) {
+                                const response = await adminUpdateOrder(parsedMessage.adminOrderUpdate.newData);
+                                if (response.success) {
+                                    ws.send(JSON.stringify(response));
+                                } else {
+                                    console.log('Update failed');
+                                    ws.send(JSON.stringify({error: 'Error editing the order'}));
+                                }
+                            } else {
+                                console.log('Privilege level too low');
+                                ws.send(JSON.stringify({error: 'Error editing the order'}));
+                            }
+                        } else {
+                            console.log('User not found');
+                            ws.send(JSON.stringify({error: 'Error editing the order'}));
+                        }
+                    } catch (error) {
+                        console.error('Error processing message:', error);
+                        ws.send(JSON.stringify({error: 'Error processing request'}));
+                    }
                 }
-            } else {
-                ws.send(JSON.stringify({error: 'Authentication failed'}));
             }
         }
     });
