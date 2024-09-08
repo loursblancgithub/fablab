@@ -114,6 +114,13 @@ async function getUserPrivilegeLevel(studentCode) {
     return res.rows[0] ? res.rows[0].privilegelevel : null;
 }
 
+// Save sent feedback in the database
+async function saveFeedback(data) {
+    await query(`INSERT INTO public."feedback" (content, fablabuser)
+                 VALUES ($1, $2)`, [data.feedbackContent, data.feedbackUser]);
+    return {feedbackSaved: true};
+}
+
 // For admin use, retrieve all orders from the database
 async function adminGetOrders() {
     const res = await query('SELECT * FROM public."order"');
@@ -129,7 +136,9 @@ async function adminGetUsers() {
 // For admin use, update a specific field of a specific order in the database
 async function adminUpdateOrder(data) {
     await query(
-        `UPDATE public."order" SET ${data.field} = $1 WHERE id = $2`,
+        `UPDATE public."order"
+         SET ${data.field} = $1
+         WHERE id = $2`,
         [data.newValue, data.orderID]
     );
     return {success: true, fieldToUpdate: data.field};
@@ -150,5 +159,6 @@ module.exports = {
     getUserPrivilegeLevel,
     adminGetOrders,
     adminGetUsers,
-    adminUpdateOrder
+    adminUpdateOrder,
+    saveFeedback
 };

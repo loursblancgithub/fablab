@@ -15,6 +15,7 @@ let orderElementFilesMessageContent;
 let currentOrderID;
 let orderData;
 let clientUserData;
+export {clientUserData};
 
 /*--------------------------
 

@@ -14,7 +14,7 @@ const {
     getUserPrivilegeLevel,
     adminGetOrders,
     adminGetUsers,
-    adminUpdateOrder
+    adminUpdateOrder, saveFeedback
 } = require('./db_handler');
 const {mainLogin} = require('./login_handler');
 
@@ -281,6 +281,11 @@ wss.on('connection', (ws) => {
                     } catch (error) {
                         console.error('Error processing message:', error);
                         ws.send(JSON.stringify({error: 'Error processing request'}));
+                    }
+                } else if (key === 'newFeedback'){
+                    const feedbackSaved = await saveFeedback(parsedMessage.newFeedback);
+                    if (feedbackSaved) {
+                        ws.send(JSON.stringify({feedbackReceived: true}));
                     }
                 }
             }

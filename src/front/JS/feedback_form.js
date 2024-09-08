@@ -1,3 +1,7 @@
+import {sendMessage, addMessageListener} from "./ws_client.js";
+import {sanitizeOutput, showCustomAlert} from "./utils.js";
+import {clientUserData} from "./main_client.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     const formBulb = document.getElementById('formBulb');
     const pageMask = document.createElement('div');
@@ -34,8 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
         feedbackForm.appendChild(feedbackFormCloseContainer);
 
         const feedbackFormText = document.createElement('div');
-        feedbackFormText.textContent = 'Une question sur le service ? Une suggestion d\'amélioration ? N\'hésite pas à nous laisser un message !';
+        feedbackFormText.textContent = 'Une suggestion d\'amélioration ? N\'hésite pas à nous laisser un message !';
         feedbackFormText.style.maxWidth = '100%';
+        feedbackFormText.style.marginBottom = '10%';
         feedbackForm.appendChild(feedbackFormText);
 
         // Fields container
@@ -45,24 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
         feedbackFormFields.style.justifyContent = 'flex-start';
         feedbackFormFields.style.alignItems = 'flex-start';
         feedbackFormFields.style.width = '100%';
-
-        // Feedback type selector
-        const feedbackType = document.createElement('select');
-        feedbackType.id = 'feedbackType';
-        feedbackType.classList.add('feedbackType');
-        feedbackType.classList.add('inputStyle');
-        feedbackType.style.width = 'fit-content';
-        feedbackType.style.margin = '1vh 0 1vh 0';
-
-        const feedbackTypeOption1 = document.createElement('option');
-        feedbackTypeOption1.value = 'suggestion';
-        feedbackTypeOption1.textContent = 'Suggestion';
-        const feedbackTypeOption2 = document.createElement('option');
-        feedbackTypeOption2.value = 'question';
-        feedbackTypeOption2.textContent = 'Question';
-        feedbackType.appendChild(feedbackTypeOption1);
-        feedbackType.appendChild(feedbackTypeOption2);
-        feedbackFormFields.appendChild(feedbackType);
 
         // Feedback content input
         const feedbackMessage = document.createElement('textarea');
@@ -89,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         feedbackForm.appendChild(feedbackSubmit);
 
         document.body.appendChild(feedbackForm);
+        feedbackMessage.focus();
 
         feedbackFormClose.addEventListener('click', () => {
             feedbackForm.classList.remove('feedbackFormPopIn');
@@ -98,25 +86,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.removeChild(feedbackForm);
             }, {once: true});
         });
-    });
 
-    document.getElementById('feedbackSubmit').addEventListener('click', () => {
-        const feedbackType = document.getElementById('feedbackType').value;
-        const feedbackContent = document.getElementById('feedbackContent').value;
-        const sanitizedFeedbackContent = sanitizeOutput(feedbackContent);
-        const feedbackData = {
-            feedbackType: feedbackType,
-            feedbackMessage: sanitizedFeedbackContent
-        };
-        console.log(feedbackData);
+        document.getElementById('feedbackSubmit').addEventListener('click', () => {
+            const feedbackContent = document.getElementById('feedbackContent').value;
+            const sanitizedFeedbackContent = sanitizeOutput(feedbackContent);
+
+            sendMessage({
+                newFeedback: {
+                    feedbackContent: sanitizedFeedbackContent,
+                    feedbackUser: clientUserData.studentCode
+                }
+            });
+            addMessageListener((response) => {
+                if (response.feedbackReceived) {
+                    showCustomAlert('Merci de ton message ! Nous reviendrons vers toi si ton idée pique notre curiosité.', 'green')
+                    setTimeout(() =>{
+                        document.body.removeChild(pageMask);
+                        feedbackForm.classList.remove('feedbackFormPopIn');
+                        feedbackForm.classList.add('feedbackFormPopOut');
+                        document.removeChild(feedbackForm);
+                    }, 2000);
+                } else {
+                    console.error('Feedback could not be sent');
+                }
+            })
+        });
     });
 });
-
-function sanitizeOutput(toOutput) {
-    return toOutput.replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#x27;')
-        .replace(/\//g, '&#x2F;');
-}
