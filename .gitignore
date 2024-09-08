@@ -6,4 +6,7 @@
 .idea/inspectionProfiles/Project_Default.xml
 .idea/fablab.iml
 .idea/codeStyles/codeStyleConfig.xml
+.idea/dataSources
+.idea/dataSources.local.xml
+.idea/dataSources.xml
 node_modules/
