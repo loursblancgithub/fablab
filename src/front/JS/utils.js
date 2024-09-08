@@ -348,6 +348,7 @@ function displayMessages(allOrders, order, userData, chatContainer, clientStatus
     chatMessageInputContainer.appendChild(chatMessageSendButton);
 
     chatInputs.appendChild(chatMessageInputContainer);
+    chatMessageTextarea.focus();
 
     addMessageListener((response) => {
         if (response.newExternalMessage) {
