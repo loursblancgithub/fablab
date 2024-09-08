@@ -5,7 +5,8 @@ import {
     logout,
     capitalizeFirstLetter,
     formatDateTime,
-    getColorForState
+    getColorForState,
+    showContentsOfActiveOrder
 } from "/src/front/JS/utils.js";
 import {addMessageListener, sendMessage} from "./ws_client.js";
 
@@ -23,9 +24,11 @@ let allOrdersData;
 let allUsersData;
 let clientUserData;
 let cookie;
+let currentOrderID;
+const orderElementFilesMessageContent = document.getElementById('orderElementFilesMessageContent');
 
 document.addEventListener('DOMContentLoaded', () => {
-    fiveElements(document.getElementById('bodyContainer'));
+    fiveElements(document.getElementById('contentContainer'));
     logout(document.getElementById('logoutButton'));
     cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
     sendMessage({adminOrdersRequest: {}, cookie, getClientUserData: {}});
@@ -74,6 +77,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('sidePanelStateButtonFinished').addEventListener('click', () => {
         contentContainer.innerHTML = '';
         createOrderMosaicElements(allOrdersData.filter(order => order.state === "finished"), allUsersData);
+    });
+
+    document.getElementById('orderElementFilesButton').addEventListener('click', () => {
+        showContentsOfActiveOrder(allOrdersData, currentOrderID , 'files', orderElementFilesMessageContent, clientUserData, "admin");
+    });
+
+    document.getElementById('orderElementMessageButton').addEventListener('click', () => {
+        showContentsOfActiveOrder(allOrdersData, currentOrderID , 'chat', orderElementFilesMessageContent, clientUserData, "admin");
     });
 });
 
@@ -232,6 +243,8 @@ function createOrderMosaicElements(orderData, userData) {
         detailsExpandButton.addEventListener('click', () => {
             console.log(orderElement)
             showOrderDetails(orderElement);
+            currentOrderID = orderElement.id;
+            showContentsOfActiveOrder(allOrdersData, currentOrderID , 'files', orderElementFilesMessageContent, clientUserData);
         });
 
         document.getElementById('hideOrderDetails').addEventListener('click', () => {
@@ -325,21 +338,24 @@ function showOrderDetails(orderElement) {
     document.getElementById('orderState').textContent = stateOptions[orderElement.state];
 
     // Date
-    const [date, time] = orderElement.orderDateTime.split(' ');
-    document.getElementById('orderDateTime').textContent = `Commande passée le ${date} à ${time}`;
+    document.getElementById('orderDateTime').textContent = formatDateTime(orderElement.datetime, 'order');
 
     // Material
-    if (orderElement.material === 'PLA' || orderElement.material === 'PETG' || orderElement.material === 'ABS') {
-        document.getElementById('orderMaterial').textContent = `${orderElement.material} (Plastique)`;
+    if (orderElement.material === 'pla' || orderElement.material === 'petg' || orderElement.material === 'abs') {
+        document.getElementById('orderMaterial').textContent = `${orderElement.material.toUpperCase()} (Plastique)`;
     } else if (orderElement.material === 'Résine') {
         document.getElementById('orderMaterial').textContent = `${orderElement.material}`;
     }
 
-    // Weight
+    // Color
+    document.getElementById('orderColor').textContent = capitalizeFirstLetter(orderElement.color);
+
+    // Total weight
+    const weightElementDetailedView = document.getElementById('orderTotalWeight');
     if (orderElement.totalweight > 1000) {
-        document.getElementById('orderTotalWeight').textContent = `Poids total: ${orderElement.totalweight / 1000}kg`;
+        weightElementDetailedView.textContent = `Poids total: ${orderElement.totalweight / 1000}kg`;
     } else {
-        document.getElementById('orderTotalWeight').textContent = `Poids total: ${orderElement.totalweight}g`;
+        weightElementDetailedView.textContent = `Poids total: ${orderElement.totalweight}g`;
     }
 
     // Quantity
@@ -351,6 +367,9 @@ function showOrderDetails(orderElement) {
 
     document.getElementById('orderPrice').textContent = `${orderElement.price}€`;
     document.getElementById('orderQuestion').textContent = `Questions: ${orderElement.question}`;
+    if ( orderElement.question === '' || orderElement.question === null || orderElement.question === undefined) {
+        document.getElementById('orderQuestion').textContent = 'Questions: Non renseigné';
+    }
 }
 
 // Function to create the order state dropdown

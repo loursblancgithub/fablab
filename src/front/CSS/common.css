@@ -614,7 +614,7 @@ Order element styling
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    align-items: center;
+    align-items: flex-start;
     width: fit-content;
     max-width: 70%;
     z-index: 15;

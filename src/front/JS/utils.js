@@ -248,3 +248,233 @@ function getColorForState(state) {
 }
 
 export {getColorForState};
+
+/*--------------------------
+
+Show the files list for a specific order
+
+--------------------------*/
+
+function displayFilesList(order, filesListContainer) {
+    filesListContainer.innerHTML = '';
+
+    const files = order.files ? Object.values(order.files) : [];
+    const sortedFiles = sortElementsByDate(files);
+
+    sortedFiles.forEach((file) => {
+        const fileElement = document.createElement('div');
+        fileElement.classList.add('fileElement');
+
+        const fileElementName = document.createElement('div');
+        fileElementName.classList.add('fileElementName');
+        fileElementName.textContent = file.fileName;
+        fileElement.appendChild(fileElementName);
+
+        const fileElementRightPart = document.createElement('div');
+        fileElementRightPart.classList.add('fileElementRightPart');
+
+        const fileElementDate = document.createElement('div');
+        fileElementDate.classList.add('fileElementDate', 'fileElementSubPart');
+        fileElementDate.textContent = `${formatDateTime(file.fileDateTime, 'file')}`;
+        fileElementRightPart.appendChild(fileElementDate);
+
+        const fileElementSize = document.createElement('div');
+        fileElementSize.classList.add('fileElementSubPart');
+        if (file.fileWeight >= 1000) {
+            fileElementSize.textContent = `${(file.fileWeight / 1000).toFixed(2)}ko`;
+        } else {
+            fileElementSize.textContent = `${file.fileWeight}KB`;
+        }
+        fileElementSize.style.fontSize = '0.9em';
+        fileElementRightPart.appendChild(fileElementSize);
+
+        const fileElementDownloadButton = createSVGElement('download_icon', 'Télécharger');
+        fileElementDownloadButton.classList.add('fileElementDownload');
+        fileElementDownloadButton.style.height = '20px';
+        fileElementRightPart.appendChild(fileElementDownloadButton);
+
+        fileElement.appendChild(fileElementRightPart);
+
+        filesListContainer.appendChild(fileElement);
+    });
+}
+
+export {displayFilesList};
+
+/*--------------------------
+
+Show the chat for a specific order
+
+--------------------------*/
+
+function displayMessages(allOrders, order, userData, chatContainer, clientStatus) {
+    chatContainer.innerHTML = '';
+
+    const chatFeed = document.createElement('div');
+    chatFeed.classList.add('chatFeed');
+    chatContainer.appendChild(chatFeed);
+
+    const chatContent = order.chat;
+    if (!chatContent || Object.keys(chatContent).length === 0) {
+        chatFeed.textContent = 'Personne n\'a encore rien dit...';
+        chatFeed.style.textAlign = 'center';
+    } else {
+        const chatMessages = Object.values(chatContent.chatMessages);
+        chatMessages.sort((a, b) => new Date(a.msgDate) - new Date(b.msgDate)); // Sort in ascending order
+        chatMessages.forEach((message) => {
+            appendMessage(allOrders, message, clientStatus);
+        });
+    }
+
+    const chatInputs = document.createElement('div');
+    chatInputs.classList.add('chatInputs');
+    chatContainer.appendChild(chatInputs);
+
+    const filesInput = createSVGElement('files_icon', 'Ajouter un fichier');
+    filesInput.classList.add('chatFilesInput');
+    chatInputs.appendChild(filesInput);
+
+    const chatMessageInputContainer = document.createElement('div');
+    chatMessageInputContainer.classList.add('chatMessageInputContainer');
+
+    const chatMessageTextarea = document.createElement('textarea');
+    chatMessageTextarea.classList.add('chatMessageTextarea');
+    chatMessageTextarea.placeholder = 'Écris un message...';
+    chatMessageInputContainer.appendChild(chatMessageTextarea);
+
+    const chatMessageSendButton = createSVGElement('send_icon', 'Envoyer');
+    chatMessageSendButton.classList.add('chatMessageSendButton');
+    chatMessageSendButton.id = 'chatMessageSendButton';
+    chatMessageInputContainer.appendChild(chatMessageSendButton);
+
+    chatInputs.appendChild(chatMessageInputContainer);
+
+    addMessageListener((response) => {
+        if (response.newExternalMessage) {
+            appendMessage(response.newExternalMessage);
+        }
+    })
+
+    document.getElementById('chatMessageSendButton').addEventListener('click', () => {
+        const chatMessageTextarea = document.querySelector('.chatMessageTextarea');
+        const messageContent = chatMessageTextarea.value.trim();
+
+        let msgSender
+        if (clientStatus === 'admin') {
+            msgSender = 'FabLab';
+        } else {
+            msgSender = userData.studentCode;
+        }
+
+        if (messageContent) {
+            const message = {
+                orderID: order.id,
+                msgID: `msg_${Date.now()}`,
+                msgSender: msgSender,
+                msgDate: new Date().toLocaleString('fr-FR', {timeZone: 'Europe/Paris'}),
+                msgContent: messageContent
+            };
+            sendMessage({newChatMessage: message});
+            addMessageListener((response) => {
+                if (response.success) {
+                    chatMessageTextarea.value = '';
+                    appendMessage(allOrders, message, clientStatus);
+                }
+            });
+        }
+    });
+}
+
+export {displayMessages};
+
+/*--------------------------
+
+Function to append a new message to the chat feed
+
+--------------------------*/
+
+function appendMessage(allOrders, message) {
+    const chatFeed = document.querySelector('.chatFeed');
+
+    if (chatFeed.textContent === 'Personne n\'a encore rien dit...') {
+        chatFeed.textContent = '';
+        chatFeed.style.textAlign = 'left';
+    }
+
+    if (document.getElementById(message.msgID)) {
+        return;
+    }
+
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('messageElement');
+    messageElement.id = message.msgID; // Set the ID of the message element to the msgID
+    const messageElementBody = document.createElement('div');
+    messageElementBody.classList.add('messageElementBody');
+    const messageElementSender = document.createElement('div');
+    messageElementSender.classList.add('messageElementSender');
+    if (message.msgSender === 'FabLab') {
+        messageElementSender.textContent = 'FabLab';
+    } else {
+        messageElementSender.textContent = '';
+    }
+    messageElementBody.appendChild(messageElementSender);
+
+    const messageElementContent = document.createElement('div');
+    messageElementContent.classList.add('messageElementContent');
+    messageElementContent.textContent = message.msgContent;
+    messageElementBody.appendChild(messageElementContent);
+    messageElement.appendChild(messageElementBody);
+
+    const messageElementDateTime = document.createElement('div');
+    messageElementDateTime.classList.add('messageElementDateTime');
+    messageElementDateTime.textContent = message.msgDate;
+    messageElement.appendChild(messageElementDateTime);
+
+    if (message.msgSender === 'FabLab') {
+        messageElement.classList.add('leftColumn');
+        messageElementBody.classList.add('leftColumnBubble');
+        messageElementDateTime.style.alignSelf = 'flex-start';
+    } else {
+        messageElement.classList.add('rightColumn');
+        messageElementBody.classList.add('rightColumnBubble');
+    }
+    chatFeed.appendChild(messageElement);
+    allOrders.find(order => order.id === message.orderID).chat.chatMessages[message.msgID] = message;
+}
+
+/*--------------------------
+
+Create the svg elements working with the sprite
+
+--------------------------*/
+
+function createSVGElement(name, alt) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('svgIcon');
+    svg.alt = alt;
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `/src/front/Assets/sprite.svg#${name}`);
+    svg.appendChild(use);
+    return svg;
+}
+
+export {createSVGElement};
+
+/*--------------------------
+
+Function to show files or chat of the active order
+
+--------------------------*/
+
+function showContentsOfActiveOrder(allOrdersData, activeOrderId, dataType, filesMessagesContainer, clientUserData, clientStatus) {
+    if (activeOrderId) {
+        const activeOrder = allOrdersData.find(order => order.id === Number(activeOrderId));
+        if (dataType === 'files') {
+            displayFilesList(activeOrder, filesMessagesContainer);
+        } else if (dataType === 'chat') {
+            displayMessages(allOrdersData, activeOrder, clientUserData, filesMessagesContainer, clientStatus);
+        }
+    }
+}
+
+export {showContentsOfActiveOrder};
