@@ -1,4 +1,4 @@
-import {addMessageListener, sendMessage} from "./ws_client.js";
+import {addMessageListener, sendMessage, sendFile} from "./ws_client.js";
 
 function removeAllChildren(element) {
     while (element.firstChild) {
@@ -333,6 +333,9 @@ function displayMessages(allOrders, order, userData, chatContainer, clientStatus
     const filesInput = createSVGElement('files_icon', 'Ajouter un fichier');
     filesInput.classList.add('chatFilesInput');
     chatInputs.appendChild(filesInput);
+    filesInput.addEventListener('click', () => {
+        showFilesPopup();
+    });
 
     const chatMessageInputContainer = document.createElement('div');
     chatMessageInputContainer.classList.add('chatMessageInputContainer');
@@ -479,3 +482,90 @@ function showContentsOfActiveOrder(allOrdersData, activeOrderId, dataType, files
 }
 
 export {showContentsOfActiveOrder};
+
+/*--------------------------
+
+Function to show file upload pop up
+
+--------------------------*/
+
+function showFilesPopup() {
+    if (document.querySelector('.filesPopup')) {
+        return;
+    }
+
+    const chatFeed = document.querySelector('.chatFeed');
+    chatFeed.style.position = 'relative';
+
+    // Creating the page mask
+    const pageMask = document.createElement('div');
+    pageMask.style.zIndex = '50';
+    pageMask.style.position = 'absolute';
+    pageMask.style.top = '0';
+    pageMask.style.left = '0';
+    pageMask.style.height = '100%';
+    pageMask.style.width = '100%';
+    pageMask.style.opacity = '0.5';
+    pageMask.style.backgroundColor = '#ffffff';
+
+    // Creating the files popup
+    const filesPopup = document.createElement('div');
+    filesPopup.classList.add('filesPopup');
+    filesPopup.style.zIndex = '52';
+    filesPopup.style.position = 'absolute';
+    filesPopup.style.transform = 'translate(-50%, -50%)';
+    filesPopup.style.backgroundColor = '#ffffff';
+
+    const filesPopupTitleClose = document.createElement('div');
+    filesPopupTitleClose.classList.add('filesPopupTitleClose');
+
+    const filesPopupTitle = document.createElement('div');
+    filesPopupTitle.classList.add('filesPopupTitle');
+    filesPopupTitle.textContent = 'Ajouter un fichier';
+    filesPopupTitleClose.appendChild(filesPopupTitle);
+
+    const filesPopupCloseButton = document.createElement('span');
+    filesPopupCloseButton.classList.add('filesPopupClose');
+    filesPopupCloseButton.textContent = '×';
+    filesPopupTitleClose.appendChild(filesPopupCloseButton);
+
+    filesPopup.appendChild(filesPopupTitleClose);
+
+    const filesPopupInput = document.createElement('input');
+    filesPopupInput.type = 'file';
+    filesPopupInput.accept = '.stl, .3mf, .stp, .step';
+    filesPopup.appendChild(filesPopupInput);
+
+    const filesPopupSubmitButton = document.createElement('button');
+    filesPopupSubmitButton.classList.add('blueButton');
+    filesPopupSubmitButton.textContent = 'Envoyer';
+    filesPopupSubmitButton.style.width = '40%';
+    filesPopupSubmitButton.style.border = 'none';
+    filesPopupSubmitButton.style.alignSelf = 'center';
+    filesPopup.appendChild(filesPopupSubmitButton);
+
+    // Adding the page mask and the files popup to the chat feed
+    chatFeed.appendChild(pageMask);
+    chatFeed.appendChild(filesPopup);
+
+    // Submit the file when the submit button is clicked
+    filesPopupSubmitButton.addEventListener('click', () => {
+        if (filesPopupInput.files.length > 0) {
+            const file = filesPopupInput.files[0];
+            sendFile(file);
+            addMessageListener((response) => {
+                if (response.fileSendSuccess) {
+                    filesPopupInput.value = '';
+                    chatFeed.removeChild(filesPopup);
+                    chatFeed.removeChild(pageMask);
+                }
+            });
+        }
+    });
+
+    // Close popup on clicking the close button
+    filesPopupCloseButton.addEventListener('click', () => {
+        chatFeed.removeChild(filesPopup);
+        chatFeed.removeChild(pageMask);
+    });
+}

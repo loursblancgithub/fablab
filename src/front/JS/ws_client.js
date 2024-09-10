@@ -1,6 +1,7 @@
 let ws;
 let wsReadyPromise;
 
+// Function to initialize WebSocket connection
 function initializeWebSocket() {
     return new Promise((resolve, reject) => {
         ws = new WebSocket('ws://localhost:8080');
@@ -9,6 +10,7 @@ function initializeWebSocket() {
     });
 }
 
+// Function to send a message through WebSocket
 function sendMessage(message) {
     wsReadyPromise.then(() => {
         ws.send(JSON.stringify(message));
@@ -26,6 +28,7 @@ function sendMessage(message) {
     });
 }
 
+// Function to add a message listener to WebSocket
 function addMessageListener(callback) {
     wsReadyPromise.then(() => {
         ws.addEventListener('message', (event) => {
@@ -46,7 +49,8 @@ function addMessageListener(callback) {
     });
 }
 
-function sendOrder(order, file) {
+// Function to send a file through WebSocket
+function sendFile(file) {
     const reader = new FileReader();
     reader.onload = function (event) {
         const binaryData = event.target.result;
@@ -57,7 +61,6 @@ function sendOrder(order, file) {
 
         wsReadyPromise.then(() => {
             ws.send(JSON.stringify({
-                newOrder: order,
                 file: {
                     fileName: file.name,
                     fileExtension: file.name.split('.').pop(),
@@ -71,6 +74,14 @@ function sendOrder(order, file) {
     reader.readAsArrayBuffer(file);
 }
 
+// Function to send an order through WebSocket
+function sendOrder(order, file) {
+    sendFile(file);
+    wsReadyPromise.then(() => {
+        ws.send(JSON.stringify({ newOrder: order }));
+    });
+}
+
 wsReadyPromise = initializeWebSocket();
 
-export {sendMessage, addMessageListener, sendOrder};
+export {sendMessage, addMessageListener, sendOrder, sendFile};
