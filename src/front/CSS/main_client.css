@@ -33,7 +33,6 @@ Generic elements
     box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
     border-radius: 10px;
     margin: 0 0 0.5vh 0;
-    background-color: var(--logoBlue);
     box-sizing: border-box;
 }
 

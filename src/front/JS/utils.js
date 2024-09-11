@@ -149,39 +149,60 @@ Congratulations on finding this, on behalf of all the team
 
 --------------------------*/
 
-function fiveElements(bodyContainer) {
+function fiveElements(affectedContainer) {
     let buffer = '';
     const fireSequence = 'fire';
     const leafSequence = 'leaf';
     const earthSequence = 'earth';
     const waterSequence = 'water';
 
-    if (bodyContainer.classList === null) {
-        bodyContainer.className = '';
+    const gradients = {
+        fire: 'linear-gradient(219deg, #ff7e5f, #feb47b)',
+        leaf: 'linear-gradient(500deg, #00b09b, #96c93d)',
+        earth: 'linear-gradient(150deg, #7b4397, #dc2430)',
+        fablabBlueGradient: 'linear-gradient(40deg, #7287ca, #2e4798)'
+    };
+
+    if (affectedContainer.classList === null) {
+        affectedContainer.className = '';
     }
+
+    affectedContainer.classList.add('fablabBlueGradient');
+    affectedContainer.style.backgroundImage = gradients.fablabBlueGradient;
 
     document.addEventListener('keydown', (event) => {
         buffer += event.key.toLowerCase();
         if (buffer.includes(fireSequence)) {
-            bodyContainer.classList.add('fire');
-            bodyContainer.classList.remove('leaf', 'earth', 'fablabBlueGradient');
+            affectedContainer.classList.remove('leaf', 'earth', 'fablabBlueGradient');
+            affectedContainer.classList.add('fire');
+            updateGradient(affectedContainer, gradients.fire);
             buffer = '';
         } else if (buffer.includes(leafSequence)) {
-            bodyContainer.classList.add('leaf');
-            bodyContainer.classList.remove('fire', 'earth', 'fablabBlueGradient');
+            affectedContainer.classList.remove('fire', 'earth', 'fablabBlueGradient');
+            affectedContainer.classList.add('leaf');
+            updateGradient(affectedContainer, gradients.leaf);
             buffer = '';
         } else if (buffer.includes(earthSequence)) {
-            bodyContainer.classList.add('earth');
-            bodyContainer.classList.remove('fire', 'leaf', 'fablabBlueGradient');
+            affectedContainer.classList.remove('fire', 'leaf', 'fablabBlueGradient');
+            affectedContainer.classList.add('earth');
+            updateGradient(affectedContainer, gradients.earth);
             buffer = '';
         } else if (buffer.includes(waterSequence)) {
-            bodyContainer.classList.add('fablabBlueGradient');
-            bodyContainer.classList.remove('fire', 'leaf', 'earth');
+            affectedContainer.classList.remove('fire', 'leaf', 'earth');
+            affectedContainer.classList.add('fablabBlueGradient');
+            updateGradient(affectedContainer, gradients.fablabBlueGradient);
             buffer = '';
         }
         if (buffer.length > Math.max(fireSequence.length, leafSequence.length, earthSequence.length)) {
             buffer = buffer.slice(-Math.max(fireSequence.length, leafSequence.length, earthSequence.length));
         }
+    });
+}
+
+function updateGradient(element, newGradient) {
+    element.style.backgroundImage = '';
+    requestAnimationFrame(() => {
+        element.style.backgroundImage = newGradient;
     });
 }
 
@@ -220,9 +241,9 @@ function formatDateTime(isoDate, type) {
     const [datePart, timePart] = parisTimeString.split(' ');
     const [day, month, year] = datePart.split('/');
     if (type === 'file') {
-        return `Fichier envoyé le ${day}/${month}/${year} à ${timePart}`;
+        return `Envoyé le ${day}/${month}/${year} à ${timePart}`;
     } else if (type === 'order') {
-        return `Commande passée le ${day}/${month}/${year} à ${timePart}`;
+        return `Passée le ${day}/${month}/${year} à ${timePart}`;
     }
 }
 

@@ -366,23 +366,59 @@ Hover popup for text that is too long
 --------------------------*/
 
 .fablabBlueGradient {
-    background: linear-gradient(219deg, #ffffff, #7287ca, var(--logoBlue)) !important;
+    background: linear-gradient(219deg, #ffffff,#302e98, #8d8fcc) no-repeat border-box;
     background-size: 600% 600%;
+
+    -webkit-animation: fablabGradient 20s ease infinite;
+    -moz-animation: fablabGradient 20s ease infinite;
+    -o-animation: fablabGradient 20s ease infinite;
+    animation: fablabGradient 20s ease infinite;
 }
 
 .fire {
-    background: linear-gradient(500deg, #ffffff, #c13206, #98412e) !important;
+    background: linear-gradient(500deg, #ffffff, #c13206, #98412e) no-repeat border-box !important;
     background-size: 600% 600%;
+
+    -webkit-animation: fablabGradient 2s ease infinite;
+    -moz-animation: fablabGradient 2s ease infinite;
+    -o-animation: fablabGradient 2s ease infinite;
+    animation: fablabGradient 2s ease infinite;
 }
 
 .leaf {
-    background: linear-gradient(150deg, #ffffff, #35c106, #1b6e03) !important;
+    background: linear-gradient(150deg, #ffffff, #35c106, #1b6e03) no-repeat border-box !important;
     background-size: 600% 600%;
+
+    -webkit-animation: fablabGradient 10s ease infinite;
+    -moz-animation: fablabGradient 10s ease infinite;
+    -o-animation: fablabGradient 10s ease infinite;
+    animation: fablabGradient 10s ease infinite;
 }
 
 .earth {
-    background: linear-gradient(40deg, #ffffff, #9e7f32, #6e5903) !important;
+    background: linear-gradient(40deg, #ffffff, #9e7f32, #6e5903) no-repeat border-box !important;
     background-size: 600% 600%;
+}
+
+@-webkit-keyframes fablabGradient {
+    0%{background-position:0 9%}
+    50%{background-position:100% 92%}
+    100%{background-position:0 9%}
+}
+@-moz-keyframes fablabGradient {
+    0%{background-position:0 9%}
+    50%{background-position:100% 92%}
+    100%{background-position:0 9%}
+}
+@-o-keyframes fablabGradient {
+    0%{background-position:0 9%}
+    50%{background-position:100% 92%}
+    100%{background-position:0 9%}
+}
+@keyframes fablabGradient {
+    0%{background-position:0 9%}
+    50%{background-position:100% 92%}
+    100%{background-position:0 9%}
 }
 
 /*--------------------------
@@ -572,6 +608,7 @@ Order element styling
     border-radius: 5px;
     background-color: var(--logoBlue);
     fill: #ffffff;
+    align-self: center;
 }
 
 .fileElementDownload:hover {

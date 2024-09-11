@@ -5,7 +5,7 @@ import {
     capitalizeFirstLetter,
     formatDateTime,
     getColorForState,
-    showContentsOfActiveOrder
+    showContentsOfActiveOrder, fiveElements
 } from "/src/front/JS/utils.js";
 import {addMessageListener, sendMessage} from "./ws_client.js";
 
@@ -24,6 +24,7 @@ Main logic
 --------------------------*/
 
 document.addEventListener('DOMContentLoaded', () => {
+    fiveElements(document.getElementById('contentContainer'));
     logout(document.getElementById('logoutButton'));
     const cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
     sendMessage({fetchOrders: {cookie}});
