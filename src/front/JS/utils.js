@@ -1,4 +1,4 @@
-import {addMessageListener, sendMessage, sendFile} from "./ws_client.js";
+import {addMessageListener, sendMessage} from "./ws_client.js";
 
 function removeAllChildren(element) {
     while (element.firstChild) {
@@ -283,6 +283,7 @@ function displayFilesList(order, filesListContainer) {
     const sortedFiles = sortElementsByDate(files);
 
     sortedFiles.forEach((file) => {
+        console.log('file:', file);
         const fileElement = document.createElement('div');
         fileElement.classList.add('fileElement');
 
@@ -312,11 +313,29 @@ function displayFilesList(order, filesListContainer) {
         const fileElementDownloadButton = createSVGElement('download_icon', 'Télécharger');
         fileElementDownloadButton.classList.add('fileElementDownload');
         fileElementDownloadButton.style.height = '20px';
+        console.log('file.name', file.fileName);
         fileElementRightPart.appendChild(fileElementDownloadButton);
 
         fileElement.appendChild(fileElementRightPart);
 
         filesListContainer.appendChild(fileElement);
+
+        fileElementDownloadButton.addEventListener('click', () => sendMessage({fileRequest: {fileName: file.fileName, fileExtension: file.fileExtension, orderID: order.id}}));
+        addMessageListener((response) => {
+            if (response.fileDownload) {
+                console.log('response.fileDownload:', response.fileDownload.fileExtension);
+                const fileData = response.fileDownload;
+                const blob = new Blob([new Uint8Array(fileData.fileData)], {type: `application/${fileData.fileExtension}`});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileData.fileName.concat('.', fileData.fileExtension);
+                a.click();
+                URL.revokeObjectURL(url);
+            } else if (response.fileDownloadError) {
+                showCustomAlert('Erreur lors du téléchargement du fichier', 'red');
+            }
+        });
     });
 }
 
@@ -328,7 +347,7 @@ Show the chat for a specific order
 
 --------------------------*/
 
-function displayMessages(allOrders, order, userData, chatContainer, clientStatus) {
+function displayMessages(allOrdersData, order, userData, chatContainer, clientStatus, cookie) {
     chatContainer.innerHTML = '';
 
     const chatFeed = document.createElement('div');
@@ -343,7 +362,7 @@ function displayMessages(allOrders, order, userData, chatContainer, clientStatus
         const chatMessages = Object.values(chatContent.chatMessages);
         chatMessages.sort((a, b) => new Date(a.msgDate) - new Date(b.msgDate)); // Sort in ascending order
         chatMessages.forEach((message) => {
-            appendMessage(allOrders, message, clientStatus);
+            appendMessage(allOrdersData, message, clientStatus);
         });
     }
 
@@ -355,7 +374,7 @@ function displayMessages(allOrders, order, userData, chatContainer, clientStatus
     filesInput.classList.add('chatFilesInput');
     chatInputs.appendChild(filesInput);
     filesInput.addEventListener('click', () => {
-        showFilesPopup();
+        showFilesPopup(allOrdersData, order.id, cookie);
     });
 
     const chatMessageInputContainer = document.createElement('div');
@@ -403,7 +422,7 @@ function displayMessages(allOrders, order, userData, chatContainer, clientStatus
             addMessageListener((response) => {
                 if (response.success) {
                     chatMessageTextarea.value = '';
-                    appendMessage(allOrders, message, clientStatus);
+                    appendMessage(allOrdersData, message, clientStatus);
                 }
             });
         }
@@ -491,13 +510,13 @@ Function to show files or chat of the active order
 
 --------------------------*/
 
-function showContentsOfActiveOrder(allOrdersData, activeOrderId, dataType, filesMessagesContainer, clientUserData, clientStatus) {
+function showContentsOfActiveOrder(allOrdersData, activeOrderId, dataType, filesMessagesContainer, clientUserData, clientStatus, cookie) {
     if (activeOrderId) {
         const activeOrder = allOrdersData.find(order => order.id === Number(activeOrderId));
         if (dataType === 'files') {
             displayFilesList(activeOrder, filesMessagesContainer);
         } else if (dataType === 'chat') {
-            displayMessages(allOrdersData, activeOrder, clientUserData, filesMessagesContainer, clientStatus);
+            displayMessages(allOrdersData, activeOrder, clientUserData, filesMessagesContainer, clientStatus, cookie);
         }
     }
 }
@@ -510,7 +529,7 @@ Function to show file upload pop up
 
 --------------------------*/
 
-function showFilesPopup() {
+function showFilesPopup(allOrdersData, activeOrderId, cookie) {
     if (document.querySelector('.filesPopup')) {
         return;
     }
@@ -520,6 +539,7 @@ function showFilesPopup() {
 
     // Creating the page mask
     const pageMask = document.createElement('div');
+    pageMask.classList.add('pageMask');
     pageMask.style.zIndex = '50';
     pageMask.style.position = 'absolute';
     pageMask.style.top = '0';
@@ -570,17 +590,40 @@ function showFilesPopup() {
     chatFeed.appendChild(filesPopup);
 
     // Submit the file when the submit button is clicked
-    filesPopupSubmitButton.addEventListener('click', () => {
+    filesPopupSubmitButton.addEventListener('click', async () => {
         if (filesPopupInput.files.length > 0) {
             const file = filesPopupInput.files[0];
-            sendFile(file);
-            addMessageListener((response) => {
-                if (response.fileSendSuccess) {
-                    filesPopupInput.value = '';
-                    chatFeed.removeChild(filesPopup);
-                    chatFeed.removeChild(pageMask);
-                }
-            });
+            try {
+                const preparedFile = await prepareFile(file);
+                sendMessage({newFile: preparedFile, orderID: activeOrderId, cookie: cookie});
+                addMessageListener((response) => {
+                    if (response.newFileSendSuccess) {
+                        const order = allOrdersData.find(order => order.id === activeOrderId);
+                        if (order) {
+                            if (!order.files) {
+                                order.files = [];
+                            }
+                            console.log('order.files:', order.files);
+                            console.log('order.files.type', typeof order.files);
+                            order.files.newKey = preparedFile;
+                        }
+
+                        showCustomAlert('Fichier envoyé avec succès', 'green');
+                        setTimeout(() => {
+                            filesPopupInput.value = '';
+                            while (document.querySelectorAll('.pageMask')[0]) {
+                                chatFeed.removeChild(document.querySelectorAll('.pageMask')[0]);
+                            }
+                            while (document.querySelectorAll('.filesPopup')[0]) {
+                                chatFeed.removeChild(document.querySelectorAll('.filesPopup')[0]);
+                            }
+                        }, 2000);
+                    }
+                });
+            } catch (error) {
+                console.error('Error preparing file:', error);
+                showCustomAlert('Erreur lors de la préparation du fichier', 'red');
+            }
         }
     });
 
@@ -590,3 +633,40 @@ function showFilesPopup() {
         chatFeed.removeChild(pageMask);
     });
 }
+
+/*--------------------------
+
+Function to show file upload pop up
+
+--------------------------*/
+
+async function prepareFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const binaryData = event.target.result;
+            const fileDateTime = new Date().toISOString();
+            const fileWeight = file.size;
+
+            console.log('Treating:', file.name);
+
+            const fileNameParts = file.name.split('.');
+            const fileExtension = fileNameParts.pop();
+            const fileName = fileNameParts.join('.');
+
+            resolve({
+                fileName: fileName,
+                fileExtension: fileExtension,
+                fileData: Array.from(new Uint8Array(binaryData)),
+                fileDateTime: fileDateTime,
+                fileWeight: fileWeight
+            });
+        };
+        reader.onerror = function (error) {
+            reject(error);
+        };
+        reader.readAsArrayBuffer(file);
+    });
+}
+
+export {prepareFile};

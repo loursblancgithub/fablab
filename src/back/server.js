@@ -17,6 +17,7 @@ const {
     adminUpdateOrder, saveFeedback
 } = require('./db_handler');
 const {mainLogin} = require('./login_handler');
+const {saveFileToOrder} = require('./files_handler.js');
 
 // Function to serve static files with correct MIME types
 function serveStaticFile(res, filePath) {
@@ -136,15 +137,6 @@ const server = http.createServer(async (req, res) => {
 // Create WebSocket server
 const wss = new WebSocket.Server({server});
 
-function generateRandomFileID(length) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return result;
-}
-
 wss.on('connection', (ws) => {
     ws.on('message', async (message) => {
         const parsedMessage = JSON.parse(message);
@@ -222,9 +214,9 @@ wss.on('connection', (ws) => {
                     } else {
                         ws.send(JSON.stringify(response));
                     }
-                } else if (key === 'newOrder' && parsedMessage.file) {
-                    const {newOrder} = parsedMessage;
-                    const {fileName, fileExtension, fileData, fileDateTime, fileWeight} = parsedMessage.file;
+                } else if (key === 'newOrder') {
+                    const newOrder = parsedMessage.newOrder;
+                    const {fileName, fileExtension, fileData, fileDateTime, fileWeight} = parsedMessage.newFile;
 
                     if (!fileData) {
                         ws.send(JSON.stringify({error: 'File data is missing'}));
@@ -233,29 +225,79 @@ wss.on('connection', (ws) => {
 
                     const buffer = Buffer.from(fileData);
 
-                    const orderResponse = await createOrder(newOrder);
-                    if (orderResponse.success) {
-                        const orderID = orderResponse.orderID;
-                        const fileID = generateRandomFileID(30);
+                    try {
+                        const orderCreationResponse = await createOrder(newOrder);
+                        if (orderCreationResponse.success) {
+                            const orderID = orderCreationResponse.orderID;
+                            await saveFileToOrder(orderID, `${fileName}.${fileExtension}`, buffer);
 
-                        const filePath = path.join('C:\\Users\\Duarn\\Downloads', `${fileName}`);
-                        fs.writeFile(filePath, buffer, async (err) => {
-                            if (err) {
-                                ws.send(JSON.stringify({error: 'File could not be saved'}));
-                            } else {
-                                const fileInfo = {
-                                    fileID: fileID,
-                                    fileName: fileName,
-                                    fileExtension: fileExtension,
-                                    fileDateTime: fileDateTime,
-                                    fileWeight: fileWeight
-                                };
-                                await updateOrderFiles(orderID, fileInfo);
-                                ws.send(JSON.stringify({success: true, redirect: 'main_client.html'}));
-                            }
-                        });
-                    } else {
-                        ws.send(JSON.stringify({error: 'Erreur lors de l\'envoi de la commande'}));
+                            const filePath = path.join(__dirname, 'storage', 'orders', orderID.toString(), `${fileName}.${fileExtension}`);
+                            fs.writeFile(filePath, buffer, async (err) => {
+                                if (err) {
+                                    console.error('File could not be saved:', err);
+                                    ws.send(JSON.stringify({error: 'File could not be saved'}));
+                                } else {
+                                    const fileInfo = {
+                                        fileName: fileName,
+                                        fileExtension: fileExtension,
+                                        fileDateTime: fileDateTime,
+                                        fileWeight: fileWeight
+                                    };
+                                    await updateOrderFiles(orderID, fileInfo);
+                                    ws.send(JSON.stringify({success: true, redirect: 'main_client.html'}));
+                                }
+                            });
+                        } else {
+                            console.error('Error creating order:', orderCreationResponse);
+                            ws.send(JSON.stringify({error: 'Erreur lors de l\'envoi de la commande'}));
+                        }
+                    } catch (error) {
+                        console.error('Error processing order:', error);
+                        ws.send(JSON.stringify({error: 'Erreur lors de l\'envoi du fichier, merci de réessayer plus tard'}));
+                    }
+                } else if (key === 'newFile') {
+                    const {fileName, fileExtension, fileData, fileDateTime, fileWeight} = parsedMessage.newFile;
+                    const orderID = parsedMessage.orderID;
+                    const cookie = parsedMessage.cookie;
+
+                    console.log('Received newFile message:', parsedMessage.newFile); // Log the newFile object
+
+                    if (!fileData) {
+                        console.error('File data is missing');
+                        ws.send(JSON.stringify({error: 'File data is missing'}));
+                        return;
+                    }
+
+                    const buffer = Buffer.from(fileData);
+                    console.log('Buffer created from fileData:', buffer); // Log the buffer
+
+                    try {
+                        const userVerification = await getUserByCookie(cookie);
+                        if (userVerification) {
+                            const dirPath = path.join(__dirname, 'storage', 'orders', orderID.toString());
+                            const filePath = path.join(dirPath, `${fileName}.${fileExtension}`);
+
+                            fs.mkdirSync(dirPath, {recursive: true});
+
+                            fs.writeFile(filePath, buffer, async (err) => {
+                                if (err) {
+                                    console.error('File could not be saved:', err);
+                                    ws.send(JSON.stringify({error: 'File could not be saved'}));
+                                } else {
+                                    const fileInfo = {
+                                        fileName: fileName,
+                                        fileExtension: fileExtension,
+                                        fileDateTime: fileDateTime,
+                                        fileWeight: fileWeight
+                                    };
+                                    await updateOrderFiles(orderID, fileInfo);
+                                    ws.send(JSON.stringify({newFileSendSuccess: true}));
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error processing file:', error);
+                        ws.send(JSON.stringify({error: 'Error processing file'}));
                     }
                 } else if (key === 'adminOrderUpdate') {
                     try {
@@ -282,11 +324,27 @@ wss.on('connection', (ws) => {
                         console.error('Error processing message:', error);
                         ws.send(JSON.stringify({error: 'Error processing request'}));
                     }
-                } else if (key === 'newFeedback'){
+                } else if (key === 'newFeedback') {
                     const feedbackSaved = await saveFeedback(parsedMessage.newFeedback);
                     if (feedbackSaved) {
                         ws.send(JSON.stringify({feedbackReceived: true}));
                     }
+                } else if (key === 'fileRequest') {
+                    const {fileName, fileExtension, orderID} = parsedMessage.fileRequest;
+                    const filePath = path.join(__dirname, 'storage', 'orders', orderID.toString(), `${fileName}.${fileExtension}`);
+                    fs.readFile(filePath, (err, data) => {
+                        if (err) {
+                            console.error('Error reading file:', err);
+                            ws.send(JSON.stringify({fileDownloadError: 'Error reading file'}));
+                        } else {
+                            const fileDownload = {
+                                fileName: fileName,
+                                fileExtension: fileExtension,
+                                fileData: Array.from(data)
+                            };
+                            ws.send(JSON.stringify({fileDownload: fileDownload}));
+                        }
+                    });
                 }
             }
         }

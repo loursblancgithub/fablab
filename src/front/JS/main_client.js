@@ -13,7 +13,7 @@ const orderContainer = document.getElementById('orderContainer');
 const newOrder = document.getElementById('newOrder');
 let orderElementFilesMessageContent;
 let currentOrderID;
-let orderData;
+let allOrdersData;
 let clientUserData;
 export {clientUserData};
 
@@ -31,14 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addMessageListener(response => {
         if (response.orders) {
-            orderData = Object.values(response.orders);
+            allOrdersData = Object.values(response.orders);
             clientUserData = response.user;
             if (response.user) {
-                displayLandingPage(response.user, orderData);
+                displayLandingPage(response.user, allOrdersData);
             } else {
                 console.error('User data unavailable');
             }
-            displayOrdersList(orderData);
+            displayOrdersList(allOrdersData);
         } else if (response.error) {
             console.error(response.error);
         }
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('ordersListHome').addEventListener('click', () => {
-        displayLandingPage(clientUserData, orderData);
+        displayLandingPage(clientUserData, allOrdersData);
     });
 
     document.getElementById('ordersList').addEventListener('click', function (event) {
@@ -58,12 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.ordersListElement').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
             currentOrderID = element.id;
-            showContentsOfActiveOrder(orderData, currentOrderID, 'files', orderElementFilesMessageContent, clientUserData, 'buyer');
+            showContentsOfActiveOrder(allOrdersData, currentOrderID, 'files', orderElementFilesMessageContent, clientUserData, 'buyer', cookie);
             document.getElementById('orderElementFilesButton').addEventListener('click', () => {
-                showContentsOfActiveOrder(orderData, currentOrderID, 'files', orderElementFilesMessageContent, clientUserData, 'buyer');
+                showContentsOfActiveOrder(allOrdersData, currentOrderID, 'files', orderElementFilesMessageContent, clientUserData, 'buyer', cookie);
             });
             document.getElementById('orderElementMessageButton').addEventListener('click', () => {
-                showContentsOfActiveOrder(orderData, currentOrderID, 'chat', orderElementFilesMessageContent, clientUserData, 'buyer');
+                showContentsOfActiveOrder(allOrdersData, currentOrderID, 'chat', orderElementFilesMessageContent, clientUserData, 'buyer', cookie);
             });
         }
     });

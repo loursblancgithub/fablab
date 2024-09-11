@@ -80,11 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('orderElementFilesButton').addEventListener('click', () => {
-        showContentsOfActiveOrder(allOrdersData, currentOrderID , 'files', orderElementFilesMessageContent, clientUserData, "admin");
+        showContentsOfActiveOrder(allOrdersData, currentOrderID , 'files', orderElementFilesMessageContent, clientUserData, "admin", cookie);
     });
 
     document.getElementById('orderElementMessageButton').addEventListener('click', () => {
-        showContentsOfActiveOrder(allOrdersData, currentOrderID , 'chat', orderElementFilesMessageContent, clientUserData, "admin");
+        showContentsOfActiveOrder(allOrdersData, currentOrderID , 'chat', orderElementFilesMessageContent, clientUserData, "admin", cookie);
     });
 });
 
@@ -244,7 +244,7 @@ function createOrderMosaicElements(orderData, userData) {
             console.log(orderElement)
             showOrderDetails(orderElement);
             currentOrderID = orderElement.id;
-            showContentsOfActiveOrder(allOrdersData, currentOrderID , 'files', orderElementFilesMessageContent, clientUserData);
+            showContentsOfActiveOrder(allOrdersData, currentOrderID , 'files', orderElementFilesMessageContent, clientUserData, 'admin', cookie);
         });
 
         document.getElementById('hideOrderDetails').addEventListener('click', () => {

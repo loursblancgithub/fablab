@@ -1,5 +1,5 @@
-import {logout, showCustomAlert, sanitizeOutput} from "/src/front/JS/utils.js";
-import {sendMessage, addMessageListener, sendOrder} from "/src/front/JS/ws_client.js";
+import {logout, showCustomAlert, sanitizeOutput, prepareFile} from "/src/front/JS/utils.js";
+import {sendMessage, addMessageListener} from "/src/front/JS/ws_client.js";
 
 // Variables declaration
 const wipeInputs = document.querySelectorAll('input[type="text"], input[type="password"],input[type="quantity"], input[type="checkbox"], input[type="select"], textarea');
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Retrieving, formatting and sending the order informations
-    document.getElementById('submit').addEventListener('click', function () {
+    document.getElementById('submit').addEventListener('click', async function () {
         console.log('Submit button clicked'); // Debug log
 
         const requiredFields = ['orderName', 'orderTool', 'orderQuantity', 'orderMaterial'];
@@ -70,20 +70,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                 };
                 const parisTimeString = now.toLocaleString('fr-FR', options).replace(',', '');
                 const dateTimeString = parisTimeString.toString();
+                const preparedFile = await prepareFile(file)
 
                 if (document.getElementById('goodPracticesCheck').checked) {
-                    sendOrder({
-                        orderName: sanitizeOutput(document.getElementById('orderName').value),
-                        orderTool: sanitizeOutput(document.getElementById('orderTool').value),
-                        orderMaterial: sanitizeOutput(document.getElementById('orderMaterial').value),
-                        orderColor: sanitizeOutput(document.getElementById('orderColor').value),
-                        orderQuantity: parseInt(document.getElementById('orderQuantity').value),
-                        orderQuestions: sanitizeOutput(document.getElementById('orderQuestions').value),
-                        orderDateTime: dateTimeString,
-                        orderClient: clientUserData.studentCode,
-                        orderGoodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
-                        orderAdditionalParameters: {}
-                    }, file);
+                    sendMessage({
+                        newOrder: {
+                            orderName: sanitizeOutput(document.getElementById('orderName').value),
+                            orderTool: sanitizeOutput(document.getElementById('orderTool').value),
+                            orderMaterial: sanitizeOutput(document.getElementById('orderMaterial').value),
+                            orderColor: sanitizeOutput(document.getElementById('orderColor').value),
+                            orderQuantity: parseInt(document.getElementById('orderQuantity').value),
+                            orderQuestions: sanitizeOutput(document.getElementById('orderQuestions').value),
+                            orderDateTime: dateTimeString,
+                            orderClient: clientUserData.studentCode,
+                            orderGoodPracticesCheck: document.getElementById('goodPracticesCheck').checked,
+                            orderAdditionalParameters: {}
+                        }, newFile: preparedFile
+                    });
 
                     addMessageListener((response) => {
                         if (response.redirect) {
@@ -94,6 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             }, 2000);
                         } else if (response.error) {
                             showCustomAlert('Erreur lors de l\'envoi du fichier, merci de réessayer plus tard', "red");
+                            console.error('Error sending order:', response.error);
                         } else {
                             showCustomAlert('Erreur lors de l\'envoi de la commande, merci de réessayer plus tard', "red");
                         }
