@@ -366,7 +366,7 @@ Hover popup for text that is too long
 --------------------------*/
 
 .fablabBlueGradient {
-    background: linear-gradient(219deg, #ffffff,#302e98, #8d8fcc) no-repeat border-box;
+    background: linear-gradient(219deg, #ffffff, #302e98, #8d8fcc) no-repeat border-box;
     background-size: 600% 600%;
 
     -webkit-animation: fablabGradient 20s ease infinite;
@@ -401,24 +401,51 @@ Hover popup for text that is too long
 }
 
 @-webkit-keyframes fablabGradient {
-    0%{background-position:0 9%}
-    50%{background-position:100% 92%}
-    100%{background-position:0 9%}
+    0% {
+        background-position: 0 9%
+    }
+    50% {
+        background-position: 100% 92%
+    }
+    100% {
+        background-position: 0 9%
+    }
 }
+
 @-moz-keyframes fablabGradient {
-    0%{background-position:0 9%}
-    50%{background-position:100% 92%}
-    100%{background-position:0 9%}
+    0% {
+        background-position: 0 9%
+    }
+    50% {
+        background-position: 100% 92%
+    }
+    100% {
+        background-position: 0 9%
+    }
 }
+
 @-o-keyframes fablabGradient {
-    0%{background-position:0 9%}
-    50%{background-position:100% 92%}
-    100%{background-position:0 9%}
+    0% {
+        background-position: 0 9%
+    }
+    50% {
+        background-position: 100% 92%
+    }
+    100% {
+        background-position: 0 9%
+    }
 }
+
 @keyframes fablabGradient {
-    0%{background-position:0 9%}
-    50%{background-position:100% 92%}
-    100%{background-position:0 9%}
+    0% {
+        background-position: 0 9%
+    }
+    50% {
+        background-position: 100% 92%
+    }
+    100% {
+        background-position: 0 9%
+    }
 }
 
 /*--------------------------
@@ -645,7 +672,6 @@ Order element styling
 .rightColumnBubble {
     background-color: var(--logoBlue);
     color: #ffffff;
-    width: 100%;
 }
 
 .messageElement {
@@ -653,17 +679,20 @@ Order element styling
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-start;
+    min-width: fit-content;
     width: fit-content;
     max-width: 70%;
     z-index: 15;
     margin-top: 1%;
-    min-width: 30%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .messageElementBody {
-    margin: 2% 0 1% 0;
-    padding: 2%;
+    padding: 0.285rem;
     border-radius: 5px;
+    max-width: 100%;
 }
 
 .messageElementSender {
@@ -767,7 +796,7 @@ Order element styling
     width: 100%;
 }
 
-.filesPopupTitle{
+.filesPopupTitle {
     font-size: 2vh;
     font-weight: 325;
     margin: 1.5vh 0 0.5vh 0;
