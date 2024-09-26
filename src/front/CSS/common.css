@@ -371,7 +371,6 @@ Hover popup for text that is too long
 
     -webkit-animation: fablabGradient 20s ease infinite;
     -moz-animation: fablabGradient 20s ease infinite;
-    -o-animation: fablabGradient 20s ease infinite;
     animation: fablabGradient 20s ease infinite;
 }
 
@@ -381,7 +380,6 @@ Hover popup for text that is too long
 
     -webkit-animation: fablabGradient 2s ease infinite;
     -moz-animation: fablabGradient 2s ease infinite;
-    -o-animation: fablabGradient 2s ease infinite;
     animation: fablabGradient 2s ease infinite;
 }
 
@@ -391,7 +389,6 @@ Hover popup for text that is too long
 
     -webkit-animation: fablabGradient 10s ease infinite;
     -moz-animation: fablabGradient 10s ease infinite;
-    -o-animation: fablabGradient 10s ease infinite;
     animation: fablabGradient 10s ease infinite;
 }
 
@@ -413,18 +410,6 @@ Hover popup for text that is too long
 }
 
 @-moz-keyframes fablabGradient {
-    0% {
-        background-position: 0 9%
-    }
-    50% {
-        background-position: 100% 92%
-    }
-    100% {
-        background-position: 0 9%
-    }
-}
-
-@-o-keyframes fablabGradient {
     0% {
         background-position: 0 9%
     }
