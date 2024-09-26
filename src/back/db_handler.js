@@ -1,4 +1,4 @@
-const {Pool} = require('pg');
+const { Pool } = require('pg');
 
 const pool = new Pool({
     user: 'postgres',
@@ -9,21 +9,29 @@ const pool = new Pool({
 });
 
 async function query(text, params) {
-    const dbClient = await pool.connect();
+    let dbClient;
     try {
+        dbClient = await pool.connect();
         return await dbClient.query(text, params);
     } catch (err) {
         console.error('Database query error:', err);
         throw err;
     } finally {
-        dbClient.release();
+        if (dbClient) {
+            dbClient.release();
+        }
     }
 }
 
 // Check if the user who logged in exists in the database
 async function userExists(studentCode) {
-    const res = await query('SELECT 1 FROM public."userdata" WHERE studentcode = $1', [studentCode]);
-    return res.rows.length > 0;
+    try {
+        const res = await query('SELECT 1 FROM public."userdata" WHERE studentcode = $1', [studentCode]);
+        return res.rows.length > 0;
+    } catch (err) {
+        console.error('Error checking if user exists:', err);
+        throw err;
+    }
 }
 
 // Add a new user to the database
@@ -45,10 +53,10 @@ async function createCookie(cookie, studentCode) {
 // Save order information in the database
 async function createOrder(order) {
     const res = await query(
-        'INSERT INTO public."order" (name, tool, material, color, quantity, questions, datetime, fablabuser, state, goodpracticescheck, additionalparameters) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id',
-        [order.orderName, order.orderTool, order.orderMaterial, order.orderColor, order.orderQuantity, order.orderQuestions, order.orderDateTime, order.orderClient, "pending", order.orderGoodPracticesCheck, order.orderAdditionalParameters]
+        'INSERT INTO public."order" (fablabuser, orderdata) VALUES ($1, $2) RETURNING id',
+        [order.fablabuser, order.orderdata]
     );
-    return {success: true, orderID: res.rows[0].id};
+    return { success: true, orderID: res.rows[0].id };
 }
 
 // Update the order with the new file information
@@ -64,7 +72,7 @@ async function updateOrderFiles(orderID, fileInfo) {
         [currentFiles, orderID]
     );
 
-    return {success: true};
+    return { success: true };
 }
 
 // Get all orders of a specific user
@@ -97,7 +105,7 @@ async function saveChatMessage(message) {
         [currentChat, message.orderID]
     );
 
-    return {success: true};
+    return { success: true };
 }
 
 // Get user information using the student code
@@ -117,8 +125,8 @@ async function getUserPrivilegeLevel(studentCode) {
 // Save sent feedback in the database
 async function saveFeedback(data) {
     await query(`INSERT INTO public."feedback" (content, fablabuser)
-                 VALUES ($1, $2)`, [data.feedbackContent, data.feedbackUser]);
-    return {feedbackSaved: true};
+                 VALUES ($1, $2)`, [data.content, data.fablabuser]);
+    return { feedbackSaved: true };
 }
 
 // For admin use, retrieve all orders from the database
@@ -136,12 +144,10 @@ async function adminGetUsers() {
 // For admin use, update a specific field of a specific order in the database
 async function adminUpdateOrder(data) {
     await query(
-        `UPDATE public."order"
-         SET ${data.field} = $1
-         WHERE id = $2`,
-        [data.newValue, data.orderID]
+        'UPDATE public."order" SET $1 = $2 WHERE id = $3',
+        [data.field, data.value, data.orderID]
     );
-    return {success: true, fieldToUpdate: data.field};
+    return { success: true, fieldToUpdate: data.field };
 }
 
 module.exports = {

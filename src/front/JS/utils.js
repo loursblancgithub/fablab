@@ -289,7 +289,7 @@ function displayFilesList(order, filesListContainer) {
 
         const fileElementName = document.createElement('div');
         fileElementName.classList.add('fileElementName');
-        fileElementName.textContent = file.fileName;
+        fileElementName.textContent = file.fileName.concat('.', file.fileExtension);
         fileElement.appendChild(fileElementName);
 
         const fileElementRightPart = document.createElement('div');
