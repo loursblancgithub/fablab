@@ -2,9 +2,11 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    height: 95vh;
+    height: 100vh;
+    width: 100vw;
     overflow: hidden;
     box-sizing: border-box;
+    padding: 1vh;
 }
 
 option {
