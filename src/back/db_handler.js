@@ -9,17 +9,14 @@ const pool = new Pool({
 });
 
 async function query(text, params) {
-    let dbClient;
+    const dbClient = await pool.connect();
     try {
-        dbClient = await pool.connect();
         return await dbClient.query(text, params);
     } catch (err) {
         console.error('Database query error:', err);
         throw err;
     } finally {
-        if (dbClient) {
-            dbClient.release();
-        }
+        dbClient.release();
     }
 }
 
@@ -143,9 +140,10 @@ async function adminGetUsers() {
 
 // For admin use, update a specific field of a specific order in the database
 async function adminUpdateOrder(data) {
+    console.log("data received: ", data);
     await query(
-        'UPDATE public."order" SET $1 = $2 WHERE id = $3',
-        [data.field, data.value, data.orderID]
+        `UPDATE public."order" SET ${data.field} = $1 WHERE id = $2`,
+        [data.newValue, data.orderID]
     );
     return { success: true, fieldToUpdate: data.field };
 }

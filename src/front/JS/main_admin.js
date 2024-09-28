@@ -80,11 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('orderElementFilesButton').addEventListener('click', () => {
-        showContentsOfActiveOrder(allOrdersData, currentOrderID , 'files', orderElementFilesMessageContent, clientUserData, "admin", cookie);
+        showContentsOfActiveOrder(allOrdersData, currentOrderID, 'files', orderElementFilesMessageContent, clientUserData, "admin", cookie);
     });
 
     document.getElementById('orderElementMessageButton').addEventListener('click', () => {
-        showContentsOfActiveOrder(allOrdersData, currentOrderID , 'chat', orderElementFilesMessageContent, clientUserData, "admin", cookie);
+        showContentsOfActiveOrder(allOrdersData, currentOrderID, 'chat', orderElementFilesMessageContent, clientUserData, "admin", cookie);
     });
 });
 
@@ -139,15 +139,6 @@ function createOrderMosaicElements(orderData, userData) {
         const orderStateDropdown = createStateDropdown(orderElement.state, orderElement.id);
         orderStateDropdown.style.margin = '1vh 0 1vh 0';
         applyHoverIfNecessary(orderStateDropdown, stateOptions[orderElement.state]);
-        orderStateDropdown.addEventListener('change', function () {
-            const previousValue = orderStateDropdown.value;
-            const successfulUpdate = certifyOrderUpdate(this.value, 'state', orderElement.id, cookie);
-            if (successfulUpdate) {
-                orderElement.state = this.value;
-            } else {
-                orderElement.state = previousValue;
-            }
-        });
         orderElementHeaderClientState.appendChild(orderStateDropdown);
 
         orderElementHeader.appendChild(orderElementHeaderClientState);
@@ -244,7 +235,7 @@ function createOrderMosaicElements(orderData, userData) {
             console.log(orderElement)
             showOrderDetails(orderElement);
             currentOrderID = orderElement.id;
-            showContentsOfActiveOrder(allOrdersData, currentOrderID , 'files', orderElementFilesMessageContent, clientUserData, 'admin', cookie);
+            showContentsOfActiveOrder(allOrdersData, currentOrderID, 'files', orderElementFilesMessageContent, clientUserData, 'admin', cookie);
         });
 
         document.getElementById('hideOrderDetails').addEventListener('click', () => {
@@ -367,13 +358,13 @@ function showOrderDetails(orderElement) {
 
     document.getElementById('orderPrice').textContent = `${orderElement.price}€`;
     document.getElementById('orderQuestion').textContent = `Questions: ${orderElement.question}`;
-    if ( orderElement.question === '' || orderElement.question === null || orderElement.question === undefined) {
+    if (orderElement.question === '' || orderElement.question === null || orderElement.question === undefined) {
         document.getElementById('orderQuestion').textContent = 'Questions: Non renseigné';
     }
 }
 
 // Function to create the order state dropdown
-function createStateDropdown(currentState, orderElement) {
+function createStateDropdown(currentState, orderID) {
     const dropdown = document.createElement('select');
     dropdown.classList.add('orderStateDropdown');
 
@@ -397,7 +388,7 @@ function createStateDropdown(currentState, orderElement) {
     dropdown.addEventListener('change', function () {
         const previousValue = currentState;
         const newValue = this.value;
-        const successfulUpdate = certifyOrderUpdate(newValue, 'state', orderElement.id, cookie);
+        const successfulUpdate = certifyOrderUpdate(newValue, 'state', orderID, cookie);
         if (successfulUpdate) {
             const {background, font} = getColorForState(newValue);
             this.style.backgroundColor = background;
@@ -421,13 +412,28 @@ function getUserNameById(userID, usersData) {
 }
 
 // Certify the data has been correctly received before changing the field content
+let listenerAdded = false;
+
 async function certifyOrderUpdate(updatedData, field, orderID, cookie) {
-    sendMessage({adminOrderUpdate: {newData: {newValue: updatedData, field: field, orderID: orderID}, cookie: cookie}});
-    addMessageListener((response) => {
-        if (response.success === true) {
-            return response.fieldToUpdate === field;
-        } else {
-            console.error(response.error);
+    return new Promise((resolve, reject) => {
+        sendMessage({
+            adminOrderUpdate: {
+                newData: {newValue: updatedData, field: field, orderID: orderID},
+                cookie: cookie
+            }
+        });
+
+        if (!listenerAdded) {
+            addMessageListener((response) => {
+                if (response.success === true) {
+                    console.log("response.fieldToUpdate: ",response.fieldToUpdate);
+                    resolve(response.fieldToUpdate === field);
+                } else {
+                    console.error(response.error);
+                    reject(response.error);
+                }
+            });
+            listenerAdded = true;
         }
     });
 }

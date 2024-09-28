@@ -283,7 +283,6 @@ function displayFilesList(order, filesListContainer) {
     const sortedFiles = sortElementsByDate(files);
 
     sortedFiles.forEach((file) => {
-        console.log('file:', file);
         const fileElement = document.createElement('div');
         fileElement.classList.add('fileElement');
 
@@ -313,17 +312,26 @@ function displayFilesList(order, filesListContainer) {
         const fileElementDownloadButton = createSVGElement('download_icon', 'Télécharger');
         fileElementDownloadButton.classList.add('fileElementDownload');
         fileElementDownloadButton.style.height = '20px';
-        console.log('file.name', file.fileName);
         fileElementRightPart.appendChild(fileElementDownloadButton);
 
         fileElement.appendChild(fileElementRightPart);
-
         filesListContainer.appendChild(fileElement);
 
-        fileElementDownloadButton.addEventListener('click', () => sendMessage({fileRequest: {fileName: file.fileName, fileExtension: file.fileExtension, orderID: order.id}}));
+        fileElementDownloadButton.addEventListener('click', () => {
+            sendMessage({
+                fileRequest: {
+                    fileName: file.fileName,
+                    fileExtension: file.fileExtension,
+                    orderID: order.id
+                }
+            });
+        });
+    });
+
+    // Ensure the listener is added only once
+    if (!displayFilesList.listenerAdded) {
         addMessageListener((response) => {
             if (response.fileDownload) {
-                console.log('response.fileDownload:', response.fileDownload.fileExtension);
                 const fileData = response.fileDownload;
                 const blob = new Blob([new Uint8Array(fileData.fileData)], {type: `application/${fileData.fileExtension}`});
                 const url = URL.createObjectURL(blob);
@@ -336,7 +344,8 @@ function displayFilesList(order, filesListContainer) {
                 showCustomAlert('Erreur lors du téléchargement du fichier', 'red');
             }
         });
-    });
+        displayFilesList.listenerAdded = true;
+    }
 }
 
 export {displayFilesList};
@@ -423,6 +432,15 @@ function displayMessages(allOrdersData, order, userData, chatContainer, clientSt
                 if (response.success) {
                     chatMessageTextarea.value = '';
                     appendMessage(allOrdersData, message, clientStatus);
+                    const order = allOrdersData.find(order => order.id === activeOrderId);
+                    if (order) {
+                        if (!order.chat) {
+                            order.chat = [];
+                        }
+                        console.log('order.files:', order.chat);
+                        console.log('order.files.type', typeof order.chat);
+                        order.chat.newKey = message;
+                    }
                 }
             });
         }
@@ -437,7 +455,7 @@ Function to append a new message to the chat feed
 
 --------------------------*/
 
-function appendMessage(allOrders, message) {
+function appendMessage(allOrders, message, clientStatus) {
     const chatFeed = document.querySelector('.chatFeed');
 
     if (chatFeed.textContent === 'Personne n\'a encore rien dit...') {
@@ -462,6 +480,9 @@ function appendMessage(allOrders, message) {
         messageElementSender.textContent = '';
     }
     messageElementBody.appendChild(messageElementSender);
+    if (messageElementSender.textContent === '') {
+        messageElementSender.parentNode.removeChild(messageElementSender);
+    }
 
     const messageElementContent = document.createElement('div');
     messageElementContent.classList.add('messageElementContent');
@@ -474,13 +495,24 @@ function appendMessage(allOrders, message) {
     messageElementDateTime.textContent = message.msgDate;
     messageElement.appendChild(messageElementDateTime);
 
-    if (message.msgSender === 'FabLab') {
-        messageElement.classList.add('leftColumn');
-        messageElementBody.classList.add('leftColumnBubble');
-        messageElementDateTime.style.alignSelf = 'flex-start';
-    } else {
-        messageElement.classList.add('rightColumn');
-        messageElementBody.classList.add('rightColumnBubble');
+    if (clientStatus === 'admin') {
+        if (message.msgSender === 'FabLab') {
+            messageElement.classList.add('leftColumn');
+            messageElementBody.classList.add('leftColumnBubble');
+            messageElementDateTime.style.alignSelf = 'flex-start';
+        } else {
+            messageElement.classList.add('rightColumn');
+            messageElementBody.classList.add('rightColumnBubble');
+        }
+    } else if (clientStatus === 'buyer') {
+        if (message.msgSender === 'FabLab') {
+            messageElement.classList.add('leftColumn');
+            messageElementBody.classList.add('leftColumnBubble');
+            messageElementDateTime.style.alignSelf = 'flex-start';
+        } else {
+            messageElement.classList.add('rightColumn');
+            messageElementBody.classList.add('rightColumnBubble');
+        }
     }
     chatFeed.appendChild(messageElement);
     allOrders.find(order => order.id === message.orderID).chat.chatMessages[message.msgID] = message;
