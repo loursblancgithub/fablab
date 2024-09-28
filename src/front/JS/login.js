@@ -8,6 +8,7 @@ const passwordInput = document.getElementById('password');
 
 document.addEventListener('DOMContentLoaded', () => {
     fiveElements(bodyContainer);
+    usernameInput.focus();
 
     loginButton.addEventListener('click', () => {
         const username = usernameInput.value;
