@@ -16,17 +16,18 @@
 </head>
 <body>
 <div id="bodyContainer">
-    <div id="headerRight">
-        <img src="/src/front/Assets/bulb_icon.svg" alt="logo" id="formBulb">
-        <div id="logoutButton" class="blueButton hoverButton">Se déconnecter</div>
+    <div id="header">
+        <img src="/src/front/Assets/SVG/logo_fablab.svg" alt="logo" id="fablabLogo">
+        <div id="headerRight">
+            <img id="formBulb" src="/src/front/Assets/SVG/bulb_icon.svg" alt="logo">
+            <div id="logoutButton" class="blueButton hoverButton">Se déconnecter</div>
+        </div>
     </div>
-    <img src="/src/front/Assets/logo_fablab.svg" alt="logo" id="fablabLogo">
     <div id="contentContainer">
         <div id="leftContentContainer">
             <div id="ordersListHeader">
-                <svg id="ordersListHome" class="svgIcon">
-                    <use xlink:href="/src/front/Assets/sprite.svg#home_icon"></use>
-                </svg>
+                <img id="ordersListHome" class="whiteSVGHover" src="/src/front/Assets/SVG/home_icon.svg"
+                     alt="Home Icon">
                 <div id="newOrder" class="hoverButton">Commander</div>
             </div>
             <div id="ordersList"></div>

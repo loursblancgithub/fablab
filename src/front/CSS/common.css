@@ -40,18 +40,6 @@ textarea:focus, input:focus {
     width: 100vw;
 }
 
-.svgIcon {
-    fill: #000;
-    width: 24px;
-    height: 24px;
-}
-
-.svgIcon:hover {
-    fill: #ffffff;
-    background-color: var(--logoBlue);
-    cursor: pointer;
-    transition: background-color 0.25s ease;
-}
 
 /*------> Generic grey input with box shadow <------*/
 .inputStyle {
@@ -100,6 +88,18 @@ textarea:focus, input:focus {
     transition: background-color 0.25s ease;
 }
 
+.whiteSVGHover:hover {
+    cursor: pointer;
+    background-color: rgb(222, 222, 232) !important;
+    transition: background-color ease 0.25s;
+}
+
+.blueSVGHover:hover {
+    cursor: pointer;
+    background-color: var(--backgroundLightBlue) !important;
+    transition: background-color ease 0.25s;
+}
+
 select > option {
     font-family: LexendDeca, sans-serif;
 }
@@ -127,9 +127,6 @@ Header side
     justify-content: flex-end;
     align-items: center;
     width: fit-content;
-    position: absolute;
-    right: 10vw;
-    top: 6vw;
 }
 
 #formBulb {
@@ -138,18 +135,10 @@ Header side
     margin: 1vh 0 1vh 0;
 }
 
-#formBulb:hover {
-    cursor: pointer;
-}
-
 #logoutButton {
     width: fit-content;
     padding: 1% 5% 1% 5%;
     margin: 0 0 0 5%;
-}
-
-#logoutButton:hover {
-    cursor: pointer;
 }
 
 /*--------------------------
@@ -619,14 +608,7 @@ Order element styling
     padding: 1%;
     border-radius: 5px;
     background-color: var(--logoBlue);
-    fill: #ffffff;
     align-self: center;
-}
-
-.fileElementDownload:hover {
-    cursor: pointer;
-    background-color: var(--backgroundLightBlue);
-    transition: background-color 0.25s ease;
 }
 
 /* Chat Styling */
@@ -643,6 +625,7 @@ Order element styling
 
 .leftColumn {
     align-self: flex-start;
+    margin-left: 3%;
 }
 
 .leftColumnBubble {
@@ -663,10 +646,8 @@ Order element styling
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    align-items: flex-start;
-    min-width: fit-content;
-    width: fit-content;
-    max-width: 70%;
+    align-items: flex-end;
+    max-width: 60%;
     z-index: 15;
     margin-top: 1%;
     box-sizing: border-box;
@@ -713,7 +694,7 @@ Order element styling
     padding: 1%;
     box-sizing: border-box;
     background-color: #ffffff;
-    cursor: pointer;
+    transition: background-color ease 0.25s;
 }
 
 .chatMessageInputContainer {
@@ -723,7 +704,7 @@ Order element styling
     height: 80%;
     width: 90%;
     border-radius: 5px;
-    padding: 0.75% 0.5% 0.75% 0.5%;
+    padding: 0.75% 0 0.75% 0.5%;
     box-sizing: border-box;
     background-color: #ffffff;
 }
@@ -748,8 +729,8 @@ Order element styling
     border-radius: 5px;
     padding: 1%;
     box-sizing: border-box;
-    height: 100% !important;
-    width: 8% !important;
+    height: 110% !important;
+    transition: background-color ease 0.25s;
 }
 
 /* Chat file popup */
@@ -825,9 +806,38 @@ Order element styling
 
     .orderElementFilesMessage {
         width: 100%;
-        height: fit-content;
-        max-height: 34vh;
+        height: 50vh;
         margin: 0.5vh auto;
         padding: 1% 0 0 0;
+    }
+
+    .orderElementFilesMessageContent {
+        padding: 3vw
+    }
+
+    .chatFeed {
+        height: 150vh;
+        width: 100%;
+    }
+
+    .chatFilesInput {
+        height: 2rem;
+    }
+
+    .chatMessageInputContainer {
+        height: 100%;
+    }
+
+    #chatMessageSendButton {
+        height: 2rem;
+        width: 2rem;
+    }
+
+    .fileElementName {
+        font-size: 80%;
+    }
+
+    .fileElementDate {
+        font-size: 80%;
     }
 }

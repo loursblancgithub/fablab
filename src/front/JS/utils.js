@@ -311,6 +311,7 @@ function displayFilesList(order, filesListContainer) {
 
         const fileElementDownloadButton = createSVGElement('download_icon', 'Télécharger');
         fileElementDownloadButton.classList.add('fileElementDownload');
+        fileElementDownloadButton.classList.add('blueSVGHover')
         fileElementDownloadButton.style.height = '20px';
         fileElementRightPart.appendChild(fileElementDownloadButton);
 
@@ -361,6 +362,7 @@ function displayMessages(allOrdersData, order, userData, chatContainer, clientSt
 
     const chatFeed = document.createElement('div');
     chatFeed.classList.add('chatFeed');
+    chatFeed.id = 'chatFeed'
     chatContainer.appendChild(chatFeed);
 
     const chatContent = order.chat;
@@ -369,11 +371,13 @@ function displayMessages(allOrdersData, order, userData, chatContainer, clientSt
         chatFeed.style.textAlign = 'center';
     } else {
         const chatMessages = Object.values(chatContent.chatMessages);
-        chatMessages.sort((a, b) => new Date(a.msgDate) - new Date(b.msgDate)); // Sort in ascending order
+        chatMessages.sort((a, b) => new Date(a.msgDate) - new Date(b.msgDate));
         chatMessages.forEach((message) => {
             appendMessage(allOrdersData, message, clientStatus);
         });
     }
+
+    scrollToBottom('chatFeed')
 
     const chatInputs = document.createElement('div');
     chatInputs.classList.add('chatInputs');
@@ -381,6 +385,7 @@ function displayMessages(allOrdersData, order, userData, chatContainer, clientSt
 
     const filesInput = createSVGElement('files_icon', 'Ajouter un fichier');
     filesInput.classList.add('chatFilesInput');
+    filesInput.classList.add('whiteSVGHover');
     chatInputs.appendChild(filesInput);
     filesInput.addEventListener('click', () => {
         showFilesPopup(allOrdersData, order.id, cookie);
@@ -396,6 +401,7 @@ function displayMessages(allOrdersData, order, userData, chatContainer, clientSt
 
     const chatMessageSendButton = createSVGElement('send_icon', 'Envoyer');
     chatMessageSendButton.classList.add('chatMessageSendButton');
+    chatMessageSendButton.classList.add('whiteSVGHover');
     chatMessageSendButton.id = 'chatMessageSendButton';
     chatMessageInputContainer.appendChild(chatMessageSendButton);
 
@@ -525,13 +531,11 @@ Create the svg elements working with the sprite
 --------------------------*/
 
 function createSVGElement(name, alt) {
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.classList.add('svgIcon');
-    svg.alt = alt;
-    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-    use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `/src/front/Assets/sprite.svg#${name}`);
-    svg.appendChild(use);
-    return svg;
+    const img = document.createElement('img');
+    img.classList.add('svgIcon');
+    img.alt = alt;
+    img.src = `/src/front/Assets/SVG/${name}.svg`;
+    return img;
 }
 
 export {createSVGElement};
@@ -565,6 +569,8 @@ function showFilesPopup(allOrdersData, activeOrderId, cookie) {
     if (document.querySelector('.filesPopup')) {
         return;
     }
+
+    document.querySelector('.chatFeed').style.overflow = 'hidden'
 
     const chatFeed = document.querySelector('.chatFeed');
     chatFeed.style.position = 'relative';
@@ -663,6 +669,7 @@ function showFilesPopup(allOrdersData, activeOrderId, cookie) {
     filesPopupCloseButton.addEventListener('click', () => {
         chatFeed.removeChild(filesPopup);
         chatFeed.removeChild(pageMask);
+        document.querySelector('.chatFeed').style.overflow = 'auto'
     });
 }
 
@@ -702,3 +709,16 @@ async function prepareFile(file) {
 }
 
 export {prepareFile};
+
+/*--------------------------
+
+Function to scroll down a container when showing it
+
+--------------------------*/
+
+function scrollToBottom(containerId) {
+    const container = document.getElementById(containerId);
+    container.scrollTop = container.scrollHeight;
+}
+
+export {scrollToBottom};
