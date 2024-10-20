@@ -141,8 +141,8 @@ function displayOrdersList(orders) {
 
         const ordersListElementState = document.createElement('div');
         ordersListElementState.classList.add('ordersListElementState');
-        ordersListElementState.style.backgroundColor = getColorForState(orderElement.state).background;
-        ordersListElementState.style.color = getColorForState(orderElement.state).font;
+        ordersListElementState.style.backgroundColor = getColorForState(orderElement.state).backgroundColor;
+        ordersListElementState.style.color = getColorForState(orderElement.state).color;
         ordersListElementState.textContent = getColorForState(orderElement.state).frText;
 
         ordersListElement.appendChild(ordersListElementName);
@@ -184,7 +184,7 @@ function displayOrderContent(order) {
     const orderElementState = document.createElement('div');
     orderElementState.classList.add('orderElementState');
     orderElementState.textContent = `${order.state}`;
-    orderElementState.style.color = getColorForState(order.state).background;
+    orderElementState.style.color = getColorForState(order.state).backgroundColor;
     orderElementState.textContent = getColorForState(order.state).frText;
     orderElementSummary.appendChild(orderElementState);
 
