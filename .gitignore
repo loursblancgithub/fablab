@@ -1,13 +1,4 @@
 /target
-.idea/vcs.xml
-.idea/prettier.xml
-.idea/modules.xml
-.idea/jsLinters/eslint.xml
-.idea/inspectionProfiles/Project_Default.xml
-.idea/fablab.iml
-.idea/codeStyles/codeStyleConfig.xml
-.idea/dataSources
-.idea/dataSources.local.xml
-.idea/dataSources.xml
-.idea/sqldialects.xml
+.idea
 node_modules/
+.env
