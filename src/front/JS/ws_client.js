@@ -1,7 +1,7 @@
 let ws;
 let wsReadyPromise;
 
-// Function to initialize WebSocket connection
+// Initialize WebSocket connection
 function initializeWebSocket() {
     return new Promise((resolve, reject) => {
         ws = new WebSocket('ws://localhost:8080');
@@ -10,7 +10,7 @@ function initializeWebSocket() {
     });
 }
 
-// Function to send a message through WebSocket
+// Send a message through WebSocket
 function sendMessage(message) {
     wsReadyPromise.then(() => {
         ws.send(JSON.stringify(message));
@@ -28,7 +28,7 @@ function sendMessage(message) {
     });
 }
 
-// Function to add a message listener to WebSocket
+// Add a message listener to WebSocket
 function addMessageListener(callback) {
     wsReadyPromise.then(() => {
         ws.addEventListener('message', (event) => {

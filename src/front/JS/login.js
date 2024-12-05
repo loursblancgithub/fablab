@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fiveElements(bodyContainer);
     usernameInput.focus();
 
+    // When clicking the login button, retrieving username and password
     loginButton.addEventListener('click', () => {
         const username = usernameInput.value;
         const password = passwordInput.value;
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // If all fields filled, sending login infos to the server for check
         sendMessage({checkUser: {username}});
         addMessageListener((response) => {
             if (response.userExists) {
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
+            // If login successful, redirecting to a specific location
             addMessageListener((response) => {
                 if (response.redirect) {
                     if (response.cookie) {

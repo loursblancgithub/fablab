@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         generateParametersHTML(printParameters, orderPrintSettings);
     });
 
-    // Retrieving, formatting and sending the order informations
+    // Retrieving, formatting and sending the order data
     document.getElementById('submit').addEventListener('click', async function () {
         console.log('Submit button clicked'); // Debug log
 
@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const dateTimeString = parisTimeString.toString();
                 const preparedFile = await prepareFile(file)
 
+                // Checking for acceptance of good practices
                 if (document.getElementById('goodPracticesCheck').checked) {
                     sendMessage({
                         newOrder: {
@@ -114,7 +115,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-// Functions
+/*--------------------------
+
+Functions
+
+--------------------------*/
+
+// Retrieving print parameters from json file
 async function fetchPrintParameters() {
     try {
         const response = await fetch('../JSON/print_parameters.json');
@@ -128,6 +135,7 @@ async function fetchPrintParameters() {
     }
 }
 
+// Initializing the print parameters slider
 function initializeSlider() {
     const expertModeSwitch = document.getElementById('expertModeSwitch');
     const slider = document.querySelector('.slider');
@@ -145,6 +153,7 @@ function initializeSlider() {
     expertModeSwitch.addEventListener('change', updateSliderStyle);
 }
 
+// Generating the custom parameters section's html from the json
 function generateParametersHTML(parameters, parentElement, depth = 0) {
     Object.entries(parameters).forEach(([key, value]) => {
         if (typeof value === "object" && value.defaultValue !== undefined) {
@@ -158,6 +167,7 @@ function generateParametersHTML(parameters, parentElement, depth = 0) {
             label.style.fontSize = '0.9em';
             container.appendChild(label);
 
+            // If selector, creating specific html, else just a text input
             if (value.type === "select") {
                 const select = document.createElement('select');
                 select.id = key + 'Value';

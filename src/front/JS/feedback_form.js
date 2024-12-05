@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let feedbackForm;
 
+    // When clicking the feedback form light bulb
     formBulb.addEventListener('click', () => {
         if (document.getElementById('feedbackForm')) {
             return;
@@ -87,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, {once: true});
         });
 
+        // When clicking the submit button, sending feedback data to the server
         document.getElementById('feedbackSubmit').addEventListener('click', () => {
             const feedbackContent = document.getElementById('feedbackContent').value;
             const sanitizedFeedbackContent = sanitizeOutput(feedbackContent);
@@ -97,6 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     feedbackUser: clientUserData.studentCode
                 }
             });
+
+            // If data successfully received, showing a success message
             addMessageListener((response) => {
                 if (response.feedbackReceived) {
                     showCustomAlert('Merci de ton message ! Nous reviendrons vers toi si ton idée pique notre curiosité.', 'green')

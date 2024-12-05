@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
     sendMessage({fetchOrders: {cookie}});
 
+    // After sending base info on page loading, waiting for reception of requested information
     addMessageListener(response => {
         if (response.orders) {
             allOrdersData = Object.values(response.orders);
@@ -44,14 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // If clicking the new order button, redirecting to the order page
     newOrder.addEventListener('click', function () {
         window.location.href = "/src/front/HTML/order.html";
     });
 
+    // If clicking the home button, showing the home popup
     document.getElementById('ordersListHome').addEventListener('click', () => {
         displayLandingPage(clientUserData, allOrdersData);
     });
 
+    // If clicking an order element in the list, showing its popup, highlighting it in the list and setting up event listeners
     document.getElementById('ordersList').addEventListener('click', function (event) {
         const element = event.target.closest('.ordersListElement');
         if (element) {
@@ -75,7 +79,7 @@ Functions
 
 --------------------------*/
 
-//Function showing the landing page of the user
+// Showing the landing page of the user
 function displayLandingPage(user, orders) {
     orderContainer.innerHTML = '';
     document.querySelectorAll('.ordersListElement').forEach(el => el.classList.remove('active'));
@@ -113,7 +117,7 @@ function displayLandingPage(user, orders) {
     }, 10);
 }
 
-// Function to fill the order list
+// Fill the order list
 function displayOrdersList(orders) {
     const ordersList = document.getElementById('ordersList');
 
@@ -128,6 +132,7 @@ function displayOrdersList(orders) {
         return 0;
     });
 
+    // Displaying the orders
     timeSortedOrders.forEach((orderElement) => {
         const ordersListElement = document.createElement('div');
         ordersListElement.classList.add('ordersListElement');
@@ -156,9 +161,9 @@ function displayOrdersList(orders) {
     });
 }
 
-// Function to display order details in #orderContainer
+// Display order details in #orderContainer
 function displayOrderContent(order) {
-
+    // Clearing the order element before displaying a new one
     if (document.getElementById('orderElement')) {
         document.getElementById('orderElement').remove();
     }
@@ -295,6 +300,8 @@ function displayOrderContent(order) {
     orderElementDiv.appendChild(orderElementBody);
 
     orderContainer.appendChild(orderElementDiv);
+
+    // Small animation
     setTimeout(() => {
         orderElementDiv.classList.add('active');
     }, 10);
