@@ -121,7 +121,10 @@ Functions
 
 --------------------------*/
 
-// Retrieving print parameters from json file
+/**
+ * Retrieving print parameters from json file
+ * @returns {Promise<any|null>}
+ */
 async function fetchPrintParameters() {
     try {
         const response = await fetch('../JSON/print_parameters.json');
@@ -135,7 +138,9 @@ async function fetchPrintParameters() {
     }
 }
 
-// Initializing the print parameters slider
+/**
+ * Initializing the print parameters slider
+ */
 function initializeSlider() {
     const expertModeSwitch = document.getElementById('expertModeSwitch');
     const slider = document.querySelector('.slider');
@@ -153,7 +158,12 @@ function initializeSlider() {
     expertModeSwitch.addEventListener('change', updateSliderStyle);
 }
 
-// Generating the custom parameters section's html from the json
+/**
+ * Generating the custom parameters section's html from the json
+ * @param parameters
+ * @param parentElement
+ * @param depth
+ */
 function generateParametersHTML(parameters, parentElement, depth = 0) {
     Object.entries(parameters).forEach(([key, value]) => {
         if (typeof value === "object" && value.defaultValue !== undefined) {

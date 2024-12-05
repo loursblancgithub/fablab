@@ -46,6 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+/**
+ * When accepting the login, showing a terms and conditions popup
+ * @param onAccept
+ */
 function showTermsPopup(onAccept) {
     const pageMask = document.createElement('div');
     pageMask.className = 'pageMask';

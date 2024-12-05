@@ -19,7 +19,11 @@ const {
 const {mainLogin} = require('./login_handler');
 const {saveFileToOrder} = require('./files_handler.js');
 
-// Function to serve static files with correct MIME types
+/**
+ * Function to serve static files with correct MIME types
+ * @param res
+ * @param filePath
+ */
 function serveStaticFile(res, filePath) {
     const extname = path.extname(filePath);
     let contentType = 'application/octet-stream';
@@ -65,13 +69,22 @@ function serveStaticFile(res, filePath) {
     });
 }
 
-// Function to check if the user has orders
+/**
+ * Function to check if the user has orders
+ * @param studentCode
+ * @returns {Promise<boolean>}
+ */
 async function checkUserOrders(studentCode) {
     const orders = await getOrders(studentCode);
     return orders.length > 0;
 }
 
-// Function to handle user redirection based on orders
+/**
+ * Function to handle user redirection based on orders
+ * @param res
+ * @param cookieValue
+ * @returns {Promise<void>}
+ */
 async function handleUserRedirection(res, cookieValue) {
     const user = await getUserByCookie(cookieValue);
     if (user) {
@@ -93,7 +106,10 @@ async function handleUserRedirection(res, cookieValue) {
     }
 }
 
-// Create HTTP server
+/**
+ * Create HTTP server
+ * @type {Server<typeof IncomingMessage, typeof ServerResponse>}
+ */
 const server = http.createServer(async (req, res) => {
     if (req.method === 'GET') {
         const cookies = req.headers.cookie;
@@ -134,9 +150,13 @@ const server = http.createServer(async (req, res) => {
     }
 });
 
-// Create WebSocket server
+/**
+ * Create WebSocket server
+ * @type {WebSocket.Server}
+ */
 const wss = new WebSocket.Server({server});
 
+// When socket connected, waiting for messages
 wss.on('connection', (ws) => {
     ws.on('message', async (message) => {
         const parsedMessage = JSON.parse(message);

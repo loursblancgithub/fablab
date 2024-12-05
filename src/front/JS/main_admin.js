@@ -89,7 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //-------------------------->
 
-// Modify the createOrderMosaicElements function
+/**
+ * Modify the createOrderMosaicElements function
+ * @param orderData
+ * @param userData
+ */
 function createOrderMosaicElements(orderData, userData) {
     const contentContainer = document.getElementById('contentContainer');
     if (!contentContainer) {
@@ -243,7 +247,13 @@ function createOrderMosaicElements(orderData, userData) {
     columns.forEach(column => contentContainer.appendChild(column));
 }
 
-// Populate the order elements mosaic
+/**
+ * Populate the order elements mosaic
+ * @param element
+ * @param orderElement
+ * @param property
+ * @param userData
+ */
 function toggleTextToTextarea(element, orderElement, property, userData) {
     element.addEventListener('click', function () {
         if (element.tagName === 'DIV') {
@@ -312,7 +322,10 @@ function toggleTextToTextarea(element, orderElement, property, userData) {
     });
 }
 
-// Show the detailed order with the files list and the chat
+/**
+ * Show the detailed order with the files list and the chat
+ * @param orderElement
+ */
 function showOrderDetails(orderElement) {
     document.getElementById('orderElement').style.display = 'flex';
     document.querySelector('.pageMask').style.display = 'block';
@@ -361,7 +374,12 @@ function showOrderDetails(orderElement) {
     }
 }
 
-// Create the order state dropdown
+/**
+ * Create the order state dropdown
+ * @param currentState
+ * @param orderID
+ * @returns {HTMLSelectElement}
+ */
 function createStateDropdown(currentState, orderID) {
     const dropdown = document.createElement('select');
     dropdown.classList.add('orderStateDropdown');
@@ -408,7 +426,12 @@ function createStateDropdown(currentState, orderID) {
     return dropdown;
 }
 
-// Get username by user ID
+/**
+ * Get username by user ID
+ * @param userID
+ * @param usersData
+ * @returns {string}
+ */
 function getUserNameById(userID, usersData) {
     for (let i = 0; i < usersData.length; i++) {
         if (usersData[i].studentcode === userID) {
@@ -418,7 +441,14 @@ function getUserNameById(userID, usersData) {
     return 'Unknown User';
 }
 
-// Certify the data has been correctly received before changing the field content
+/**
+ * Certify the data has been correctly received before changing the field content
+ * @param updatedData
+ * @param field
+ * @param orderID
+ * @param cookie
+ * @returns {Promise<unknown>}
+ */
 async function certifyOrderUpdate(updatedData, field, orderID, cookie) {
     let listenerAdded = false;
     return new Promise((resolve, reject) => {

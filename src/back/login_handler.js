@@ -28,6 +28,11 @@ async function login(user, password) {
     return cookies.split("lemonldap=")[1].split(";")[0];
 }
 
+/**
+ *
+ * @param token
+ * @returns {Promise<any>}
+ */
 async function getUserData(token) {
     const headers = {
         'Cookie': `lemonldap=${token}`

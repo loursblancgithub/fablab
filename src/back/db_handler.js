@@ -8,6 +8,12 @@ const pool = new Pool({
     port: 5432,
 });
 
+/**
+ * Query the database with inputted data
+ * @param text
+ * @param params
+ * @returns {Promise<*>}
+ */
 async function query(text, params) {
     const dbClient = await pool.connect();
     try {
@@ -20,7 +26,11 @@ async function query(text, params) {
     }
 }
 
-// Check if the user who logged in exists in the database
+/**
+ * Check if the user who logged in exists in the database
+ * @param studentCode
+ * @returns {Promise<boolean>}
+ */
 async function userExists(studentCode) {
     try {
         const res = await query('SELECT 1 FROM public."userdata" WHERE studentcode = $1', [studentCode]);
@@ -31,7 +41,13 @@ async function userExists(studentCode) {
     }
 }
 
-// Add a new user to the database
+/**
+ * Add a new user to the database
+ * @param studentCode
+ * @param firstName
+ * @param lastName
+ * @returns {Promise<void>}
+ */
 async function addUser(studentCode, firstName, lastName) {
     await query(
         'INSERT INTO public."userdata" (studentcode, privilegelevel, chat, firstname, lastname) VALUES ($1, $2, $3, $4, $5)',
@@ -39,7 +55,12 @@ async function addUser(studentCode, firstName, lastName) {
     );
 }
 
-// Add a new cookie to the database
+/**
+ * Add a new cookie to the database
+ * @param cookie
+ * @param studentCode
+ * @returns {Promise<void>}
+ */
 async function createCookie(cookie, studentCode) {
     await query(
         'INSERT INTO public."cookie" (cookie, fablabuser) VALUES ($1, $2)',
@@ -47,7 +68,11 @@ async function createCookie(cookie, studentCode) {
     );
 }
 
-// Save order information in the database
+/**
+ * Save order information in the database
+ * @param order
+ * @returns {Promise<{orderID, success: boolean}>}
+ */
 async function createOrder(order) {
     const res = await query(
         'INSERT INTO public."order" (fablabuser, orderdata) VALUES ($1, $2) RETURNING id',
@@ -56,7 +81,12 @@ async function createOrder(order) {
     return { success: true, orderID: res.rows[0].id };
 }
 
-// Update the order with the new file information
+/**
+ * Update the order with the new file information
+ * @param orderID
+ * @param fileInfo
+ * @returns {Promise<{success: boolean}>}
+ */
 async function updateOrderFiles(orderID, fileInfo) {
     const res = await query('SELECT files FROM public."order" WHERE id = $1', [orderID]);
     const currentFiles = res.rows[0].files || {};
@@ -72,24 +102,40 @@ async function updateOrderFiles(orderID, fileInfo) {
     return { success: true };
 }
 
-// Get all orders of a specific user
+/**
+ * Get all orders of a specific user
+ * @param user
+ * @returns {Promise<*>}
+ */
 async function getOrders(user) {
     const res = await query('SELECT * FROM public."order" WHERE fablabuser = $1', [user]);
     return res.rows;
 }
 
-// Get the user student code using the cookie from the client's browser
+/**
+ * Get the user student code using the cookie from the client's browser
+ * @param cookie
+ * @returns {Promise<*>}
+ */
 async function getUserByCookie(cookie) {
     const res = await query('SELECT fablabuser FROM public."cookie" WHERE cookie = $1', [cookie]);
     return res.rows[0];
 }
 
-// Delete a cookie when the user logs out from a device
+/**
+ * Delete a cookie when the user logs out from a device
+ * @param cookie
+ * @returns {Promise<void>}
+ */
 async function deleteCookie(cookie) {
     await query('DELETE FROM public."cookie" WHERE cookie = $1', [cookie]);
 }
 
-// Save a chat message in the database
+/**
+ * Save a chat message in the database
+ * @param message
+ * @returns {Promise<{success: boolean}>}
+ */
 async function saveChatMessage(message) {
     const res = await query('SELECT chat FROM public."order" WHERE id = $1', [message.orderID]);
     const currentChat = res.rows[0].chat || {};
@@ -105,7 +151,11 @@ async function saveChatMessage(message) {
     return { success: true };
 }
 
-// Get user information using the student code
+/**
+ * Get user information using the student code
+ * @param studentCode
+ * @returns {Promise<*>}
+ */
 async function getUserInfos(studentCode) {
     const res = await query('SELECT * FROM public."userdata" WHERE studentcode = $1', [studentCode]);
     return res.rows[0];

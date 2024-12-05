@@ -79,7 +79,11 @@ Functions
 
 --------------------------*/
 
-// Showing the landing page of the user
+/**
+ * Showing the landing page of the user
+ * @param user
+ * @param orders
+ */
 function displayLandingPage(user, orders) {
     orderContainer.innerHTML = '';
     document.querySelectorAll('.ordersListElement').forEach(el => el.classList.remove('active'));
@@ -117,7 +121,10 @@ function displayLandingPage(user, orders) {
     }, 10);
 }
 
-// Fill the order list
+/**
+ * Fill the order list
+ * @param orders
+ */
 function displayOrdersList(orders) {
     const ordersList = document.getElementById('ordersList');
 
@@ -161,7 +168,10 @@ function displayOrdersList(orders) {
     });
 }
 
-// Display order details in #orderContainer
+/**
+ * Display order details in #orderContainer
+ * @param order
+ */
 function displayOrderContent(order) {
     // Clearing the order element before displaying a new one
     if (document.getElementById('orderElement')) {

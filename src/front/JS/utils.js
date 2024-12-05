@@ -8,12 +8,11 @@ function removeAllChildren(element) {
 
 export {removeAllChildren};
 
-/*--------------------------
-
-Sanitize inputs
-
---------------------------*/
-
+/**
+ * Sanitize inputs
+ * @param toOutput
+ * @returns {*}
+ */
 function sanitizeOutput(toOutput) {
     return toOutput.replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
@@ -25,12 +24,10 @@ function sanitizeOutput(toOutput) {
 
 export {sanitizeOutput};
 
-/*--------------------------
-
-Sanitize inputs
-
---------------------------*/
-
+/**
+ * Log out
+ * @param logoutButton
+ */
 function logout(logoutButton) {
     logoutButton.addEventListener('click', () => {
         const fablabCookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
@@ -47,12 +44,11 @@ function logout(logoutButton) {
 
 export {logout};
 
-/*--------------------------
-
-Show details on hover when ellipsed
-
---------------------------*/
-
+/**
+ * Show details on hover when ellipsed
+ * @param element
+ * @param hoverText
+ */
 function showHover(element, hoverText) {
     // Create the hover text element
     const hoverElement = document.createElement('div');
@@ -81,12 +77,11 @@ function applyHoverIfNecessary(element, hoverText) {
 
 export {applyHoverIfNecessary};
 
-/*--------------------------
-
-Custom alert popup
-
---------------------------*/
-
+/**
+ * Custom alert popup
+ * @param message
+ * @param level
+ */
 function showCustomAlert(message, level) {
     // Create the alert popup
     const alertPopup = document.createElement('div');
@@ -124,12 +119,11 @@ function showCustomAlert(message, level) {
 
 export {showCustomAlert};
 
-/*--------------------------
-
-Function sorting elements in received json by date
-
---------------------------*/
-
+/**
+ * Function sorting elements in received json by date
+ * @param elements
+ * @returns {*}
+ */
 function sortElementsByDate(elements) {
     return elements.sort((a, b) => {
         if (!a.orderDateTime || !b.orderDateTime) {
@@ -143,12 +137,10 @@ function sortElementsByDate(elements) {
 
 export {sortElementsByDate};
 
-/*--------------------------
-
-Congratulations on finding this, on behalf of all the team
-
---------------------------*/
-
+/**
+ * Congratulations on finding this, on behalf of all the team
+ * @param affectedContainer
+ */
 function fiveElements(affectedContainer) {
     let buffer = '';
     const fireSequence = 'fire';
@@ -208,24 +200,23 @@ function updateGradient(element, newGradient) {
 
 export {fiveElements};
 
-/*--------------------------
-
-In the name
-
---------------------------*/
-
+/**
+ * In the name
+ * @param string
+ * @returns {string}
+ */
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 export {capitalizeFirstLetter};
 
-/*--------------------------
-
-Create a date to be displayed
-
---------------------------*/
-
+/**
+ * Create a date to be displayed
+ * @param isoDate
+ * @param type
+ * @returns {string}
+ */
 function formatDateTime(isoDate, type) {
     const date = new Date(isoDate);
     const options = {
@@ -249,12 +240,11 @@ function formatDateTime(isoDate, type) {
 
 export {formatDateTime};
 
-/*--------------------------
-
-Select the right color for each order state
-
---------------------------*/
-
+/**
+ * Select the right color for each order state
+ * @param state
+ * @returns {*|{background: string, font: string}}
+ */
 function getColorForState(state) {
     const stateColorMapping = {
         pending: {backgroundColor: '#215a6c', color: '#ffffff', frText: "En attente", value: "pending"},
@@ -270,12 +260,11 @@ function getColorForState(state) {
 
 export {getColorForState};
 
-/*--------------------------
-
-Show the files list for a specific order
-
---------------------------*/
-
+/**
+ * Show the files list for a specific order
+ * @param order
+ * @param filesListContainer
+ */
 function displayFilesList(order, filesListContainer) {
     filesListContainer.innerHTML = '';
 
@@ -351,12 +340,15 @@ function displayFilesList(order, filesListContainer) {
 
 export {displayFilesList};
 
-/*--------------------------
-
-Show the chat for a specific order
-
---------------------------*/
-
+/**
+ * Show the chat for a specific order
+ * @param allOrdersData
+ * @param order
+ * @param userData
+ * @param chatContainer
+ * @param clientStatus
+ * @param cookie
+ */
 function displayMessages(allOrdersData, order, userData, chatContainer, clientStatus, cookie) {
     chatContainer.innerHTML = '';
 
@@ -455,12 +447,12 @@ function displayMessages(allOrdersData, order, userData, chatContainer, clientSt
 
 export {displayMessages};
 
-/*--------------------------
-
-Append a new message to the chat feed
-
---------------------------*/
-
+/**
+ * Append a new message to the chat feed
+ * @param allOrders
+ * @param message
+ * @param clientStatus
+ */
 function appendMessage(allOrders, message, clientStatus) {
     const chatFeed = document.querySelector('.chatFeed');
 
@@ -524,12 +516,12 @@ function appendMessage(allOrders, message, clientStatus) {
     allOrders.find(order => order.id === message.orderID).chat.chatMessages[message.msgID] = message;
 }
 
-/*--------------------------
-
-Create the svg elements working with the sprite
-
---------------------------*/
-
+/**
+ * Create the svg elements working with the sprite
+ * @param name
+ * @param alt
+ * @returns {HTMLImageElement}
+ */
 function createSVGElement(name, alt) {
     const img = document.createElement('img');
     img.classList.add('svgIcon');
@@ -540,12 +532,16 @@ function createSVGElement(name, alt) {
 
 export {createSVGElement};
 
-/*--------------------------
-
-Show files or chat of the active order depending on user selection
-
---------------------------*/
-
+/**
+ * Show files or chat of the active order depending on user selection
+ * @param allOrdersData
+ * @param activeOrderId
+ * @param dataType
+ * @param filesMessagesContainer
+ * @param clientUserData
+ * @param clientStatus
+ * @param cookie
+ */
 function showContentsOfActiveOrder(allOrdersData, activeOrderId, dataType, filesMessagesContainer, clientUserData, clientStatus, cookie) {
     if (activeOrderId) {
         const activeOrder = allOrdersData.find(order => order.id === Number(activeOrderId));
@@ -559,12 +555,12 @@ function showContentsOfActiveOrder(allOrdersData, activeOrderId, dataType, files
 
 export {showContentsOfActiveOrder};
 
-/*--------------------------
-
-Show file upload pop up
-
---------------------------*/
-
+/**
+ * Show file upload pop up
+ * @param allOrdersData
+ * @param activeOrderId
+ * @param cookie
+ */
 function showFilesPopup(allOrdersData, activeOrderId, cookie) {
     if (document.querySelector('.filesPopup')) {
         return;
@@ -673,12 +669,11 @@ function showFilesPopup(allOrdersData, activeOrderId, cookie) {
     });
 }
 
-/*--------------------------
-
-Prepare file to be sent through the websocket
-
---------------------------*/
-
+/**
+ * Prepare file to be sent through the websocket
+ * @param file
+ * @returns {Promise<unknown>}
+ */
 async function prepareFile(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -710,12 +705,10 @@ async function prepareFile(file) {
 
 export {prepareFile};
 
-/*--------------------------
-
-Scroll down a container when showing it
-
---------------------------*/
-
+/**
+ * Scroll down a container when showing it
+ * @param containerId
+ */
 function scrollToBottom(containerId) {
     const container = document.getElementById(containerId);
     container.scrollTop = container.scrollHeight;
