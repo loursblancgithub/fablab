@@ -16,12 +16,23 @@
 <div id="bodyContainer">
     <div id="sidePanel">
         <img src="/src/front/Assets/SVG/logo_fablab.svg" alt="logo" id="fablabLogo">
-        <div id="sidePanelStateButtonsContainer">
-            <div class="sidePanelStateButton" id="sidePanelStateButtonAll">Tout</div>
-            <div class="sidePanelStateButton" id="sidePanelStateButtonToDo">Non traité</div>
-            <div class="sidePanelStateButton" id="sidePanelStateButtonOngoing">En cours</div>
-            <div id="subStateButtonsContainer"></div>
-            <div class="sidePanelStateButton" id="sidePanelStateButtonFinished">Terminé</div>
+        <div id="orderInfoReload"></div>
+        <div id="orderSortingSelectorContainer">
+            <label for="orderSortingSelector">Trier les commandes</label><select id="orderSortingSelector">
+            <option>Etat</option>
+            <!--            <option>Date</option>-->
+            <!--            <option>Client</option>-->
+            <!--            <option>Matériau</option>-->
+            <!--            <option>Couleur</option>-->
+        </select>
+        </div>
+        <div>
+            <label for="stateFilterSelector"></label><select id="stateFilterSelector">
+            <option value="all" selected id="orderSortingSelectorAll">Tout</option>
+            <option value="pending" id="orderSortingSelectorPending">Non traité</option>
+            <option value="running" id="orderSortingSelectorRunning">En cours</option>
+            <option value="finished" id="orderSortingSelectorFinished">Terminé</option>
+        </select>
         </div>
         <div id="logoutButton" class="blueButton">Se déconnecter</div>
     </div>
@@ -31,11 +42,10 @@
         <div class="orderElementBody">
             <div class="orderElementSummary">
                 <div id="orderName" style="font-size: 2em;"></div>
-                <div id="orderState" class="orderElementState" style="color: rgb(33, 90, 108);"></div>
+                <div id="orderState" class="orderElementState"></div>
                 <div id="orderDateTime" style="font-size: 0.7em; margin: 0 0 5vh;"></div>
                 <div class="orderElementOverviewTitle">Vue d'ensemble</div>
-                <div class="orderElementDetails"
-                     style="display: flex; flex-direction: column; place-content: center space-between; width: 100%;">
+                <div class="orderElementDetails">
                     <div class="orderElementSummaryMaterialColor">
                         <div id="orderMaterial"></div>
                         <div id="orderColor"></div>

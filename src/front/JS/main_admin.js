@@ -10,15 +10,6 @@ import {
 } from "/src/front/JS/utils.js";
 import {addMessageListener, sendMessage} from "./ws_client.js";
 
-const stateOptions = {
-    pending: 'En attente',
-    billed: 'Facturé',
-    printed: 'Imprimé',
-    sliced: 'Slicé',
-    printing: 'En cours d\'impression',
-    finished: 'Terminé'
-}
-
 const contentContainer = document.getElementById('contentContainer');
 let allOrdersData;
 let allUsersData;
@@ -26,6 +17,8 @@ let clientUserData;
 let cookie;
 let currentOrderID;
 const orderElementFilesMessageContent = document.getElementById('orderElementFilesMessageContent');
+const orderSortingSelector = document.getElementById('orderSortingSelector');
+const orderInfoReload = document.getElementById('orderInfoReload');
 
 document.addEventListener('DOMContentLoaded', () => {
     fiveElements(document.getElementById('contentContainer'));
@@ -33,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cookie = document.cookie.split('; ').find(row => row.startsWith('fablabCookie=')).split('=')[1];
     sendMessage({adminOrdersRequest: {}, cookie, getClientUserData: {}});
 
+    // After loading primary elements and sending a data request, waiting for an answer
     addMessageListener((response) => {
         if (response.clientUserData) {
             clientUserData = response.clientUserData;
@@ -47,42 +41,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.querySelectorAll('.sidePanelStateButton').forEach(button => {
-        button.addEventListener('click', function () {
-            // Remove active class from all buttons
-            document.querySelectorAll('.sidePanelStateButton').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // Add active class to the clicked buttons
-            this.classList.add('active');
+    // Sending an order infos request through the socket if the user presses the orderInfoReload button
+    orderInfoReload.addEventListener('click', () => {
+        sendMessage({cookie, getClientUserData: {}});
+        addMessageListener((response) => {
+            if (response.clientUserData) {
+                clientUserData = response.clientUserData;
+                console.log("Updated client user data");
+            }
         });
     });
 
-    document.getElementById('sidePanelStateButtonAll').addEventListener('click', () => {
+    // Sorting orders by completion state, depending on the user's choice
+    orderSortingSelector.addEventListener('change', () => {
         contentContainer.innerHTML = '';
-        createOrderMosaicElements(allOrdersData, allUsersData);
+        orderSortingSelector.dataset.chosen = orderSortingSelector.value;
+        switch (orderSortingSelector.value) {
+            case 'all':
+                createOrderMosaicElements(allOrdersData, allUsersData);
+                break;
+            case 'pending':
+                createOrderMosaicElements(allOrdersData.filter(order => order.state === "pending"), allUsersData);
+                break;
+            case 'running':
+                createOrderMosaicElements(allOrdersData.filter(order => order.state !== "pending" && order.state !== "finished"), allUsersData);
+                break;
+            case 'finished':
+                createOrderMosaicElements(allOrdersData.filter(order => order.state === "finished"), allUsersData);
+                break;
+        }
     });
 
-    document.getElementById('sidePanelStateButtonToDo').addEventListener('click', () => {
-        contentContainer.innerHTML = '';
-        createOrderMosaicElements(allOrdersData.filter(order => order.state === "pending"), allUsersData);
-    });
-
-    document.getElementById('sidePanelStateButtonOngoing').addEventListener('click', () => {
-        contentContainer.innerHTML = '';
-        createOrderMosaicElements(allOrdersData.filter(order => order.state !== "pending" && order.state !== "finished"), allUsersData);
-    });
-
-    document.getElementById('sidePanelStateButtonFinished').addEventListener('click', () => {
-        contentContainer.innerHTML = '';
-        createOrderMosaicElements(allOrdersData.filter(order => order.state === "finished"), allUsersData);
-    });
-
+    // If the files button is pressed, showing the order's files
     document.getElementById('orderElementFilesButton').addEventListener('click', () => {
         showContentsOfActiveOrder(allOrdersData, currentOrderID, 'files', orderElementFilesMessageContent, clientUserData, "admin", cookie);
     });
 
+    // If the chat button is pressed, showing the order's chat
     document.getElementById('orderElementMessageButton').addEventListener('click', () => {
         showContentsOfActiveOrder(allOrdersData, currentOrderID, 'chat', orderElementFilesMessageContent, clientUserData, "admin", cookie);
     });
@@ -138,7 +133,7 @@ function createOrderMosaicElements(orderData, userData) {
 
         const orderStateDropdown = createStateDropdown(orderElement.state, orderElement.id);
         orderStateDropdown.style.margin = '1vh 0 1vh 0';
-        applyHoverIfNecessary(orderStateDropdown, stateOptions[orderElement.state]);
+        applyHoverIfNecessary(orderStateDropdown, getColorForState(orderElement.state).frText);
         orderElementHeaderClientState.appendChild(orderStateDropdown);
 
         orderElementHeader.appendChild(orderElementHeaderClientState);
@@ -232,7 +227,7 @@ function createOrderMosaicElements(orderData, userData) {
         columns[index % 3].appendChild(orderMosaicElementDiv);
 
         detailsExpandButton.addEventListener('click', () => {
-            console.log(orderElement)
+            console.log(orderElement);
             showOrderDetails(orderElement);
             currentOrderID = orderElement.id;
             showContentsOfActiveOrder(allOrdersData, currentOrderID, 'files', orderElementFilesMessageContent, clientUserData, 'admin', cookie);
@@ -248,7 +243,7 @@ function createOrderMosaicElements(orderData, userData) {
     columns.forEach(column => contentContainer.appendChild(column));
 }
 
-// Function to populate the order elements mosaic
+// Populate the order elements mosaic
 function toggleTextToTextarea(element, orderElement, property, userData) {
     element.addEventListener('click', function () {
         if (element.tagName === 'DIV') {
@@ -317,7 +312,7 @@ function toggleTextToTextarea(element, orderElement, property, userData) {
     });
 }
 
-// Function to show the detailed order with the files list and the chat
+// Show the detailed order with the files list and the chat
 function showOrderDetails(orderElement) {
     document.getElementById('orderElement').style.display = 'flex';
     document.querySelector('.pageMask').style.display = 'block';
@@ -326,7 +321,10 @@ function showOrderDetails(orderElement) {
     document.getElementById('orderName').textContent = orderElement.name;
 
     // State
-    document.getElementById('orderState').textContent = stateOptions[orderElement.state];
+    const orderDetailsState = document.getElementById('orderState');
+    const orderDetailsStateStyle = getColorForState(orderElement.state);
+    orderDetailsState.textContent = orderDetailsStateStyle.frText;
+    orderDetailsState.style.color = orderDetailsStateStyle.backgroundColor;
 
     // Date
     document.getElementById('orderDateTime').textContent = formatDateTime(orderElement.datetime, 'order');
@@ -363,10 +361,19 @@ function showOrderDetails(orderElement) {
     }
 }
 
-// Function to create the order state dropdown
+// Create the order state dropdown
 function createStateDropdown(currentState, orderID) {
     const dropdown = document.createElement('select');
     dropdown.classList.add('orderStateDropdown');
+
+    const stateOptions = {
+        pending: 'En attente',
+        billed: 'Facturé',
+        printed: 'Imprimé',
+        sliced: 'Slicé',
+        printing: 'En impression',
+        finished: 'Terminé'
+    };
 
     Object.entries(stateOptions).forEach(([value, frText]) => {
         const option = document.createElement('option');
@@ -374,25 +381,25 @@ function createStateDropdown(currentState, orderID) {
         option.textContent = frText;
         option.selected = value === currentState;
 
-        const {background, font} = getColorForState(value);
-        option.style.backgroundColor = background;
-        option.style.color = font;
+        const {backgroundColor, color} = getColorForState(value);
+        option.style.backgroundColor = backgroundColor;
+        option.style.color = color;
 
         dropdown.appendChild(option);
     });
 
-    const {background, font} = getColorForState(currentState);
-    dropdown.style.backgroundColor = background;
-    dropdown.style.color = font;
+    const {backgroundColor, color} = getColorForState(currentState);
+    dropdown.style.backgroundColor = backgroundColor;
+    dropdown.style.color = color;
 
     dropdown.addEventListener('change', function () {
         const previousValue = currentState;
         const newValue = this.value;
         const successfulUpdate = certifyOrderUpdate(newValue, 'state', orderID, cookie);
         if (successfulUpdate) {
-            const {background, font} = getColorForState(newValue);
-            this.style.backgroundColor = background;
-            this.style.color = font;
+            const {backgroundColor, color} = getColorForState(newValue);
+            this.style.backgroundColor = backgroundColor;
+            this.style.color = color;
         } else {
             this.value = previousValue;
         }
@@ -401,7 +408,7 @@ function createStateDropdown(currentState, orderID) {
     return dropdown;
 }
 
-// Function to get username by user ID
+// Get username by user ID
 function getUserNameById(userID, usersData) {
     for (let i = 0; i < usersData.length; i++) {
         if (usersData[i].studentcode === userID) {
@@ -412,9 +419,8 @@ function getUserNameById(userID, usersData) {
 }
 
 // Certify the data has been correctly received before changing the field content
-let listenerAdded = false;
-
 async function certifyOrderUpdate(updatedData, field, orderID, cookie) {
+    let listenerAdded = false;
     return new Promise((resolve, reject) => {
         sendMessage({
             adminOrderUpdate: {
@@ -426,7 +432,7 @@ async function certifyOrderUpdate(updatedData, field, orderID, cookie) {
         if (!listenerAdded) {
             addMessageListener((response) => {
                 if (response.success === true) {
-                    console.log("response.fieldToUpdate: ",response.fieldToUpdate);
+                    console.log("response.fieldToUpdate: ", response.fieldToUpdate);
                     resolve(response.fieldToUpdate === field);
                 } else {
                     console.error(response.error);

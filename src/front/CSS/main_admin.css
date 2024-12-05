@@ -21,6 +21,12 @@ option {
     justify-content: flex-start;
     align-items: center;
     box-sizing: border-box;
+    margin-right: 0.5vh;
+}
+
+#logoutButton {
+    margin-top: auto !important;
+    box-shadow: 0 0.25vh 0.5vh rgba(0, 0, 0, 0.32);
 }
 
 #fablabLogo {
@@ -28,43 +34,50 @@ option {
     margin: 1vh 0 6vh 0;
 }
 
-#sidePanelStateButtonsContainer {
-    width: 100%;
-    height: fit-content;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 0 1rem 0 0;
-    box-sizing: border-box;
+#orderInfoReload {
+    height: 20px;
+    width: 20px;
+    background-color: red;
+    cursor: pointer;
+    align-self: flex-end;
+    margin-bottom: 1vh;
 }
 
-.sidePanelStateButton {
-    display: flex;
-    align-items: baseline;
-    justify-content: flex-start;
+#orderSortingSelectorContainer {
     width: 100%;
-    height: 3vh;
-    border-radius: 5px;
-    padding: 0.5%;
-    font-size: 1vw;
-    transition: background-color 0.5s ease;
-    margin: 0.5vh 0 0.5vh 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.active {
-    background-color: #2e4798 !important;
+#orderSortingSelector[data-chosen='pending'] {
+    background-color: #215a6c;
     color: #ffffff;
 }
 
-.sidePanelStateButton:hover {
-    cursor: pointer;
+#orderSortingSelector[data-chosen='running'] {
+    background-color: #5a3286;
+    color: #ffffff;
+}
+
+#orderSortingSelector[data-chosen='finished'] {
+    background-color: #0a53a8;
+    color: #ffffff;
+}
+
+#orderSortingSelector {
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: fit-content;
+    margin-left: 5%;
 }
 
 #contentContainer {
     width: 80vw;
     height: 100%;
-    padding: 1rem 1rem 1rem 1rem;
+    padding: 1rem;
+    margin-left: 0.5vh;
     background-color: #2e4798;
     border-radius: 10px;
     overflow-x: hidden;
