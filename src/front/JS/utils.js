@@ -457,7 +457,7 @@ export {displayMessages};
 
 /*--------------------------
 
-Function to append a new message to the chat feed
+Append a new message to the chat feed
 
 --------------------------*/
 
@@ -542,7 +542,7 @@ export {createSVGElement};
 
 /*--------------------------
 
-Function to show files or chat of the active order
+Show files or chat of the active order depending on user selection
 
 --------------------------*/
 
@@ -561,7 +561,7 @@ export {showContentsOfActiveOrder};
 
 /*--------------------------
 
-Function to show file upload pop up
+Show file upload pop up
 
 --------------------------*/
 
@@ -675,7 +675,7 @@ function showFilesPopup(allOrdersData, activeOrderId, cookie) {
 
 /*--------------------------
 
-Function to show file upload pop up
+Prepare file to be sent through the websocket
 
 --------------------------*/
 
@@ -712,7 +712,7 @@ export {prepareFile};
 
 /*--------------------------
 
-Function to scroll down a container when showing it
+Scroll down a container when showing it
 
 --------------------------*/
 
